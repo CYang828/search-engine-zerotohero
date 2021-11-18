@@ -47,6 +47,7 @@ class ZhihuArticalItem(scrapy.Item):
     comment_permission = scrapy.Field()  #
     author = scrapy.Field()  #
     comment_count = scrapy.Field()  #
+    comments = scrapy.Field()  #
     created = scrapy.Field()  #
     content = scrapy.Field()  #
     state = scrapy.Field()  #
