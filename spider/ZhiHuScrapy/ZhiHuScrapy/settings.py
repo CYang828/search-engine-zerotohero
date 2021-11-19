@@ -6,6 +6,9 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
 
 BOT_NAME = 'ZhiHuScrapy'
 
@@ -89,5 +92,5 @@ ITEM_PIPELINES = {
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 LOG_FILE = '../logs/zhihu.log'
-LOG_LEVEL = 'DEBUG'
+LOG_LEVEL = 'WARNING'
 LOG_STDOUT = 'True'

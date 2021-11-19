@@ -11,7 +11,7 @@ class MongoUtil:
         # client = pymongo.MongoClient(host='39.106.195.80', port=27017)
         client = pymongo.MongoClient('mongodb://{}:{}@{}:{}/'.format(
             "bigdata", "bigdata123", "10.30.89.124", "27016"))
-        self.collection = client.zhihu[f'{myset}']
+        self.collection = client.new_zhihu[f'{myset}']
 
     def mongo_insert(self, data_dict):
         ret = self.collection.insert_one(data_dict)

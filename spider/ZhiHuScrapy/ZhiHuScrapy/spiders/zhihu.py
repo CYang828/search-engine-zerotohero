@@ -1,17 +1,20 @@
 import json
+import logging
+import os
 import time
 
 import scrapy
 
 from ZhiHuScrapy.items import ZhihuscrapyItem, ZhihuArticalItem
 from ZhiHuScrapy.utils.mongo_utils import MongoUtil
+from ZhiHuScrapy.settings import BASE_DIR
 
 
 class ZhihuSpider(scrapy.Spider):
     name = 'zhihu'
     allowed_domains = ['www.zhihu.com']
     start_urls = ['https://zhuanlan.zhihu.com/api/recommendations/columns?limit=8&offset=8&seed=7']
-    with open('libs/cookie.txt') as f:
+    with open(os.path.join(BASE_DIR, 'libs/cookie.txt')) as f:
         cookie = f.read()
     headers = {
         "referer": "https://www.zhihu.com/search?type=content&q=python",
@@ -37,11 +40,11 @@ class ZhihuSpider(scrapy.Spider):
 
     def start_requests(self):
         start_urls = [f'https://zhuanlan.zhihu.com/api/recommendations/columns?limit={8}&offset={i * 8}&seed=7'
-                      for i in range(1, 100000000)]
+                      for i in range(0, 100000000)]
 
         # start_urls = ['https://zhuanlan.zhihu.com/api/recommendations/columns?limit=8&offset=8&seed=7']
         for url in start_urls:
-            time.sleep(3)
+            time.sleep(0.1)
             yield scrapy.Request(url=url, headers=self.headers, callback=self.parse_zhuanlan)
 
     def parse_zhuanlan(self, response):
@@ -67,7 +70,7 @@ class ZhihuSpider(scrapy.Spider):
             item['url_token'] = i.get('url_token')
             item['id'] = i.get('id')
             item['articles_count'] = i.get('articles_count')
-            time.sleep(1)
+            time.sleep(0.1)
             # print(item['url'])
             # c_url = f"https://www.zhihu.com/api/v4/columns/{item['url_token']}/items"
             pages = item['articles_count'] // 20 + 1
@@ -86,12 +89,12 @@ class ZhihuSpider(scrapy.Spider):
                 continue
             else:
                 print('insert to Mongo-zhuanlan, {}'.format(i.get('id')))
-            # cur_url = f"https://www.zhihu.com/api/v4/columns/{item['url_token']}/items?limit={10}&offset={10}"
+            cur_url = f"https://www.zhihu.com/api/v4/columns/{item['url_token']}/items?limit={10}&offset={10}"
             # yield scrapy.Request(url=cur_url,
             #                      headers=self.headers,
-            #                      body=json.dumps(params),
+            #                      # body=json.dumps(params),
             #                      callback=self.parse_article)
-            for j in range(1, pages + 1):
+            for j in range(0, pages):
                 cur_url = f"https://www.zhihu.com/api/v4/columns/{item['url_token']}/items?limit={20}&offset={j * 20}"
                 yield scrapy.Request(url=cur_url,
                                      headers=self.headers,
@@ -124,6 +127,7 @@ class ZhihuSpider(scrapy.Spider):
             article_item['comment_permission'] = article.get('comment_permission')
             article_item['author'] = article.get('author')
             comment_count = article.get('comment_count')
+            assert isinstance(comment_count, int), '评论数为整数！'
             article_item['comment_count'] = comment_count
             article_item['created'] = article.get('created')
             article_item['content'] = article.get('content')
@@ -134,8 +138,11 @@ class ZhihuSpider(scrapy.Spider):
             article_item['type'] = article.get('type')
             article_item['suggest_edit'] = article.get('suggest_edit')
             pages = comment_count // 20 + 1
+            if not pages:
+                yield article_item
             # comment_url = f'https://www.zhihu.com/api/v4/articles/{article_id}/root_comments?order=normal&limit=20&offset=0&status=open'
-            for j in range(1, pages + 1):
+            for j in range(0, pages):
+                time.sleep(0.1)
                 comment_url = f'https://www.zhihu.com/api/v4/articles/{article_id}/root_comments?order=normal&limit=20&offset={j * 20}&status=open'
                 yield scrapy.Request(url=comment_url,
                                      headers=self.headers,
@@ -145,6 +152,8 @@ class ZhihuSpider(scrapy.Spider):
 
     def parse_article_comment(self, response):
         comment_data = response.json()
+        # print(comment_data)
+        # logging.warning(comment_data.get('data'))
         article_item = response.meta
         article_item['comments'] = comment_data.get('data')
         yield article_item
