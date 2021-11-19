@@ -36,6 +36,7 @@ ITEM_PIPELINES = {
 }
 ```
 - 使用mongodb存储数据，数据重复问题的解决方式
+- 增加去重复pipeline 对数据进行去重的操作，配置中开启pipeline，设置好权重
 
 #### 2.4 中间件的使用
 - scrapy中间的作用
@@ -112,3 +113,16 @@ scrapy crawl <爬虫名字>
 ```
 
 ### 2、docker的使用
+- 完成dockerfile的编写
+```python
+FROM python:3.7
+WORKDIR /usr/src/app
+COPY . /usr/src/app
+RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+CMD ["python", "start.py"]
+```
+- 启动容器，开启爬虫
+```bash
+docker build -t zhihu .  # 生成镜像
+docker run -d --name zh zhihu  # 后台启动容器进行爬虫
+```
