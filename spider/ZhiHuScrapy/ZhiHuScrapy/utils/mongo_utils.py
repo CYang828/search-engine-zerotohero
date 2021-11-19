@@ -8,9 +8,9 @@ import pymongo
 class MongoUtil:
 
     def __init__(self, myset):
-        # client = pymongo.MongoClient(host='39.106.195.80', port=27017)
-        client = pymongo.MongoClient('mongodb://{}:{}@{}:{}/'.format(
-            "bigdata", "bigdata123", "10.30.89.124", "27016"))
+        client = pymongo.MongoClient(host='10.30.89.124', port=27011)
+        # client = pymongo.MongoClient('mongodb://{}:{}@{}:{}/'.format(
+        #     "bigdata", "bigdata123", "10.30.89.124", "27011"))
         self.collection = client.new_zhihu[f'{myset}']
 
     def mongo_insert(self, data_dict):
@@ -37,12 +37,14 @@ class MongoUtil:
 
 
 if __name__ == '__main__':
-    mg_db = MongoUtil('new')
+    mg_db = MongoUtil('articles')
     # # 插入数据
-    student = {'id': '20190101', 'name': 'Tom3', 'age': 20, 'gender': 'female'}
-    ret = mg_db.mongo_insert(student)
-    print('insert_id:', ret.inserted_id)
+    # student = {'id': '20190101', 'name': 'Tom3', 'age': 20, 'gender': 'female'}
+    # ret = mg_db.mongo_insert(student)
+    # print('insert_id:', ret.inserted_id)
     # # mongo_data = mg_db.find_one({'imdb_id': '0113497'})
     # # print(mongo_data, type(mongo_data))
     mongo_data = mg_db.find_all()
-    print(mongo_data)
+    # print(mg_db.collection.find())
+    for i in mongo_data:
+        print(i)

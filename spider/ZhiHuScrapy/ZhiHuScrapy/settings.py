@@ -68,6 +68,7 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'ZhiHuScrapy.pipelines.ZhihuscrapyPipeline': 300,
+   'ZhiHuScrapy.pipelines.DuplicatesPipeline': 200,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

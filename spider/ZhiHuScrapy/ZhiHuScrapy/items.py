@@ -56,3 +56,6 @@ class ZhihuArticalItem(scrapy.Item):
     can_comment = scrapy.Field()  #
     type = scrapy.Field()  #
     suggest_edit = scrapy.Field()  #
+
+    def __str__(self):
+        return f'文章ID: {self.id}, 标题: {self.title}'
