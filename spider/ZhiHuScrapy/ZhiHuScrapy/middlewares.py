@@ -2,11 +2,15 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+import os
+
 from fake_useragent import UserAgent
 from scrapy import signals
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+
+from ZhiHuScrapy.settings import BASE_DIR
 
 
 class ZhihuscrapySpiderMiddleware:
@@ -105,7 +109,8 @@ class ZhihuscrapyDownloaderMiddleware:
 
 class UserAgentMiddleware(object):
     def __init__(self):
-        self.ua = UserAgent()  # 建立UserAgent对象
+        location = os.path.join(BASE_DIR, 'libs/fake_useragent_0.1.11.json')
+        self.ua = UserAgent(path=location)  # 建立UserAgent对象
 
     def process_request(self, request, spider):
         us_agent = self.ua.random  # 调用UserAgent().random生成随机的user agent
