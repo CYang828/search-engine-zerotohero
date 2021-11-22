@@ -93,5 +93,5 @@ ITEM_PIPELINES = {
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 LOG_FILE = '../logs/zhihu.log'
-LOG_LEVEL = 'WARNING'
+LOG_LEVEL = 'INFO'
 LOG_STDOUT = 'True'

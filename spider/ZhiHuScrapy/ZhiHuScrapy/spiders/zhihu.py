@@ -40,19 +40,22 @@ class ZhihuSpider(scrapy.Spider):
 
     def start_requests(self):
         start_urls = [f'https://zhuanlan.zhihu.com/api/recommendations/columns?limit={8}&offset={i * 8}&seed=7'
-                      for i in range(0, 100000000)]
+                      for i in range(0, 1000000000)]
 
         # start_urls = ['https://zhuanlan.zhihu.com/api/recommendations/columns?limit=8&offset=8&seed=7']
         for url in start_urls:
-            time.sleep(0.1)
-            yield scrapy.Request(url=url, headers=self.headers, callback=self.parse_zhuanlan)
+            logging.warning(f'当前爬虫专栏URL为{url}')
+            time.sleep(0.5)
+            yield scrapy.Request(url=url, headers=self.headers, callback=self.parse_zhuanlan, meta={'url': url})
 
     def parse_zhuanlan(self, response):
         zhuanlan_data = response.json()
+        url = response.meta.get('url')
         zhuanlan_lists = zhuanlan_data.get('data')
 
         for i in zhuanlan_lists:
             if not i:
+                logging.warning(f'{url}没有解析出相应的数据')
                 continue
             item = ZhihuscrapyItem()
             item['updated'] = i.get('updated')
@@ -78,18 +81,18 @@ class ZhihuSpider(scrapy.Spider):
             #     'limit': 10,
             #     'offset': 10
             # }
-            mg_db = MongoUtil('zhuanlan')
-            # article  能确定唯一的字段
-            old_dict = {
-                'created': i.get('created'),
-                'id': i.get('id'),
-            }
-            if mg_db.update_one(old_dict, i).matched_count:
-                print('update to Mongo-zhuanlan, {}'.format(i.get('id')))
-                continue
-            else:
-                print('insert to Mongo-zhuanlan, {}'.format(i.get('id')))
-            cur_url = f"https://www.zhihu.com/api/v4/columns/{item['url_token']}/items?limit={10}&offset={10}"
+            # mg_db = MongoUtil('zhuanlan')
+            # # article  能确定唯一的字段
+            # old_dict = {
+            #     'created': i.get('created'),
+            #     'id': i.get('id'),
+            # }
+            # if mg_db.update_one(old_dict, i).matched_count:
+            #     logging.warning('专栏已爬过，update to Mongo-zhuanlan, {}'.format(i.get('id')))
+            #     continue
+            # else:
+            #     logging.warning('专栏入库，insert to Mongo-zhuanlan, {}'.format(i.get('id')))
+            # cur_url = f"https://www.zhihu.com/api/v4/columns/{item['url_token']}/items?limit={10}&offset={10}"
             # yield scrapy.Request(url=cur_url,
             #                      headers=self.headers,
             #                      # body=json.dumps(params),
@@ -104,6 +107,17 @@ class ZhihuSpider(scrapy.Spider):
 
     def parse_article(self, response):
         articles_data = response.json()
+        zhuanlan_item = response.meta
+        mg_db = MongoUtil('zhuanlan')
+        old_dict = {
+            'created': zhuanlan_item['created'],
+            'id': zhuanlan_item['id'],
+        }
+        if mg_db.update_one(old_dict, dict(zhuanlan_item)).matched_count:
+            logging.warning('专栏已爬过，update to Mongo-zhuanlan, {}'.format(zhuanlan_item['id']))
+        else:
+            logging.warning('专栏入库，insert to Mongo-zhuanlan, {}'.format(zhuanlan_item['id']))
+
         for article in articles_data.get('data'):
             if not article:
                 continue
