@@ -37,6 +37,27 @@ ITEM_PIPELINES = {
 ```
 - 使用mongodb存储数据，数据重复问题的解决方式
 - 增加去重复pipeline 对数据进行去重的操作，配置中开启pipeline，设置好权重
+    - 使用redis
+    - mongo去重复
+```python
+class DuplicatesPipeline(object):
+    def __init__(self):
+        redis_db.flushdb()  
+        if redis_db.hlen(redis_data_dict) == 0:  #
+            mg_db = MongoUtil('articles')
+            mg_data = mg_db.find_all()
+            for i in mg_data:
+                article_id = i.get('id')
+                redis_db.hset(redis_data_dict, article_id, 0)
+    def process_item(self, item, spider):
+        article_id = item['id']
+        if redis_db.hexists(redis_data_dict, article_id):
+            raise DropItem("Duplicate item found: %s" % item)
+            # logging.warning("Duplicate item found: %s" % item)
+        else:
+            redis_db.hset(redis_data_dict, article_id, 0)
+        return item
+```
 
 #### 2.4 中间件的使用
 - scrapy中间的作用
