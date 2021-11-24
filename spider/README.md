@@ -38,6 +38,8 @@ ITEM_PIPELINES = {
 - 使用mongodb存储数据，数据重复问题的解决方式
 - 增加去重复pipeline 对数据进行去重的操作，配置中开启pipeline，设置好权重
     - 使用redis
+        - 将存到mongo的每一个网页数据的唯一标识存储到redis，通过唯一标识来定位需要处理的数据，处理完就pop出去
+因为redis是单线程的，即使使用多线程处理数据，也不会造成数据的重复处理
     - mongo去重复
 ```python
 class DuplicatesPipeline(object):
