@@ -8,7 +8,7 @@ import pymongo
 class MongoUtil:
 
     def __init__(self, myset):
-        client = pymongo.MongoClient(host='10.30.89.124', port=27011)
+        client = pymongo.MongoClient(host='10.30.89.124', port=27013)
         # client = pymongo.MongoClient('mongodb://{}:{}@{}:{}/'.format(
         #     "bigdata", "bigdata123", "10.30.89.124", "27011"))
         self.collection = client.zhihu_new[f'{myset}']

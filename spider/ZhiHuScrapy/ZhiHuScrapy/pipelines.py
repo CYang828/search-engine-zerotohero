@@ -53,7 +53,7 @@ class DuplicatesPipeline(object):
         article_id = item['id']
         # 取item里的id和key里的字段对比，看是否存在，存在就丢掉这个item。不存在返回item给后面的函数处理
         if redis_db.hexists(redis_data_dict, article_id):
-            raise DropItem("Duplicate item found: %s" % item)
+            raise DropItem("Duplicate item found -> article_id: %s" % article_id)
             # logging.warning("Duplicate item found: %s" % item)
 
         else:
