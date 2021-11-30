@@ -10,8 +10,8 @@ from itemadapter import ItemAdapter
 from scrapy.exceptions import DropItem
 from ZhiHuScrapy.utils.mongo_utils import MongoUtil
 import redis
-redis_db = redis.Redis(host='10.30.89.124', port=6379, db=3)
-redis_data_dict = "new_article"
+redis_db = redis.Redis(host='10.30.89.124', port=6379, db=4)
+redis_data_dict = "articles"
 
 
 class ZhihuscrapyPipeline:
