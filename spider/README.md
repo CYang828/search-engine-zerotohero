@@ -36,6 +36,30 @@ ITEM_PIPELINES = {
 }
 ```
 - 使用mongodb存储数据，数据重复问题的解决方式
+- 增加去重复pipeline 对数据进行去重的操作，配置中开启pipeline，设置好权重
+    - 使用redis
+        - 将存到mongo的每一个网页数据的唯一标识存储到redis，通过唯一标识来定位需要处理的数据，处理完就pop出去
+因为redis是单线程的，即使使用多线程处理数据，也不会造成数据的重复处理
+    - mongo去重复
+```python
+class DuplicatesPipeline(object):
+    def __init__(self):
+        redis_db.flushdb()  
+        if redis_db.hlen(redis_data_dict) == 0:  #
+            mg_db = MongoUtil('articles')
+            mg_data = mg_db.find_all()
+            for i in mg_data:
+                article_id = i.get('id')
+                redis_db.hset(redis_data_dict, article_id, 0)
+    def process_item(self, item, spider):
+        article_id = item['id']
+        if redis_db.hexists(redis_data_dict, article_id):
+            raise DropItem("Duplicate item found: %s" % item)
+            # logging.warning("Duplicate item found: %s" % item)
+        else:
+            redis_db.hset(redis_data_dict, article_id, 0)
+        return item
+```
 
 #### 2.4 中间件的使用
 - scrapy中间的作用
@@ -112,3 +136,21 @@ scrapy crawl <爬虫名字>
 ```
 
 ### 2、docker的使用
+- 完成dockerfile的编写
+```python
+FROM python:3.7
+WORKDIR /usr/src/app
+COPY . /usr/src/app
+RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+CMD ["python", "start.py"]
+```
+- 启动容器，开启爬虫
+```bash
+docker build -t zhihu .  # 生成镜像
+docker run -d --name zh zhihu  # 后台启动容器进行爬虫
+```
+
+## 三、爬虫问题
+### 1、专栏的爬取是否可以完整
+### 2、文章是否爬取完整
+### 3、多进程爬虫的设计
