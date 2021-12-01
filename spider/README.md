@@ -149,3 +149,8 @@ CMD ["python", "start.py"]
 docker build -t zhihu .  # 生成镜像
 docker run -d --name zh zhihu  # 后台启动容器进行爬虫
 ```
+
+## 三、爬虫问题
+### 1、专栏的爬取是否可以完整
+### 2、文章是否爬取完整
+### 3、多进程爬虫的设计
