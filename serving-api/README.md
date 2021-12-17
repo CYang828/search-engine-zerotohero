@@ -67,3 +67,7 @@ def get_app_settings() -> AppSettings:
 ### 3.3 数据库
 #### 异步操作数据库
 - 参考文档：https://www.cnblogs.com/traditional/p/12290776.html
+
+---
+## 四、启动项目
+uvicorn app.main:app --reload
