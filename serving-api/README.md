@@ -62,3 +62,7 @@ def get_app_settings() -> AppSettings:
 - Python 中更优雅的日志记录方案 loguru
 
     - 参考文档：https://cuiqingcai.com/7776.html
+    
+### 3.3 数据库
+#### 异步操作数据库
+- 参考文档：https://www.cnblogs.com/traditional/p/12290776.html
