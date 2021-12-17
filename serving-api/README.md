@@ -55,6 +55,7 @@ def get_app_settings() -> AppSettings:
 > lru_cache下面的函数将针对每个参数组合执行一次。然后，每当使用完全相同的参数组合调用函数时，这些参数组合中的每一个返回的值将一次又一次地使用。
 - 官方文档：https://docs.python.org/zh-cn/3/library/functools.html#functools.lru_cache
 - 参考文档：https://www.shangmayuan.com/a/fa6e60fc84b6439581681362.html
+- 使用functools的@lru_cache而不指定maxsize参数:https://www.cnpython.com/qa/145717
 #### 3.2.2 不同环境配置的调用
 > 使用工厂设计模式完成搭建
 

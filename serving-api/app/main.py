@@ -10,7 +10,9 @@ from app.api.errors.validate_error import http422_error_handler
 from app.api.routes.api import router as api_router
 
 from app.core.config import get_app_settings
-from app.core.events import create_start_app_handler, create_stop_app_handler
+
+
+# from app.core.events import create_start_app_handler, create_stop_app_handler
 
 
 def get_application() -> FastAPI:
@@ -46,3 +48,8 @@ def get_application() -> FastAPI:
 
 
 app = get_application()
+
+# if __name__ == '__main__':
+#     import uvicorn
+#
+#     uvicorn.run(app, host=get_app_settings.server_host, port=get_app_settings.server_port)

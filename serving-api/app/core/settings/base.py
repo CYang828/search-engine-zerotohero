@@ -16,7 +16,8 @@ class AppEnvTypes(Enum):
 
 class BaseAppSettings(BaseSettings):
     """基类app配置，设置默认类属性为生产环境"""
-    app_env: AppEnvTypes = AppEnvTypes.prod
+    app_env: AppEnvTypes = AppEnvTypes.dev
 
     class Config:
         env_file = ".env"
+        env_file_encoding = 'utf-8'

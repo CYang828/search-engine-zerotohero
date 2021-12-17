@@ -16,3 +16,4 @@ class DevAppSettings(AppSettings):
 
     class Config(AppSettings.Config):
         env_file = ".env"
+        env_file_encoding = 'utf-8'
