@@ -47,6 +47,7 @@ class ZhihuArticalItem(scrapy.Item):
     comment_permission = scrapy.Field()  #
     author = scrapy.Field()  #
     comment_count = scrapy.Field()  #
+    comments = scrapy.Field()  #
     created = scrapy.Field()  #
     content = scrapy.Field()  #
     state = scrapy.Field()  #
@@ -55,3 +56,6 @@ class ZhihuArticalItem(scrapy.Item):
     can_comment = scrapy.Field()  #
     type = scrapy.Field()  #
     suggest_edit = scrapy.Field()  #
+
+    def __str__(self):
+        return f'文章ID: {self.id}, 标题: {self.title}'

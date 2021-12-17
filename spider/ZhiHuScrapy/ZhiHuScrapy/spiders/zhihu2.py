@@ -11,7 +11,7 @@ from ZhiHuScrapy.settings import BASE_DIR
 
 
 class ZhihuSpider(scrapy.Spider):
-    name = 'zhihu'
+    name = 'zhihu2'
     allowed_domains = ['www.zhihu.com']
     start_urls = ['https://zhuanlan.zhihu.com/api/recommendations/columns?limit=8&offset=8&seed=7']
     with open(os.path.join(BASE_DIR, 'libs/cookie.txt')) as f:
@@ -40,7 +40,7 @@ class ZhihuSpider(scrapy.Spider):
 
     def start_requests(self):
         start_urls = [f'https://zhuanlan.zhihu.com/api/recommendations/columns?limit={8}&offset={i * 8}&seed=7'
-                      for i in range(0, 20000000)]
+                      for i in range(40000000, 60000000)]
 
         # start_urls = ['https://zhuanlan.zhihu.com/api/recommendations/columns?limit=8&offset=8&seed=7']
         for url in start_urls:
