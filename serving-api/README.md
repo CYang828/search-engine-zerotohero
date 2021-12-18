@@ -52,9 +52,20 @@ def get_app_settings() -> AppSettings:
     config = environments[app_env]
     return config()
 ```
+- lru_cache 技术细节
+    - @lru_cache() 修改它修饰的函数返回与第一次返回相同的值，而不是再次执行函数内部代码
+    - 因此，它下面的函数将针对每个参数组合执行一次
+    - 然后，每当使用完全相同的参数组合调用函数时，每个参数组合返回相同的值将一次又一次地使用
+    - 在请求依赖项 get_settings() 的情况下，该函数没有参数，所以它总是返回相同的值
+    - 这样，它的行为就好像它只是一个全局变量
+    - 但是因为它使用了一个依赖函数，所以可以很容易地覆盖它进行测试
+    - @lru_cache() 是 functools 的一部分，它是 Python 标准库的一部分
+    - 使用 @lru_cache() 可以避免为每个请求一次又一次地读取 .env 文件，同时可以在测试期间覆盖它的
 > lru_cache下面的函数将针对每个参数组合执行一次。然后，每当使用完全相同的参数组合调用函数时，这些参数组合中的每一个返回的值将一次又一次地使用。
 - 官方文档：https://docs.python.org/zh-cn/3/library/functools.html#functools.lru_cache
-- 参考文档：https://www.shangmayuan.com/a/fa6e60fc84b6439581681362.html
+- 参考文档：
+    - https://www.shangmayuan.com/a/fa6e60fc84b6439581681362.html
+    - https://blog.csdn.net/weixin_45154559/article/details/104581491
 - 使用functools的@lru_cache而不指定maxsize参数:https://www.cnpython.com/qa/145717
 #### 3.2.2 不同环境配置的调用
 > 使用工厂设计模式完成搭建
@@ -71,3 +82,7 @@ def get_app_settings() -> AppSettings:
 ---
 ## 四、启动项目
 uvicorn app.main:app --reload
+
+---
+## 五、项目部署
+docker以及docker-compose的使用
