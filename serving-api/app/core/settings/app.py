@@ -19,6 +19,7 @@ class AppSettings(BaseAppSettings):
     openapi_url: str = "/openapi.json"
     redoc_url: str = "/redoc"
     title: str = "Search Engine"
+    description: str = "描述"
     version: str = "0.0.0"
 
     database_url: PostgresDsn

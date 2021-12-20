@@ -5,7 +5,7 @@ from fastapi import APIRouter
 
 # from app.api.routes import authentication, comments, profiles, tags, users
 # from app.api.routes.articles import api as articles
-from app.api.routes import search, index
+from app.api.routes import search, index, query
 
 router = APIRouter()
 # router.include_router(authentication.router, tags=["authentication"], prefix="/users")
@@ -18,3 +18,4 @@ router.include_router(index.router, tags=["index"], prefix="")
 #     prefix="/articles/{slug}/comments",
 # )
 router.include_router(search.router, tags=["search"], prefix="/search")
+router.include_router(query.router, tags=["query"], prefix="/query")

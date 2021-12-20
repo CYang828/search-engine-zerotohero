@@ -10,7 +10,8 @@ from app.core.settings.app import AppSettings
 class DevAppSettings(AppSettings):
     debug: bool = True
 
-    title: str = "Dev FastAPI example application"
+    title: str = "Dev FastAPI Search Engine"
+    description: str = "开发环境，春阳搜索引擎"
 
     logging_level: int = logging.DEBUG
 
