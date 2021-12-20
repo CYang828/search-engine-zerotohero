@@ -4,6 +4,7 @@
 import happybase
 from fastapi import APIRouter
 from app.models.schemas.query import PersonResponse
+from app.resources.api_response import ApiResponse, ResponseEnum
 
 router = APIRouter()
 
@@ -22,7 +23,9 @@ async def persons(row_key: str):
         row_key_data2 = {}
         for k, v in row_key_data.items():
             row_key_data2[k.decode()] = v.decode()
-        return {'row_key': row_key, 'row_data': row_key_data2, 'code': 1, 'message': 'success'}
+        return ApiResponse.build_success(data={'row_key': row_key, 'row_data': row_key_data2})
+        # return {'row_key': row_key, 'row_data': row_key_data2, 'code': 1, 'message': 'success'}
     except Exception as e:
-        return {'row_key': row_key, 'row_data': {}, 'code': 0, 'message': str(e)}
+        # return {'row_key': row_key, 'row_data': {}, 'code': 0, 'message': str(e)}
+        return ApiResponse.build_error(ResponseEnum.HBASE_CONN_ERROR)
 
