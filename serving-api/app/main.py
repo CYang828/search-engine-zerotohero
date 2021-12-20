@@ -3,13 +3,29 @@
 # @File    : main.py
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
+from fastapi.openapi.docs import get_swagger_ui_html
 from starlette.middleware.cors import CORSMiddleware
-
+from fastapi import applications
 from app.api.errors.http_error import http_error_handler
 from app.api.errors.validate_error import http422_error_handler
 from app.api.routes.api import router as api_router
 
 from app.core.config import get_app_settings
+
+
+def swagger_monkey_patch(*args, **kwargs):
+    """
+    Wrap the function which is generating the HTML for the /docs endpoint and
+    overwrite the default values for the swagger js and css.
+    """
+    return get_swagger_ui_html(
+        *args, **kwargs,
+        swagger_js_url="https://cdn.bootcdn.net/ajax/libs/swagger-ui/4.0.0-beta.2/swagger-ui-bundle.js",
+        swagger_css_url="https://cdn.bootcdn.net/ajax/libs/swagger-ui/4.0.0-beta.2/swagger-ui.css")
+
+
+# Actual monkey patch
+applications.get_swagger_ui_html = swagger_monkey_patch
 
 
 # from app.core.events import create_start_app_handler, create_stop_app_handler

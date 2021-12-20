@@ -86,3 +86,44 @@ uvicorn app.main:app --reload
 ---
 ## 五、项目部署
 docker以及docker-compose的使用
+- Dockerfile
+- 启动容器：
+`docker run -itd --name fastapi -p 8000:8000 -v $(pwd):/app -v $(pwd)/start-reload.sh:/start-reload.sh fapp /start-reload.sh
+`
+
+---
+# 坑：
+## docs文档无法加载
+FastAPI 自动生成的docs文档没法使用, 这个是由于swagger-ui 3.30.1 中的bug导致
+
+我们可以通过在FastAPI中指定低版本的swagger-ui 来解决这个问题，主要方法是在main.py的文件中加上如下代码：
+```python
+from fastapi import applications
+from fastapi.openapi.docs import get_swagger_ui_html
+
+
+def swagger_monkey_patch(*args, **kwargs):
+    """
+    Wrap the function which is generating the HTML for the /docs endpoint and 
+    overwrite the default values for the swagger js and css.
+    """
+    return get_swagger_ui_html(
+        *args, **kwargs,
+        swagger_js_url="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.29/swagger-ui-bundle.js",
+        swagger_css_url="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.29/swagger-ui.css")
+
+
+# Actual monkey patch
+applications.get_swagger_ui_html = swagger_monkey_patch
+
+
+# Your normal code ...
+app = FastAPI()
+```
+swagger cdn: https://www.bootcdn.cn/swagger-ui/
+
+参考文档：
+- https://blog.csdn.net/xiang__liu/article/details/80396642#commentBox
+- https://blog.csdn.net/zhanggonglalala/article/details/98070986?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_ecpm_v1~rank_v31_ecpm-2-98070986.pc_agg_new_rank&utm_term=fastapi%E6%96%87%E6%A1%A3swagger&spm=1000.2123.3001.4430
+- https://blog.csdn.net/u014651560/article/details/116526653
+- https://toutiao.io/posts/d1elomi
