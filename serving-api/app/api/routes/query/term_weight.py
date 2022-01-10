@@ -15,16 +15,20 @@ router = APIRouter()
 @router.get('/term', name="query:term", summary='特征工程，term分析', response_model=TermResponse)
 async def term(args: SentenceArgs):
     """
-
-    - return:
+    Term分析API，term重要性分析
+    - params: sentence 请求体参数->json
+    - return: term_weight
     """
     # 获取请求参数 json， sentence
     sentence = args.sentence
 
     # 分词 query_list # todo  query改写预处理
     query_list = jieba.cut(sentence)
+    try:
+        # query_weight
+        query_weight = TermAnalyze(query_list=query_list).get_term_weight()
 
-    # query_weight
-    query_weight = TermAnalyze(query_list=query_list).get_term_weight()
+        return ApiResponse.build_success(data={'term_weight': [float(i) for i in query_weight]})
+    except Exception as e:
 
-    return ApiResponse.build_success(data={'term_weight': [float(i) for i in query_weight]})
+        return ApiResponse.build_error(ResponseEnum.TERM_ANALYSE_ERROR)
