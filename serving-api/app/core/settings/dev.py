@@ -12,7 +12,11 @@ class DevAppSettings(AppSettings):
 
     title: str = "Dev FastAPI Search Engine"
     description: str = "开发环境，春阳搜索引擎"
-
+    contact: dict = {
+        "name": "Search Engine Group",
+        "url": "http://39.106.195.80:15002/",
+        "email": "zhao_xingrong@163.com",
+    }
     logging_level: int = logging.DEBUG
 
     class Config(AppSettings.Config):

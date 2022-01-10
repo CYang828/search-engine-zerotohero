@@ -127,3 +127,5 @@ swagger cdn: https://www.bootcdn.cn/swagger-ui/
 - https://blog.csdn.net/zhanggonglalala/article/details/98070986?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_ecpm_v1~rank_v31_ecpm-2-98070986.pc_agg_new_rank&utm_term=fastapi%E6%96%87%E6%A1%A3swagger&spm=1000.2123.3001.4430
 - https://blog.csdn.net/u014651560/article/details/116526653
 - https://toutiao.io/posts/d1elomi
+
+![api文档](res/fapi.png)
