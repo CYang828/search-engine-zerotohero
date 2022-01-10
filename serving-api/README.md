@@ -127,5 +127,11 @@ swagger cdn: https://www.bootcdn.cn/swagger-ui/
 - https://blog.csdn.net/zhanggonglalala/article/details/98070986?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_ecpm_v1~rank_v31_ecpm-2-98070986.pc_agg_new_rank&utm_term=fastapi%E6%96%87%E6%A1%A3swagger&spm=1000.2123.3001.4430
 - https://blog.csdn.net/u014651560/article/details/116526653
 - https://toutiao.io/posts/d1elomi
+- https://cloud.tencent.com/developer/article/1884127
 
 ![api文档](res/fapi.png)
+- 其他配置
+    - OpenAPI Extra  https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/#openapi-extra
+- 相关资料
+    - Python3 Typing：https://docs.python.org/zh-cn/3/library/typing.html#
+    - pydantic：https://pydantic-docs.helpmanual.io/
