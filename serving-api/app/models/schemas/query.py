@@ -25,6 +25,15 @@ class PersonResponse(RWSchema):
     row_key: str
     row_data: dict = {}
 
+
+class SentenceArgs(RWSchema):
+    sentence: str
+
+
+class TermResponse(RWSchema):
+    # term_weight: dict = {}
+    term_weight: list
+
 # class ArticleInCreate(RWSchema):
 #     title: str
 #     description: str
