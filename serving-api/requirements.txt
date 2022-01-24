@@ -1,1 +1,6 @@
 loguru==0.5.3
+happybase==1.2.0
+sklearn==0.0
+jieba==0.42.1
+redis==4.0.1
+orjson==3.6.5

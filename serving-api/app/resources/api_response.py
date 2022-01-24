@@ -10,6 +10,7 @@ class ResponseEnum(Enum):
     SUCCESS = {'msg': "成功", 'code': "10000"}
     METHOD_ARGS_ERROR = {'msg': "参数不正确", 'code': "40000"}
     HBASE_CONN_ERROR = {'msg': "hbase连接失败", 'code': "40009"}
+    TERM_ANALYSE_ERROR = {'msg': "term分析处理异常", 'code': "40010"}
 
     def get_msg(self) -> str:
         return self.value['msg']

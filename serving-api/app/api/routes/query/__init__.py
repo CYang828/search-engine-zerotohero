@@ -3,8 +3,9 @@
 # @File    : __init__.py.py
 from fastapi import APIRouter
 
-from app.api.routes.query import person_entity
+from app.api.routes.query import person_entity, term_weight
 
 router = APIRouter()
 
 router.include_router(person_entity.router, prefix="/features")
+router.include_router(term_weight.router, prefix="/features")

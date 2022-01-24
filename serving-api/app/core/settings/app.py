@@ -20,14 +20,19 @@ class AppSettings(BaseAppSettings):
     redoc_url: str = "/redoc"
     title: str = "Search Engine"
     description: str = "描述"
-    version: str = "0.0.0"
-
+    version: str = "0.0.1"
+    contact: dict
     database_url: PostgresDsn
     max_connection_count: int = 10
     min_connection_count: int = 10
-
+    license_info: dict = {
+        "name": "Apache 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
+    }
     secret_key: SecretStr
-
+    x_logo: dict = {
+        "url": "https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png"
+    }
     api_prefix: str = "/api"
 
     jwt_token_prefix: str = "Token"
@@ -49,7 +54,11 @@ class AppSettings(BaseAppSettings):
             "openapi_url": self.openapi_url,
             "redoc_url": self.redoc_url,
             "title": self.title,
+            "contact": self.contact,
+            "license_info": self.license_info,
+            "description": self.description,
             "version": self.version,
+            "x_logo": self.x_logo,
         }
 
     def configure_logging(self) -> None:
