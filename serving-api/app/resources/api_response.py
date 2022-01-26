@@ -11,6 +11,9 @@ class ResponseEnum(Enum):
     METHOD_ARGS_ERROR = {'msg': "参数不正确", 'code': "40000"}
     HBASE_CONN_ERROR = {'msg': "hbase连接失败", 'code': "40009"}
     TERM_ANALYSE_ERROR = {'msg': "term分析处理异常", 'code': "40010"}
+    RECALL_PROCESS_ERROR = {'msg': "recall处理异常", 'code': "40011"}
+    RANK_PROCESS_ERROR = {'msg': "rank处理异常", 'code': "40012"}
+    RERANK_PROCESS_ERROR = {'msg': "rerank处理异常", 'code': "40013"}
 
     def get_msg(self) -> str:
         return self.value['msg']
