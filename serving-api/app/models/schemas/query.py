@@ -34,6 +34,21 @@ class TermResponse(RWSchema):
     # term_weight: dict = {}
     term_weight: list
 
+
+# query understanding response
+class QueryUnderstandingResonse(RWSchema):
+    query_understand: str
+
+
+# feature extract
+class FeatureExtractResonse(RWSchema):
+    feature_extract: dict
+
+
+# query transfer
+class QueryTransferResonse(RWSchema):
+    query_transfer: dict
+
 # class ArticleInCreate(RWSchema):
 #     title: str
 #     description: str
