@@ -1,6 +1,6 @@
 # @Time    : 2022-01-10 15:03
-# @Author  : 老赵
-# @File    : term_weight.py
+# @Author  : Li Mengqi
+# @File    : feature_extract.py
 
 from fastapi import APIRouter
 from app.models.schemas.query import FeatureExtractResonse, SentenceArgs
@@ -9,7 +9,7 @@ from app.resources.api_response import ApiResponse, ResponseEnum
 router = APIRouter()
 
 @router.get('/extract', name="feature:extract", summary='feature extract', response_model=FeatureExtractResonse)
-async def understanding(args: SentenceArgs):
+async def extract(args: SentenceArgs):
     """
     特征提取
     - params: sentence 请求体参数->json

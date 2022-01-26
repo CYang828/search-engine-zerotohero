@@ -1,6 +1,6 @@
 # @Time    : 2022-01-10 15:03
-# @Author  : 老赵
-# @File    : term_weight.py
+# @Author  : Li Mengqi
+# @File    : query_understanding.py
 
 from fastapi import APIRouter
 from app.models.schemas.query import QueryUnderstandingResonse, SentenceArgs

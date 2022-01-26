@@ -1,6 +1,6 @@
 # @Time    : 2022-01-10 15:03
-# @Author  : 老赵
-# @File    : term_weight.py
+# @Author  : Li Mengqi
+# @File    : query_transfer.py
 
 from fastapi import APIRouter
 from app.models.schemas.query import QueryTransferResonse, SentenceArgs
@@ -10,9 +10,9 @@ router = APIRouter()
 
 
 @router.get('/transfer', name="query:transfer", summary='query transfer', response_model=QueryTransferResonse)
-async def understanding(args: SentenceArgs):
+async def transfer(args: SentenceArgs):
     """
-    query 理解
+    query transfer
     - params: sentence 请求体参数->json
     - return: 暂时愿样子返回
     """
