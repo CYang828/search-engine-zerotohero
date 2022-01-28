@@ -9,5 +9,5 @@ from fastapi import APIRouter
 from app.api.routes.recall import recall
 
 router = APIRouter()
-router.include_router(recall.router, prefix="/analysis")
+router.include_router(recall.router,prefix="")
 

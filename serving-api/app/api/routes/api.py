@@ -1,11 +1,10 @@
 # @Time    : 2021-12-17 18:52
 # @Author  : 老赵
 # @File    : api.py
-from fastapi import APIRouter
-
 # from app.api.routes import authentication, comments, profiles, tags, users
 # from app.api.routes.articles import api as articles
-from app.api.routes import search, index, query,recall,rank,rerank
+from app.api.routes import search, index, query, recall, rank, rerank
+from fastapi import APIRouter
 
 router = APIRouter()
 # router.include_router(authentication.router, tags=["authentication"], prefix="/users")
@@ -17,8 +16,9 @@ router.include_router(index.router, tags=["index"], prefix="")
 #     tags=["comments"],
 #     prefix="/articles/{slug}/comments",
 # )
+
 router.include_router(search.router, tags=["search"], prefix="/search")
 router.include_router(query.router, tags=["query"], prefix="/query")
-router.include_router(recall.router, tags=["recall"], prefix="/recall")
-router.include_router(rank.router, tags=["rank"], prefix="/rank")
-router.include_router(rerank.router, tags=["rerank"], prefix="/rerank")
+router.include_router(recall.router, tags=["recall"], prefix="")
+router.include_router(rank.router, tags=["rank"], prefix="")
+router.include_router(rerank.router, tags=["rerank"], prefix="")

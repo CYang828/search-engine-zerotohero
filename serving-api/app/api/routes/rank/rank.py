@@ -16,7 +16,7 @@ router = APIRouter()
 
 
 @router.get('/rank', name="rank", summary='排序策略', response_model=RankResponse)
-async def rank(args: SentenceArgs):
+async def rank():
     """
     排序算法，对召回结果进行精排
     - return: result_rank
