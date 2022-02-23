@@ -9,4 +9,4 @@ from fastapi import APIRouter
 from app.api.routes.rerank import rerank
 
 router = APIRouter()
-router.include_router(rerank.router, prefix="/analysis")
+router.include_router(rerank.router, prefix="")

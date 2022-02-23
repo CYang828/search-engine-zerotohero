@@ -4,9 +4,8 @@
 # @FileName: __init__.py.py
 # @Software: PyCharm
 
+from app.api.routes.rank import rank
 from fastapi import APIRouter
 
-from app.api.routes.rank import rank
-
 router = APIRouter()
-router.include_router(rank.router, prefix="/analysis")
+router.include_router(rank.router, prefix="")
