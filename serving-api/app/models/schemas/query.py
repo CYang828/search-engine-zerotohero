@@ -21,7 +21,7 @@ class PersonInResponse(RWSchema):
     article: PersonForResponse
 
 
-class PersonResponse(RWSchema):
+class DocumentResponse(RWSchema):
     row_key: str
     row_data: dict = {}
 

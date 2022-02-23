@@ -5,7 +5,7 @@
 # @FileName:${NAME}.py
 
 from pymongo import MongoClient
-from features_utils import extract_article, hanlp_token_and_ner, split_sentence
+from features_utils import extract_article, hanlp_token_and_ner, split_sentence, word_vector, document_vector
 import jieba.analyse as analyse
 import json
 import happybase
@@ -13,8 +13,8 @@ import happybase
 
 class Process:
 
-    def __init__(self, url='mongodb://10.30.89.124:27011/', db='zhihu_new', collection='articles',
-                 h_table_name='document_features'):
+    def __init__(self, url='mongodb://10.30.89.124:27013/', db='zhihu_new', collection='articles',
+                 h_table_name='document_features_02'):
         """
         :param url:数据库所在服务器的ip和port
         :param db: 数据库名
@@ -116,13 +116,34 @@ class Process:
         document_faimly['document:has_column'] = str(one_data['has_column'])  # has_column专栏收录
         # tokens	文章的分词结果
         # entity	文章中出现的人名、地名、机构名等
+        # 标题、文章、摘要的文本向量表示;清洗后的正文内容;
+        # document:clean_content、document:title_vector、document:clean_content_vector、document:excerpt_vector
         clean_content = extract_article(one_data['content'])
         if clean_content.strip() == '':
+            document_faimly['document:clean_content'] = clean_content
+            document_faimly['document:title_vector'] = json.dumps({'title_vector': []})
+            document_faimly['document:clean_content_vector'] = json.dumps({'clean_content_vector': []})
+            document_faimly['document:excerpt_vector'] = json.dumps({'excerpt_vector': []})
+
             document_faimly['document:tokens'] = json.dumps({'tok_fine': []})
             document_faimly['document:entity'] = json.dumps({})
             document_faimly['document:top5words'] = json.dumps({'top5word': []})
             print('文章内容是空:', document_faimly)
             return document_faimly
+        document_faimly['document:clean_content'] = clean_content
+        if one_data['title'].strip() != '':
+            document_faimly['document:title_vector'] = json.dumps({'title_vector': document_vector(one_data['title'])})
+        else:
+            document_faimly['document:title_vector'] = json.dumps({'title_vector': []})
+        document_faimly['document:clean_content_vector'] = json.dumps(
+            {'clean_content_vector': document_vector(clean_content)})
+        if one_data['excerpt'].strip() != '':
+            document_faimly['document:excerpt_vector'] = json.dumps(
+                {'excerpt_vector': document_vector(one_data['excerpt'])})
+        else:
+            document_faimly['document:excerpt_vector'] = json.dumps(
+                {'excerpt_vector': []})
+
         try:
             document_tokens, document_entity = hanlp_token_and_ner(clean_content,
                                                                    use_split_sentence=False)  # 使用hanlp工具进行分词和实体识别
@@ -156,6 +177,8 @@ class Process:
             row_data = {**author_family, **comment_family, **document_faimly}  # 把三个字典合并为一个
             self.insert_hbase(row_data)
             num_of_into_hbase += 1
+            if num_of_into_hbase % 50 == 0:
+                print(num_of_into_hbase)
         print('本次从mongodb一共转移{}条数据到hbase'.format(num_of_into_hbase))
 
 
