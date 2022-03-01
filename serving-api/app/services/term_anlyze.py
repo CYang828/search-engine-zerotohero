@@ -24,13 +24,12 @@ def load_stop_words(stop_word_path):
 
 
 class TermAnalyze:
-    def __init__(self, hbase_url="10.30.89.124", hbase_port=9090, query_list=None,
+    def __init__(self, hbase_url="10.30.89.124", hbase_port=9090,
                  redis_url="10.30.89.124", redis_port=6379):
         self.hbase_url = hbase_url
         self.hbase_port = hbase_port
         self.redis_url = redis_url
         self.redis_port = redis_port
-        self.query_list = query_list
         self.connection = happybase.Connection(host=self.hbase_url, port=self.hbase_port,
                                                timeout=100000)
         self.res = redis.StrictRedis(host=self.hbase_url, port=self.redis_port, db=0)
@@ -85,10 +84,10 @@ class TermAnalyze:
             idf[key] = log(len(content) / idf[key])
         return idf
 
-    def get_term_weight(self):
+    def get_term_weight(self, query):
         idf = json.loads(self.res.get("idf"))
         weight = []
-        for term in self.query_list:
+        for term in query:
             weight.append(idf[term])
 
         weight = softmax([weight])
@@ -96,6 +95,7 @@ class TermAnalyze:
 
 
 if __name__ == '__main__':
+    # query "我喜欢学习"
     query_list = ["我", "喜欢", "学习"]
-    query_weight = TermAnalyze(query_list=query_list).get_term_weight()
+    query_weight = TermAnalyze().get_term_weight(query_list)
     print(query_weight)
