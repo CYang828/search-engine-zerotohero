@@ -5,17 +5,20 @@
 # @Software: PyCharm
 
 import json
+import os
 import pickle
 
 import faiss as faiss
 import numpy as np
 
-from recall import VectorRecall
+from recall.vector_recall import BaseVectorRecall
 
 
-class SummaryVectorRecall(VectorRecall):
+class SummaryVectorRecall(BaseVectorRecall):
     def __init__(self):
         super().__init__()
+        self.summary_vector = None
+        self.doc_summary_id2id = {}
 
     def save_vector(self):
         table = self.connection.table('document_features_02')
@@ -27,37 +30,43 @@ class SummaryVectorRecall(VectorRecall):
                 summary_vector.append(summary_vector_json)
                 doc_id_list.append(json.loads(each[1][b'document:id'].decode()))
 
-        summary_vector = np.array(summary_vector, dtype=np.float32)
-        with open("summary_vector_array.pkl", 'wb') as f:
-            pickle.dump(summary_vector, f)
-        doc_summary_id2id = {i: each for i, each in enumerate(doc_id_list)}
-        self.res.set('doc_summary_id2id', json.dumps(doc_summary_id2id))
+        self.summary_vector = np.array(summary_vector, dtype=np.float32)
+
+        if not os.path.exists(self.vector_dir):
+            os.makedirs(self.vector_dir)
+
+        with open(self.vector_dir + "summary_vector_array.pkl", 'wb') as f:
+            pickle.dump(self.summary_vector, f)
+        self.doc_summary_id2id = {i: each for i, each in enumerate(doc_id_list)}
+        self.res.set('doc_summary_id2id', json.dumps(self.doc_summary_id2id))
 
     def faiss_vector_recall(self, query: str, recall_nums: int = 40):
         """
         :param query: str 需要查询的语句
-        :param recall_num: 向量召回的数量
+        :param recall_nums: 向量召回的数量
         :return:list(I[0]):list 根据title向量召回文章的id
         """
-        with open('summary_vector_array.pkl', 'rb') as f:
-            summary_vectors = pickle.load(f)
+        if os.path.exists(self.vector_dir + 'summary_vector_array.pkl'):
+            self.doc_summary_id2id = json.loads(self.res.get('doc_summary_id2id'))
+            with open(self.vector_dir + 'summary_vector_array.pkl', 'rb') as f:
+                self.summary_vector = pickle.load(f)
+        else:
+            self.save_vector()
 
-        doc_summary_id2id = json.loads(self.res.get('doc_summary_id2id'))
-
-        index = faiss.IndexFlatL2(summary_vectors.shape[1])
-        index.add(summary_vectors)
+        index = faiss.IndexFlatL2(self.summary_vector.shape[1])
+        index.add(self.summary_vector)
 
         inputs = self.tokenizer(query, return_tensors="pt")
         outputs = self.model(**inputs)
         query_array = outputs.pooler_output.detach().numpy()[0].reshape(1, -1)
         D, I = index.search(query_array, recall_nums)
         recall_list = list(I[0])
-        summary_recall_id = [doc_summary_id2id[str(each)] for each in recall_list]
+        summary_recall_id = [self.doc_summary_id2id[str(each)] for each in recall_list]
         return summary_recall_id
 
 
 if __name__ == '__main__':
     query = "期货"
     vec = SummaryVectorRecall()
-    faiss_summary_vector_recall = vec.faiss_vector_recall(query, recall_nums=40)
-    print("faiss_summary_vector_recall:",faiss_summary_vector_recall)
+    id_list = vec.faiss_vector_recall(query, recall_nums=40)
+    print(id_list)

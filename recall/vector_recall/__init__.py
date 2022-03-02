@@ -15,7 +15,7 @@ import redis
 from transformers import BertModel, BertTokenizer
 
 
-class VectorRecall:
+class BaseVectorRecall:
     def __init__(self, hbase_url="10.30.89.124", hbase_port=9090,
                  redis_url="10.30.89.124", redis_port=6379):
         """
@@ -28,6 +28,7 @@ class VectorRecall:
         self.hbase_port = hbase_port
         self.redis_url = redis_url
         self.redis_port = redis_port
+        self.vector_dir = "recall/vector_data/"
         self.connection = happybase.Connection(host=self.hbase_url, port=self.hbase_port,
                                                timeout=100000)
         self.res = redis.StrictRedis(host=self.redis_url, port=self.redis_port, db=0)
