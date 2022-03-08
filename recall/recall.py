@@ -15,7 +15,7 @@ class Recall(BaseRecall):
         self.text_recall = TextRecall()
         self.vector_recall = VectorRecall()
 
-    def recall(self, query):
+    def recall(self, query: str):
         query_json = get_query_json(query)
         text_recall_id_list = self.text_recall.recall(query_json, recall_nums=60)
         vector_recall_id_list = self.vector_recall.recall(query, title_recall_nums=10, summary_recall_nums=10,
