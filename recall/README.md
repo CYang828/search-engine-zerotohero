@@ -3,20 +3,20 @@
 python -m recall.recall
 
 ### 召回部分的目录结构
-|-- text_recall  
-|   |-- __init__.py  
-|   -- text_recall.py # 文本召回  
+|-- text_recall
+|   |-- __init__.py
+|   -- text_recall.py  # 文本召回  
 |-- vector_data # 存储向量召回时的向量数据  
-|-- vector_recall  
-|   |-- __init__.py  
-|   |-- content_vector_recall.py # 使用query和文章内容向量进行召回  
-|   |-- summary_vector_recall.py # 使用query和文章摘要向量进行召回  
-|   |-- title_vector_recall.py  # 使用query和文章标题向量进行召回  
-|   -- vector_recall.py  #向量召回  
-|-- README.md  
-|-- __init__.py  
-|-- recall.py  
-`-- utils.py  
+|-- vector_recall
+|   |-- __init__.py
+|   |-- content_vector_recall.py  # 使用query和文章内容向量进行召回  
+|   |-- summary_vector_recall.py  # 使用query和文章摘要向量进行召回  
+|   |-- title_vector_recall.py    # 使用query和文章标题向量进行召回  
+|   -- vector_recall.py         #向量召回  
+|-- README.md
+|-- __init__.py              #定义了BaseRecall,并调用了config.ini中的参数
+|-- main.py                     # 召回
+|-- utils.py
 
 
 
