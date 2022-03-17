@@ -15,9 +15,6 @@ class ResponseEnum(Enum):
     RANK_PROCESS_ERROR = {'msg': "rank处理异常", 'code': "40012"}
     RERANK_PROCESS_ERROR = {'msg': "rerank处理异常", 'code': "40013"}
 
-    QUERY_TYPE_ERROR = {'msg': "query数据类型错误", 'code': "40014"}
-    QUERY_TRANSFER_ERROR = {'msg': "query transfer处理异常", 'code': "40015"}
-
     def get_msg(self) -> str:
         return self.value['msg']
 

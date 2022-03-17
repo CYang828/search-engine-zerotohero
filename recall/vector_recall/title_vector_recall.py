@@ -14,6 +14,7 @@ from recall.vector_recall import BaseVectorRecall
 
 
 class TitleVectorRecall(BaseVectorRecall):
+
     def __init__(self):
         super().__init__()
         self.title_vector = None
@@ -24,10 +25,12 @@ class TitleVectorRecall(BaseVectorRecall):
         title_vector = []
         doc_id_list = []
         for i, each in enumerate(table.scan(batch_size=10)):
-            title_vector_json = json.loads(each[1][b'document:title_vector'].decode())['title_vector']
+            title_vector_json = json.loads(each[1][b'document:title_vector'].decode())[
+                'title_vector']
             if len(title_vector_json) == 768:
                 title_vector.append(title_vector_json)
-                doc_id_list.append(json.loads(each[1][b'document:id'].decode()))
+                doc_id_list.append(json.loads(
+                    each[1][b'document:id'].decode()))
 
         self.title_vector = np.array(title_vector, dtype=np.float32)
         if not os.path.exists(self.vector_dir):
@@ -38,7 +41,7 @@ class TitleVectorRecall(BaseVectorRecall):
         self.doc_title_id2id = {i: each for i, each in enumerate(doc_id_list)}
         self.res.set('doc_title_id2id', json.dumps(self.doc_title_id2id))
 
-    def faiss_vector_recall(self, query: str, recall_nums: int = 40):
+    def recall(self, query: str, recall_nums: int):
         """
         :param query: str 需要查询的语句
         :param recall_nums: 向量召回的数量
@@ -60,12 +63,18 @@ class TitleVectorRecall(BaseVectorRecall):
         D, I = index.search(query_array, recall_nums)
         recall_list = list(I[0])
 
-        title_recall_id = [self.doc_title_id2id[str(each)] for each in recall_list]
+        title_recall_id = []
+        for each in recall_list:
+            each = str(each)
+            if each not in self.doc_title_id2id:
+                continue
+            else:
+                title_recall_id.append(self.doc_title_id2id[each])
         return title_recall_id
 
 
 if __name__ == '__main__':
     query = "期货"
     vec = TitleVectorRecall()
-    title_recall_id_list = vec.faiss_vector_recall(query, recall_nums=40)
+    title_recall_id_list = vec.recall(query, recall_nums=40)
     print("title_recall_id_list:", title_recall_id_list)

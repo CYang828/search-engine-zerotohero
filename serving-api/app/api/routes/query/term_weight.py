@@ -26,7 +26,7 @@ async def term(args: SentenceArgs):
     query_list = jieba.cut(sentence)
     try:
         # query_weight
-        query_weight = TermAnalyze().get_term_weight(query_list)
+        query_weight = TermAnalyze(query_list=query_list).get_term_weight()
 
         return ApiResponse.build_success(data={'term_weight': [float(i) for i in query_weight]})
     except Exception as e:
