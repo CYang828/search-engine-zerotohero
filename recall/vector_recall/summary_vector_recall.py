@@ -25,10 +25,12 @@ class SummaryVectorRecall(BaseVectorRecall):
         summary_vector = []
         doc_id_list = []
         for i, each in enumerate(table.scan(batch_size=10)):
-            summary_vector_json = json.loads(each[1][b'document:excerpt_vector'].decode())['excerpt_vector']
+            summary_vector_json = json.loads(each[1][b'document:excerpt_vector'].decode())[
+                'excerpt_vector']
             if len(summary_vector_json) == 768:
                 summary_vector.append(summary_vector_json)
-                doc_id_list.append(json.loads(each[1][b'document:id'].decode()))
+                doc_id_list.append(json.loads(
+                    each[1][b'document:id'].decode()))
 
         self.summary_vector = np.array(summary_vector, dtype=np.float32)
 
@@ -37,17 +39,19 @@ class SummaryVectorRecall(BaseVectorRecall):
 
         with open(self.vector_dir + "summary_vector_array.pkl", 'wb') as f:
             pickle.dump(self.summary_vector, f)
-        self.doc_summary_id2id = {i: each for i, each in enumerate(doc_id_list)}
+        self.doc_summary_id2id = {
+            i: each for i, each in enumerate(doc_id_list)}
         self.res.set('doc_summary_id2id', json.dumps(self.doc_summary_id2id))
 
-    def faiss_vector_recall(self, query: str, recall_nums: int = 40):
+    def recall(self, query: str, recall_nums: int):
         """
         :param query: str 需要查询的语句
         :param recall_nums: 向量召回的数量
         :return:list(I[0]):list 根据title向量召回文章的id
         """
         if os.path.exists(self.vector_dir + 'summary_vector_array.pkl'):
-            self.doc_summary_id2id = json.loads(self.res.get('doc_summary_id2id'))
+            self.doc_summary_id2id = json.loads(
+                self.res.get('doc_summary_id2id'))
             with open(self.vector_dir + 'summary_vector_array.pkl', 'rb') as f:
                 self.summary_vector = pickle.load(f)
         else:
@@ -61,12 +65,19 @@ class SummaryVectorRecall(BaseVectorRecall):
         query_array = outputs.pooler_output.detach().numpy()[0].reshape(1, -1)
         D, I = index.search(query_array, recall_nums)
         recall_list = list(I[0])
-        summary_recall_id = [self.doc_summary_id2id[str(each)] for each in recall_list]
+        summary_recall_id = []
+        for each in recall_list:
+            each = str(each)
+            if each not in self.doc_summary_id2id:
+                continue
+            else:
+                summary_recall_id.append(self.doc_summary_id2id[each])
+
         return summary_recall_id
 
 
 if __name__ == '__main__':
     query = "期货"
     vec = SummaryVectorRecall()
-    id_list = vec.faiss_vector_recall(query, recall_nums=40)
+    id_list = vec.recall(query, recall_nums=40)
     print(id_list)
