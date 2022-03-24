@@ -42,8 +42,8 @@ class ArticleSampler(BaseSampler):
         else:
             document_information = pd.read_csv('document_information.csv')
         # 对于每个用户 先选择采样的数量(对多少文章进行点击搜索)
-        # 根据文章数量决定每个用户可能交互的文章数量最多为【300，拍脑袋想的】，
-        # 然后[0,300]随机选择一个数作为 用户交互的文章数
+        # 根据文章数量决定每个用户可能交互的文章数量最多为【200，拍脑袋想的】，
+        # 然后[0,200]随机选择一个数作为 用户交互的文章数
         #
         # item_information = pd.DataFrame()
         temp_item_list = []
@@ -81,16 +81,19 @@ class ArticleSampler(BaseSampler):
 
         item_information = item_information.reset_index().drop('index', axis=1)
         item_information.loc[:, 'search_token'] = None
-        for i in range(item_information.shape[0]):
-            item_information.loc[i, 'search_token'] = str(sample_token(eval(item_information.loc[i, 'clean_token'])))
-        # #
+        # start = time.time()
+        # for i in trange(item_information.shape[0], desc='生成search_token'):
+        #     item_information.loc[i, 'search_token'] = str(sample_token(eval(item_information.loc[i, 'clean_token'])))
+        item_information['search_token'] = item_information['clean_token'].apply(lambda x: str(sample_token(eval(x))))
+        # times = time.time()-start
+        # print('循环消耗时间',times)
+        #
         # # 调整数据顺序
         item_information_new = item_information.loc[:,
                                ['userid', 'document_id', 'search_token', 'click', 'like', 'comment']]
 
-        # self.save_data(table_name='item_information', df=item_information_new)
-        # item_information_new.to_csv('item_information.csv', index=False)
-        return item_information_new
+        item_information_new.to_csv('search_information.csv', index=False)
+        # return item_information_new
 
     def get_article(self, debug=False):
         table = self.connection.table('document_features_02')
@@ -127,9 +130,8 @@ class ArticleSampler(BaseSampler):
         document_information = document_information.reset_index()
         document_information.columns = ['document_id', 'clean_token']
         document_information.to_csv('document_information.csv', index=False)
-        self.save_data(table_name='document_information', df=document_information)
 
 
 if __name__ == '__main__':
     # ArticleSampler().get_article()
-    data = ArticleSampler().sample()
+    ArticleSampler().sample()
