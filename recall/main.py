@@ -6,10 +6,9 @@
 import os
 
 from loader import load_configs
-from recall import BaseRecall
 
 from recall.text_recall.text_recall import TextRecall
-from recall.utils import get_query_json
+from recall.utils import get_query_json, BaseRecall
 from recall.vector_recall.vector_recall import VectorRecall
 
 
