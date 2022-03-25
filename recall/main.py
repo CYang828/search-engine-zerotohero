@@ -3,9 +3,6 @@
 # @Author  : zhengjiawei
 # @FileName: main.py
 # @Software: PyCharm
-import os
-
-from loader import load_configs
 
 from recall.text_recall.text_recall import TextRecall
 from recall.utils import get_query_json, BaseRecall

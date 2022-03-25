@@ -59,7 +59,8 @@ class UserSampler(BaseSampler):
             user_origin_data.loc[i, 'city'] = self.cities_dic[user_data.loc[i, 'city']]
             user_origin_data.loc[i, 'job'] = self.jobs_dic[user_data.loc[i, 'job']]
             user_origin_data.loc[i, 'education'] = self.education_dic[user_data.loc[i, 'education']]
-        return user_data, user_origin_data
+        user_data.to_csv('user_data.csv',index=False)
+        user_origin_data.to_csv('user_origin_data.csv',index=False)
 
     def sample_gender(self) -> list:
         """
@@ -135,6 +136,5 @@ class UserSampler(BaseSampler):
 
 
 if __name__ == '__main__':
-    data1, data2 = UserSampler().sample()
-    print(data1.head())
-    print(data2.head())
+    UserSampler().sample()
+
