@@ -75,6 +75,7 @@ class BaseSampler:
 
         self.user_nums = self.sampler_configs['user_nums']
         self.user_search_max_nums = self.sampler_configs['user_search_max_nums']
+        self.data_path = self.sampler_configs['data_path']
 
     @abc.abstractmethod
     def sample(self, *args, **kwargs):

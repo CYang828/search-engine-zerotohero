@@ -3,12 +3,13 @@
 # @Author  : zhengjiawei
 # @FileName: user_information.py
 # @Software: PyCharm
+import os
 import random
 
 import numpy as np
 import pandas as pd
 
-from dataset.sampler.utils import generate_userid, random_seed,BaseSampler
+from dataset.sampler.utils import generate_userid, random_seed, BaseSampler
 
 random_seed(2022)
 
@@ -46,7 +47,7 @@ class UserSampler(BaseSampler):
         # 修正数据 19岁以下只能是学生或者其他，education不能是硕士或者博士学历
         for i in range(user_data.shape[0]):
             education = user_data.loc[i, 'education']
-            while education in [3, 4]:
+            if education in [3, 4]:
                 education = random.sample([1, 2, 5], 1)[0]
             user_data.loc[i, 'education'] = education
 
@@ -59,8 +60,8 @@ class UserSampler(BaseSampler):
             user_origin_data.loc[i, 'city'] = self.cities_dic[user_data.loc[i, 'city']]
             user_origin_data.loc[i, 'job'] = self.jobs_dic[user_data.loc[i, 'job']]
             user_origin_data.loc[i, 'education'] = self.education_dic[user_data.loc[i, 'education']]
-        user_data.to_csv('user_data.csv',index=False)
-        user_origin_data.to_csv('user_origin_data.csv',index=False)
+        user_data.to_csv('../../dataset/data/user_data.csv', index=False)
+        user_origin_data.to_csv('../../dataset/data/user_origin_data.csv', index=False)
 
     def sample_gender(self) -> list:
         """
@@ -79,7 +80,8 @@ class UserSampler(BaseSampler):
         :return: age_list
         """
         # age_dic = {1: '19岁以下', 2: '20-29岁之间', 3: '30-39岁之间', 4: '其他'}
-        age_list = ['1'] * int(self.user_nums * 0.2) + ['2'] * int(self.user_nums * 0.7) + ['3'] * int(self.user_nums * 0.09) + \
+        age_list = ['1'] * int(self.user_nums * 0.2) + ['2'] * int(self.user_nums * 0.7) + ['3'] * int(
+            self.user_nums * 0.09) + \
                    ['4'] * int(self.user_nums * 0.01)
         age_list = [int(each) for each in age_list]
         random.shuffle(age_list)
@@ -92,7 +94,7 @@ class UserSampler(BaseSampler):
         """
         education_list = list(np.random.normal(2, 1, self.user_nums))
         education_list = np.ceil(education_list)
-        for i,each in enumerate(education_list):
+        for i, each in enumerate(education_list):
             while each not in [1, 2, 3, 4, 5]:
                 each = np.ceil(np.random.normal(2, 1))
             education_list[i] = each
@@ -137,4 +139,3 @@ class UserSampler(BaseSampler):
 
 if __name__ == '__main__':
     UserSampler().sample()
-
