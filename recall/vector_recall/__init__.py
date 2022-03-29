@@ -14,7 +14,7 @@ import happybase
 import redis
 from transformers import BertModel, BertTokenizer
 
-from recall import BaseRecall
+from recall.utils import BaseRecall
 
 
 class BaseVectorRecall(BaseRecall):

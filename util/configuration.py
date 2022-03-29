@@ -116,14 +116,3 @@ class ConfigurationParser(object):
 class ParameterError:
     """参数错误"""
     pass
-
-
-# from tornado.options import options
-
-# options.define('config',default = 'config.ini',help = 'this is default config path',type = str)
-
-# # # setting = {'path':'config.ini'}
-# # print('000000',options.config)
-# configer = ConfigurationParser('ini',path=options.config)
-# print(configer.configs)
-# Loader中的load_configuration 对ConfigurationParser实例化，然后返回对象的.configs对象

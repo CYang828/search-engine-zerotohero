@@ -7,8 +7,7 @@
 import json
 from elasticsearch import Elasticsearch
 
-from recall import BaseRecall
-from recall.utils import parse_es_content, get_query_json
+from recall.utils import parse_es_content, get_query_json, BaseRecall
 
 
 class TextRecall(BaseRecall):

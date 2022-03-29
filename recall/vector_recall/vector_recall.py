@@ -4,7 +4,7 @@
 # @FileName: vector_recall.py
 # @Software: PyCharm
 import json
-from recall import BaseRecall
+from recall.utils import BaseRecall
 from recall.vector_recall.content_vector_recall import ContentVectorRecall
 from recall.vector_recall.summary_vector_recall import SummaryVectorRecall
 from recall.vector_recall.title_vector_recall import TitleVectorRecall
