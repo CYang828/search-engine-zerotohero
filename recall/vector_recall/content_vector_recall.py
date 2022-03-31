@@ -10,7 +10,9 @@ import pickle
 
 import faiss as faiss
 import numpy as np
-from recall.vector_recall import BaseVectorRecall
+from transformers import BertTokenizer, BertModel
+
+from recall.vector_recall.utils import BaseVectorRecall
 
 
 class ContentVectorRecall(BaseVectorRecall):
@@ -18,6 +20,16 @@ class ContentVectorRecall(BaseVectorRecall):
         super().__init__()
         self.content_vector = None
         self.doc_content_id2id = {}
+        if os.path.exists(self.vector_dir + 'content_vector_array.pkl'):
+            self.doc_content_id2id = json.loads(
+                self.res.get('doc_content_id2id'))
+            with open(self.vector_dir + 'content_vector_array.pkl', 'rb') as f:
+                self.content_vector = pickle.load(f)
+        else:
+            self.save_vector()
+
+        self.index = faiss.IndexFlatL2(self.content_vector.shape[1])
+        self.index.add(self.content_vector)
 
     def save_vector(self):
         table = self.connection.table('document_features_02')
@@ -46,28 +58,13 @@ class ContentVectorRecall(BaseVectorRecall):
             i: each for i, each in enumerate(doc_id_list)}
         self.res.set('doc_content_id2id', json.dumps(self.doc_content_id2id))
 
-    def recall(self, query: str, recall_nums: int):
+    def recall(self, query_array, recall_nums: int):
         """
-        :param query: str 需要查询的语句
+        :param query_array: 需要查询的语句对应的向量
         :param recall_nums: 向量召回的数量
         :return:list(I[0]):list 根据content向量召回文章的id
         """
-        if os.path.exists(self.vector_dir + 'content_vector_array.pkl'):
-            self.doc_content_id2id = json.loads(
-                self.res.get('doc_content_id2id'))
-            print("path:", self.vector_dir + 'content_vector_array.pkl')
-            with open(self.vector_dir + 'content_vector_array.pkl', 'rb') as f:
-                self.content_vector = pickle.load(f)
-        else:
-            self.save_vector()
-
-        index = faiss.IndexFlatL2(self.content_vector.shape[1])
-        index.add(self.content_vector)
-
-        inputs = self.tokenizer(query, return_tensors="pt")
-        outputs = self.model(**inputs)
-        query_array = outputs.pooler_output.detach().numpy()[0].reshape(1, -1)
-        D, I = index.search(query_array, recall_nums)
+        D, I = self.index.search(query_array, recall_nums)
         recall_list = list(I[0])
 
         content_recall_id = []
@@ -83,6 +80,11 @@ class ContentVectorRecall(BaseVectorRecall):
 
 if __name__ == '__main__':
     query = "期货"
+    tokenizer = BertTokenizer.from_pretrained('bert-base-chinese')
+    model = BertModel.from_pretrained('bert-base-chinese')
+    inputs = tokenizer(query, return_tensors="pt")
+    outputs = model(**inputs)
+    query_array = outputs.pooler_output.detach().numpy()[0].reshape(1, -1)
     vec = ContentVectorRecall()
     content_id_list = vec.recall(query, recall_nums=40)
     print("content_recall_id_list:", content_id_list)

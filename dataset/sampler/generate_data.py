@@ -9,14 +9,14 @@ from loader import load_configs
 
 
 def get_train_test_data(config):
-    search_information = pd.read_csv('../../dataset/data/search_information.csv')
+    search_information = pd.read_csv('dataset/data/search_information.csv')
     test_search_data = search_information.sample(n=config['test_data_nums'], random_state=2022, axis=0)
     train_search_data = search_information[~search_information.index.isin(test_search_data.index)]
 
-    test_search_data.to_csv('../../dataset/data/test_search_data.csv', index=False)
-    train_search_data.to_csv('../../dataset/data/train_search_data.csv', index=False)
+    test_search_data.to_csv('dataset/data/test_search_data.csv', index=False)
+    train_search_data.to_csv('dataset/data/train_search_data.csv', index=False)
 
 
 if __name__ == '__main__':
-    configs = load_configs('../../config.ini',func='sampler')
+    configs = load_configs('config.ini',func='sampler')
     get_train_test_data(configs)

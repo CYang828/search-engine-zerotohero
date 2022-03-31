@@ -36,11 +36,11 @@ class ArticleSampler(BaseSampler):
         # 是否点击 1(0.95)
         # 是否点赞 0.05
         # 是否评论 0.01
-        if os.path.exists('../../dataset/data/document_information.csv'):
-            document_information = pd.read_csv('../../dataset/data/document_information.csv')
+        if os.path.exists(self.sampler_configs['data_path']+'document_information.csv'):
+            document_information = pd.read_csv(self.sampler_configs['data_path']+'document_information.csv')
         else:
             ArticleSampler().get_article()
-            document_information = pd.read_csv('../../dataset/data/document_information.csv')
+            document_information = pd.read_csv(self.sampler_configs['data_path']+'document_information.csv')
         if debug:
             self.user_search_max_nums = 50
             self.user_nums = 1000
@@ -97,7 +97,7 @@ class ArticleSampler(BaseSampler):
         item_information_new = item_information.loc[:,
                                ['userid', 'document_id', 'search_token', 'click', 'like', 'comment']]
 
-        item_information_new.to_csv('../../dataset/data/search_information.csv', index=False)
+        item_information_new.to_csv(self.sampler_configs['data_path']+'search_information.csv', index=False)
         # return item_information_new
 
     def get_article(self, debug=False):
@@ -134,7 +134,7 @@ class ArticleSampler(BaseSampler):
         document_information = pd.DataFrame([document_token_dic]).T
         document_information = document_information.reset_index()
         document_information.columns = ['document_id', 'clean_token']
-        document_information.to_csv('../../dataset/data/document_information.csv', index=False)
+        document_information.to_csv(self.sampler_configs['data_path']+'document_information.csv', index=False)
 
 
 if __name__ == '__main__':
