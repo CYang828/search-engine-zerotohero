@@ -11,37 +11,43 @@ from loader import load_configs
 def get_query_json(query, boost_title=3, boost_summary=2, boost_content=1):
     query_json = {
         "query": {
-            "bool": {
-                "must": [
-                    {
-                        "match": {
-                            "title": {
-                                "query": query,
-                                "boost": boost_title
-                            }
-                        }
-                    },
-                    {
-                        "match": {
-                            "content": {
-                                "query": query,
-                                "boost": boost_content
-                            }
-                        }
-                    }
-                    , {
-                        "match": {
-                            "excerpt": {
-                                "query": query,
-                                "boost": boost_summary
-                            }
-                        }
-
-                    }
-                ]
-            }
+            "match": {
+                "content": query}
         }
     }
+    # query_json = {
+    #     "query": {
+    #         "bool": {
+    #             "must": [
+    #                 {
+    #                     "match": {
+    #                         "title": {
+    #                             "query": query,
+    #                             "boost": boost_title
+    #                         }
+    #                     }
+    #                 },
+    #                 {
+    #                     "match": {
+    #                         "content": {
+    #                             "query": query,
+    #                             "boost": boost_content
+    #                         }
+    #                     }
+    #                 }
+    #                 , {
+    #                     "match": {
+    #                         "excerpt": {
+    #                             "query": query,
+    #                             "boost": boost_summary
+    #                         }
+    #                     }
+    #
+    #                 }
+    #             ]
+    #         }
+    #     }
+    # }
     return query_json
 
 
@@ -56,8 +62,7 @@ def parse_es_content(query_dict):
 
 
 class BaseRecall:
-    # config_path = os.path.join(os.path.dirname(__file__), "config.ini")
-    configs = load_configs(path='../config.ini', func='recall')
+    configs = load_configs(path='config.ini', func='recall')
 
     def __init__(self):
         self.hbase_url = self.configs['hbase_url']

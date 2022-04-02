@@ -62,9 +62,8 @@ def random_seed(seed):
 
 
 class BaseSampler:
-    base_configs = load_configs(path='../../config.ini', func='base')
-    recall_configs = load_configs(path='../../config.ini', func='recall')
-    sampler_configs = load_configs(path='../../config.ini', func='sampler')
+    base_configs = load_configs(path='config.ini', func='base')
+    sampler_configs = load_configs(path='config.ini', func='sampler')
 
     def __init__(self):
         self.mongo_url = self.base_configs['mongo_url']
@@ -75,6 +74,7 @@ class BaseSampler:
 
         self.user_nums = self.sampler_configs['user_nums']
         self.user_search_max_nums = self.sampler_configs['user_search_max_nums']
+        self.data_path = self.sampler_configs['data_path']
 
     @abc.abstractmethod
     def sample(self, *args, **kwargs):

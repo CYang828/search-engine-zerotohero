@@ -4,6 +4,7 @@
 # @FileName: article_information.py
 # @Software: PyCharm
 import json
+import os
 import random
 from collections import defaultdict, Counter
 
@@ -35,12 +36,16 @@ class ArticleSampler(BaseSampler):
         # 是否点击 1(0.95)
         # 是否点赞 0.05
         # 是否评论 0.01
+        if os.path.exists(self.sampler_configs['data_path']+'document_information.csv'):
+            document_information = pd.read_csv(self.sampler_configs['data_path']+'document_information.csv')
+        else:
+            ArticleSampler().get_article()
+            document_information = pd.read_csv(self.sampler_configs['data_path']+'document_information.csv')
         if debug:
             self.user_search_max_nums = 50
             self.user_nums = 1000
-            document_information = pd.read_csv('document_information.csv').head(200)
-        else:
-            document_information = pd.read_csv('document_information.csv')
+            document_information = document_information.head(200)
+
         # 对于每个用户 先选择采样的数量(对多少文章进行点击搜索)
         # 根据文章数量决定每个用户可能交互的文章数量最多为【200，拍脑袋想的】，
         # 然后[0,200]随机选择一个数作为 用户交互的文章数
@@ -92,7 +97,7 @@ class ArticleSampler(BaseSampler):
         item_information_new = item_information.loc[:,
                                ['userid', 'document_id', 'search_token', 'click', 'like', 'comment']]
 
-        item_information_new.to_csv('search_information.csv', index=False)
+        item_information_new.to_csv(self.sampler_configs['data_path']+'search_information.csv', index=False)
         # return item_information_new
 
     def get_article(self, debug=False):
@@ -129,7 +134,7 @@ class ArticleSampler(BaseSampler):
         document_information = pd.DataFrame([document_token_dic]).T
         document_information = document_information.reset_index()
         document_information.columns = ['document_id', 'clean_token']
-        document_information.to_csv('document_information.csv', index=False)
+        document_information.to_csv(self.sampler_configs['data_path']+'document_information.csv', index=False)
 
 
 if __name__ == '__main__':

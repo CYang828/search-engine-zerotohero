@@ -1,4 +1,4 @@
-### 用户表】
+### 用户表
 数据参考地址：https://i.ifeng.com/c/84sBWqk8wMs
 https://github.com/elliotxx/zhihu-crawler-people  
 用户特征：    
@@ -54,6 +54,12 @@ random.choice(range(1, 300))
 np.random.binomial(1, 0.05)
 5、是否评论 1%的概率评论
 np.random.binomial(1, 0.01)
+
+## 执行采样
+在项目的根目录下
+python -m dataset.data.main
+
+
 
 
 
