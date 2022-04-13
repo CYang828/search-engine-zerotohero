@@ -8,10 +8,11 @@ import json
 
 
 class HanlpTokensNer(FeatureBase):
-    def __init__(self):
-        self.HanLP = hanlp.load(hanlp.pretrained.mtl.CLOSE_TOK_POS_NER_SRL_DEP_SDP_CON_ELECTRA_SMALL_ZH)
+    def __init__(self, hanlp_model):
+        self.HanLP = hanlp_model
 
     def run(self, data):
+        data = data[:512]
         results_document = self.HanLP(data, tasks='ner')  # 精分
         tok_fine = json.dumps({'tok_fine': results_document['tok/fine']})
         ner_msra = results_document['ner/msra']

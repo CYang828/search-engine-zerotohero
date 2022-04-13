@@ -58,7 +58,7 @@ class DFAFilter:
                 self.add(str(keyword).strip())
         # print(self.keyword_chains)
 
-    def filter(self, message, repl="*"):
+    def filter(self, message, repl=""):
         message = message.lower()
         ret = []
         start = 0
