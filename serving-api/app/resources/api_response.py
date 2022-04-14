@@ -14,7 +14,8 @@ class ResponseEnum(Enum):
     RECALL_PROCESS_ERROR = {'msg': "recall处理异常", 'code': "40011"}
     RANK_PROCESS_ERROR = {'msg': "rank处理异常", 'code': "40012"}
     RERANK_PROCESS_ERROR = {'msg': "rerank处理异常", 'code': "40013"}
-
+    QUERY_ASSOCIATION_ERROR = {'msg': "query联想处理异常", 'code': "40014"}
+    QUERY_UNDERSTANDING_ERROR = {'msg': "query理解处理异常", 'code': "40015"}
     def get_msg(self) -> str:
         return self.value['msg']
 

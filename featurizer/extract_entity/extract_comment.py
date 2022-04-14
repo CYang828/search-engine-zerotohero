@@ -9,15 +9,16 @@ import json
 
 class ExtractComment(BaseExtract):
     def __init__(self):
-        self.comment = Comment()
+        pass
 
     def extract(self, row_data):
+        comment = Comment()
         one_data = row_data
         comment_family = dict()
         # comment_count	评论数量
-        self.comment.comment_count = str(one_data['comment_count'])
+        comment.comment_count = str(one_data['comment_count'])
         # voteup_count	点赞数量
-        self.comment.voteup_count = str(one_data['voteup_count'])
+        comment.voteup_count = str(one_data['voteup_count'])
         # 以下新建的列表中相同index位置对应同一条评论的属性
         # created_time	评论创建时间
         comment_created_time_list = []
@@ -38,10 +39,10 @@ class ExtractComment(BaseExtract):
             comment_name_list.append(one_comment['author']['member']['name'])
             comment_url_token_list.append(one_comment['author']['member']['url_token'])
             comment_vote_count_list.append(one_comment['vote_count'])
-        self.comment.created_time_list = json.dumps({'created_time_list': comment_created_time_list})
-        self.comment.content_list = json.dumps({'content_list': comment_content_list})
-        self.comment.avatar_url_list = json.dumps({'avatar_url_list': comment_avatar_url_list})
-        self.comment.name_list = json.dumps({'name_list': comment_name_list})
-        self.comment.url_token_list = json.dumps({'url_token_list': comment_url_token_list})
-        self.comment.vote_count_list = json.dumps({'vote_count_list': comment_vote_count_list})
-        return self.comment
+        comment.created_time_list = json.dumps({'created_time_list': comment_created_time_list})
+        comment.content_list = json.dumps({'content_list': comment_content_list})
+        comment.avatar_url_list = json.dumps({'avatar_url_list': comment_avatar_url_list})
+        comment.name_list = json.dumps({'name_list': comment_name_list})
+        comment.url_token_list = json.dumps({'url_token_list': comment_url_token_list})
+        comment.vote_count_list = json.dumps({'vote_count_list': comment_vote_count_list})
+        return comment

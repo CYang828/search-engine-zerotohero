@@ -8,8 +8,8 @@ from transformers import BertTokenizer, BertForMaskedLM
 from collections import defaultdict
 import json
 from annoy import AnnoyIndex
-from utils.mle_model import MLEmodel
-from tokenization import Tokenization
+from query.utils.mle_model import MLEmodel
+from query.tokenization import Tokenization
 from nltk.util import pad_sequence, ngrams
 import os
 
@@ -21,10 +21,10 @@ class RewriteQuery:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         # 调用tokenizer返回一个句子的input_ids（字典id）、 token_type_ids（第一个句子）、 attention_mask（mask遮罩减小误差）信息
         self.tokenizer = BertTokenizer.from_pretrained(
-            BASE_DIR + "/query2/model_data/macbert4csc-base-chinese")
+            BASE_DIR + "/query/model_data/macbert4csc-base-chinese")
         # 初始化模型并加载参数
         self.model = BertForMaskedLM.from_pretrained(
-            BASE_DIR + "/query2/model_data/macbert4csc-base-chinese")
+            BASE_DIR + "/query/model_data/macbert4csc-base-chinese")
         # 模型加载到指定设备
         self.model = self.model.to(self.device)
         # 加载相似词表
@@ -38,7 +38,7 @@ class RewriteQuery:
 
     def load_similar_words(self):
         # 读取相似词表（注意词表的编码格式是GB18030）
-        with open(BASE_DIR + "/query2/model_data/HIT-IRLab.txt", 'r', encoding='GB18030') as f:
+        with open(BASE_DIR + "/query/model_data/HIT-IRLab.txt", 'r', encoding='GB18030') as f:
             lines = f.readlines()
         # 只用其中相似的词
         self.one2other = defaultdict(list)
@@ -51,7 +51,7 @@ class RewriteQuery:
                     # self.one2other[word] = word_list[0:i] + word_list[i + 1:]  # 不考虑自己
 
     def load_word_freq(self):
-        with open(BASE_DIR + "/query2/model_data/vocab_dic.bin", 'rb') as f_dict:
+        with open(BASE_DIR + "/query/model_data/vocab_dic.bin", 'rb') as f_dict:
             w_freq = f_dict.read()
         self.w_freq = json.loads(w_freq)
         temp = defaultdict(int)
@@ -60,10 +60,10 @@ class RewriteQuery:
         self.w_freq = temp
 
     def load_index_word_vector(self):
-        with open(BASE_DIR + "/query2/model_data/tencent-AILab-ChineseEmbedding/tc_word_index.json", 'r') as fp:
+        with open(BASE_DIR + "/query/model_data/tencent-AILab-ChineseEmbedding/tc_word_index.json", 'r') as fp:
             self.word_index = json.load(fp)
         self.tc_index = AnnoyIndex(200)
-        self.tc_index.load(BASE_DIR + "/query2/model_data/tencent-AILab-ChineseEmbedding/tc_index_build10.index")
+        self.tc_index.load(BASE_DIR + "/query/model_data/tencent-AILab-ChineseEmbedding/tc_index_build10.index")
         # 反向id==>word映射词表
         self.reverse_word_index = dict([(value, key) for (key, value) in self.word_index.items()])
 
