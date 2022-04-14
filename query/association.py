@@ -2,6 +2,8 @@
 # @Time   :2022/3/8 3:40 下午
 # @Author :Li Meng qi
 # @FileName:association.py
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # 开启
 # CACHED = True
 # 关闭
@@ -72,7 +74,7 @@ class Node(dict):
 
 
 class QueryAssociate:
-    def __init__(self, file_path='model_data/query_association_data.txt'):
+    def __init__(self, file_path=BASE_DIR + '/query/model_data/query_association_data.txt'):
         self._build(file_path)
 
     def _add(self, node, keyword, weight=0, **kwargs):

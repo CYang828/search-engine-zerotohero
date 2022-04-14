@@ -5,9 +5,17 @@
 import opencc
 import re
 
+
 class QueryPre:
     def __init__(self):
         pass
+
+    def run(self, ustring):
+        ustring = self.filter_emoji(ustring)
+        ustring = self.strQ2B(ustring)
+        ustring = self.t2s_by_opencc(ustring)
+        ustring = self.capital_to_lower(ustring)
+        return ustring
 
     def strQ2B(self, ustring):
         """把字符串全角转半角"""
@@ -68,3 +76,7 @@ class QueryPre:
         except re.error:
             co = re.compile(u'[\uD800-\uDBFF][\uDC00-\uDFFF]')
         return co.sub(restr, desstr)
+
+if __name__ == '__main__':
+    p = QueryPre()
+    print(p.run('ASDF学习'))

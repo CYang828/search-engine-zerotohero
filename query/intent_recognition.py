@@ -4,9 +4,11 @@
 # @FileName:intent_recognition.py
 from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import TfidfVectorizer
-from tokenization import Tokenization
+from query.tokenization import Tokenization
 import pickle
+import os
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 class IntentRecognition:
     def __init__(self, n_pick_topics=20, n_pick_docs=20):
@@ -17,7 +19,7 @@ class IntentRecognition:
         self._load_corpus()
 
     def _load_corpus(self):
-        f = open('model_data/intent-recognition/cleaned_document_remove_stopwords_token.pickle', 'rb')
+        f = open(BASE_DIR + '/query/model_data/intent-recognition/cleaned_document_remove_stopwords_token.pkl', 'rb')
         self.corpus_data = pickle.load(f)
         f.close()
 
@@ -31,11 +33,11 @@ class IntentRecognition:
         self._save('X2', X2)
 
     def _save(self, model_name, obj):
-        with open('./model_data/intent-recognition/' + model_name + '.pickle', 'wb') as f:
+        with open(BASE_DIR + '/query/model_data/intent-recognition/' + model_name + '.pkl', 'wb') as f:
             pickle.dump(obj, f)
 
     def _load(self, model_name):
-        with open('./model_data/intent-recognition/' + model_name + '.pickle', 'rb') as f:
+        with open(BASE_DIR + '/query/model_data/intent-recognition/' + model_name + '.pkl', 'rb') as f:
             model = pickle.load(f)
         return model
 
@@ -65,4 +67,5 @@ class IntentRecognition:
 if __name__ == '__main__':
     intentrecognition = IntentRecognition()
     # intentrecognition.fit()
-    intentrecognition.predict('张艺谋电影')
+    re = intentrecognition.predict('想去美国留学')
+    print(len(re))

@@ -29,6 +29,14 @@ class PersonResponse(RWSchema):
 class SentenceArgs(RWSchema):
     sentence: str
 
+class QueryProcessingArgs(RWSchema):
+    sentence: str
+    process_type: str
+
+class AssociateArgs(RWSchema):
+    sentence: str
+    client_type: str
+
 
 class TermResponse(RWSchema):
     # term_weight: dict = {}
@@ -36,8 +44,8 @@ class TermResponse(RWSchema):
 
 
 # query understanding response
-class QueryUnderstandingResonse(RWSchema):
-    query_understand: str
+class QueryProcessingResonse(RWSchema):
+    query_processing: str
 
 
 # feature extract
@@ -49,6 +57,10 @@ class FeatureExtractResonse(RWSchema):
 class QueryTransferResonse(RWSchema):
     query_transfer: dict
 
+
+# query association
+class AssociationResponse(RWSchema):
+    query_association: list
 # class ArticleInCreate(RWSchema):
 #     title: str
 #     description: str
