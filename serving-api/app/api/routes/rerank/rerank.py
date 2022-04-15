@@ -14,7 +14,7 @@ from fastapi import APIRouter
 router = APIRouter()
 
 
-@router.get('/rerank', name="rerank", summary='重排策略', response_model=RankResponse)
+@router.get("/rerank", name="rerank", summary="重排策略", response_model=RankResponse)
 async def rerank():
     """
     排序算法，对精排结果进行重排
@@ -24,7 +24,7 @@ async def rerank():
         # rerank
         result_rerank = ReRank().se_rank()
 
-        return ApiResponse.build_success(data={'result_rerank': result_rerank})
+        return ApiResponse.build_success(data={"result_rerank": result_rerank})
     except Exception as e:
 
         return ApiResponse.build_error(ResponseEnum.RERANK_PROCESS_ERROR)

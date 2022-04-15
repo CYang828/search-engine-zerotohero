@@ -8,4 +8,4 @@ import subprocess
 # subprocess.check_call('执行的命令', cwd='指定的目录下')
 
 ## 方法2
-os.system('cd /usr/src/app/ZhiHuScrapy && scrapy crawlall')
+os.system("cd /usr/src/app/ZhiHuScrapy && scrapy crawlall")

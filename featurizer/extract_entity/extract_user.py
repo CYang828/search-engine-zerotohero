@@ -6,10 +6,12 @@ from extract_entity import BaseExtract
 from entity.user import User
 import json
 
+
 class ExtractUser(BaseExtract):
     def __init__(self):
         # self.user = user()
         pass
+
     def extract(self, row_data):
         user = User()
         # userid	gender	age	city	job	education

@@ -10,13 +10,13 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 
-BOT_NAME = 'ZhiHuScrapy'
+BOT_NAME = "ZhiHuScrapy"
 
-SPIDER_MODULES = ['ZhiHuScrapy.spiders']
-NEWSPIDER_MODULE = 'ZhiHuScrapy.spiders'
+SPIDER_MODULES = ["ZhiHuScrapy.spiders"]
+NEWSPIDER_MODULE = "ZhiHuScrapy.spiders"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36'
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -40,7 +40,7 @@ DOWNLOAD_DELAY = 3
 
 # Override the default request headers:
 DEFAULT_REQUEST_HEADERS = {
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "referer": "https://www.zhihu.com/search?type=content&q=python",
 }
 
@@ -54,8 +54,7 @@ DEFAULT_REQUEST_HEADERS = {
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     #    'ZhiHuScrapy.middlewares.ZhihuscrapyDownloaderMiddleware': 543,
-    'ZhiHuScrapy.middlewares.UserAgentMiddleware': 443,
-
+    "ZhiHuScrapy.middlewares.UserAgentMiddleware": 443,
 }
 
 # Enable or disable extensions
@@ -67,8 +66,8 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'ZhiHuScrapy.pipelines.ZhihuscrapyPipeline': 300,
-   'ZhiHuScrapy.pipelines.DuplicatesPipeline': 200,
+    "ZhiHuScrapy.pipelines.ZhihuscrapyPipeline": 300,
+    "ZhiHuScrapy.pipelines.DuplicatesPipeline": 200,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -92,8 +91,8 @@ ITEM_PIPELINES = {
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-LOG_FILE = '../logs/zhihu.log'
-LOG_LEVEL = 'WARNING'
-LOG_STDOUT = 'True'
+LOG_FILE = "../logs/zhihu.log"
+LOG_LEVEL = "WARNING"
+LOG_STDOUT = "True"
 
-COMMANDS_MODULE = 'ZhiHuScrapy.commands'
+COMMANDS_MODULE = "ZhiHuScrapy.commands"

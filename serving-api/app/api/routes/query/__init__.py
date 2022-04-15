@@ -3,7 +3,12 @@
 # @File    : __init__.py.py
 from fastapi import APIRouter
 
-from app.api.routes.query import document_features, term_weight, query_association, query_processing
+from app.api.routes.query import (
+    document_features,
+    term_weight,
+    query_association,
+    query_processing,
+)
 
 router = APIRouter()
 

@@ -7,7 +7,6 @@ from abc import ABCMeta, abstractmethod
 
 
 class BaseExtract(metaclass=ABCMeta):
-
     @abstractmethod
     def extract(self, row_data):
         raise NotImplementedError

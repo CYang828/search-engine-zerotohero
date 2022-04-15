@@ -29,9 +29,11 @@ class PersonResponse(RWSchema):
 class SentenceArgs(RWSchema):
     sentence: str
 
+
 class QueryProcessingArgs(RWSchema):
     sentence: str
     process_type: str
+
 
 class AssociateArgs(RWSchema):
     sentence: str
@@ -61,6 +63,8 @@ class QueryTransferResonse(RWSchema):
 # query association
 class AssociationResponse(RWSchema):
     query_association: list
+
+
 # class ArticleInCreate(RWSchema):
 #     title: str
 #     description: str

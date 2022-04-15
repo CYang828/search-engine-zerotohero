@@ -19,7 +19,7 @@ def load_stop_words(stop_word_path):
     :return: 停用词表 list
     """
     # 打开文件
-    file = open(stop_word_path, 'r', encoding='utf-8')
+    file = open(stop_word_path, "r", encoding="utf-8")
     # 读取所有行
     stop_words = file.readlines()
     # 去除每一个停用词前后 空格 换行符
@@ -28,13 +28,13 @@ def load_stop_words(stop_word_path):
 
 
 def generate_userid(nums) -> list:
-    """"
+    """ "
     :return userid_list，存放用户的userid
     """
     ids = [each for each in range(nums)]
     userid_list = []
     for each in ids:
-        id = 'userid_' + (len(str(nums)) - len(str(each))) * str(0) + str(each)
+        id = "userid_" + (len(str(nums)) - len(str(each))) * str(0) + str(each)
         userid_list.append(id)
     return userid_list
 
@@ -62,24 +62,29 @@ def random_seed(seed):
 
 
 class BaseSampler:
-    base_configs = load_configs(path='config.ini', func='base')
-    sampler_configs = load_configs(path='config.ini', func='sampler')
+    base_configs = load_configs(path="config.ini", func="base")
+    sampler_configs = load_configs(path="config.ini", func="sampler")
 
     def __init__(self):
-        self.mongo_url = self.base_configs['mongo_url']
-        self.mongo_port = self.base_configs['mongo_port']
-        self.mongo_db = self.base_configs['mongo_db']
-        self.hbase_url = self.base_configs['hbase_url']
-        self.hbase_port = self.base_configs['hbase_port']
+        self.mongo_url = self.base_configs["mongo_url"]
+        self.mongo_port = self.base_configs["mongo_port"]
+        self.mongo_db = self.base_configs["mongo_db"]
+        self.hbase_url = self.base_configs["hbase_url"]
+        self.hbase_port = self.base_configs["hbase_port"]
 
-        self.user_nums = self.sampler_configs['user_nums']
-        self.user_search_max_nums = self.sampler_configs['user_search_max_nums']
-        self.data_path = self.sampler_configs['data_path']
+        self.user_nums = self.sampler_configs["user_nums"]
+        self.user_search_max_nums = self.sampler_configs["user_search_max_nums"]
+        self.data_path = self.sampler_configs["data_path"]
 
     @abc.abstractmethod
     def sample(self, *args, **kwargs):
         raise NotImplemented
 
     def save_data(self, table_name, df):
-        save_data_to_mongo(mongo_url=self.mongo_url, mongo_port=self.mongo_port, mongo_db=self.mongo_db,
-                           table_name=table_name, df=df)
+        save_data_to_mongo(
+            mongo_url=self.mongo_url,
+            mongo_port=self.mongo_port,
+            mongo_db=self.mongo_db,
+            table_name=table_name,
+            df=df,
+        )

@@ -10,6 +10,6 @@ class CleanHtmlTag(FeatureBase):
     def run(self, data):
         if isinstance(data, float):
             print(data)
-            return ''
+            return ""
         result = bs(data).get_text()
         return result

@@ -11,10 +11,12 @@ from ZhiHuScrapy.settings import BASE_DIR
 
 
 class ZhihuSpider(scrapy.Spider):
-    name = 'zhihu1'
-    allowed_domains = ['www.zhihu.com']
-    start_urls = ['https://zhuanlan.zhihu.com/api/recommendations/columns?limit=8&offset=8&seed=7']
-    with open(os.path.join(BASE_DIR, 'libs/cookie.txt')) as f:
+    name = "zhihu1"
+    allowed_domains = ["www.zhihu.com"]
+    start_urls = [
+        "https://zhuanlan.zhihu.com/api/recommendations/columns?limit=8&offset=8&seed=7"
+    ]
+    with open(os.path.join(BASE_DIR, "libs/cookie.txt")) as f:
         cookie = f.read()
     headers = {
         "referer": "https://www.zhihu.com/search?type=content&q=python",
@@ -30,53 +32,60 @@ class ZhihuSpider(scrapy.Spider):
     @staticmethod
     def transform(cookies):
         cookie_dict = {}
-        cookies = cookies.replace(' ', '')
-        list = cookies.split(';')
+        cookies = cookies.replace(" ", "")
+        list = cookies.split(";")
         for i in list:
-            keys = i.split('=')[0]
-            values = i.split('=')[1]
+            keys = i.split("=")[0]
+            values = i.split("=")[1]
             cookie_dict[keys] = values
         return cookie_dict
 
     def start_requests(self):
-        start_urls = [f'https://zhuanlan.zhihu.com/api/recommendations/columns?limit={8}&offset={i * 8}&seed=7'
-                      for i in range(20000000, 40000000)]
+        start_urls = [
+            f"https://zhuanlan.zhihu.com/api/recommendations/columns?limit={8}&offset={i * 8}&seed=7"
+            for i in range(20000000, 40000000)
+        ]
 
         # start_urls = ['https://zhuanlan.zhihu.com/api/recommendations/columns?limit=8&offset=8&seed=7']
         for url in start_urls:
-            logging.warning(f'当前爬虫专栏URL为{url}')
+            logging.warning(f"当前爬虫专栏URL为{url}")
             time.sleep(0.5)
-            yield scrapy.Request(url=url, headers=self.headers, callback=self.parse_zhuanlan, meta={'url': url})
+            yield scrapy.Request(
+                url=url,
+                headers=self.headers,
+                callback=self.parse_zhuanlan,
+                meta={"url": url},
+            )
 
     def parse_zhuanlan(self, response):
         zhuanlan_data = response.json()
-        url = response.meta.get('url')
-        zhuanlan_lists = zhuanlan_data.get('data')
+        url = response.meta.get("url")
+        zhuanlan_lists = zhuanlan_data.get("data")
 
         for i in zhuanlan_lists:
             if not i:
-                logging.warning(f'{url}没有解析出相应的数据')
+                logging.warning(f"{url}没有解析出相应的数据")
                 continue
             item = ZhihuscrapyItem()
-            item['updated'] = i.get('updated')
-            item['description'] = i.get('description')
-            item['column_type'] = i.get('column_type')
-            item['title'] = i.get('title')
-            item['url'] = i.get('url')
-            item['comment_permission'] = i.get('comment_permission')
-            item['created'] = i.get('created')
-            item['accept_submission'] = i.get('accept_submission')
-            item['intro'] = i.get('intro')
-            item['image_url'] = i.get('image_url')
-            item['type'] = i.get('type')
-            item['followers'] = i.get('followers')
-            item['url_token'] = i.get('url_token')
-            item['id'] = i.get('id')
-            item['articles_count'] = i.get('articles_count')
+            item["updated"] = i.get("updated")
+            item["description"] = i.get("description")
+            item["column_type"] = i.get("column_type")
+            item["title"] = i.get("title")
+            item["url"] = i.get("url")
+            item["comment_permission"] = i.get("comment_permission")
+            item["created"] = i.get("created")
+            item["accept_submission"] = i.get("accept_submission")
+            item["intro"] = i.get("intro")
+            item["image_url"] = i.get("image_url")
+            item["type"] = i.get("type")
+            item["followers"] = i.get("followers")
+            item["url_token"] = i.get("url_token")
+            item["id"] = i.get("id")
+            item["articles_count"] = i.get("articles_count")
             time.sleep(0.1)
             # print(item['url'])
             # c_url = f"https://www.zhihu.com/api/v4/columns/{item['url_token']}/items"
-            pages = item['articles_count'] // 20 + 1
+            pages = item["articles_count"] // 20 + 1
             # params = {
             #     'limit': 10,
             #     'offset': 10
@@ -99,69 +108,77 @@ class ZhihuSpider(scrapy.Spider):
             #                      callback=self.parse_article)
             for j in range(0, pages):
                 cur_url = f"https://www.zhihu.com/api/v4/columns/{item['url_token']}/items?limit={20}&offset={j * 20}"
-                yield scrapy.Request(url=cur_url,
-                                     headers=self.headers,
-                                     # body=json.dumps(params),
-                                     callback=self.parse_article,
-                                     meta=item)
+                yield scrapy.Request(
+                    url=cur_url,
+                    headers=self.headers,
+                    # body=json.dumps(params),
+                    callback=self.parse_article,
+                    meta=item,
+                )
 
     def parse_article(self, response):
         articles_data = response.json()
         zhuanlan_item = response.meta
-        mg_db = MongoUtil('zhuanlan')
+        mg_db = MongoUtil("zhuanlan")
         old_dict = {
-            'created': zhuanlan_item['created'],
-            'id': zhuanlan_item['id'],
+            "created": zhuanlan_item["created"],
+            "id": zhuanlan_item["id"],
         }
         if mg_db.update_one(old_dict, dict(zhuanlan_item)).matched_count:
-            logging.warning('专栏已爬过，update to Mongo-zhuanlan, {}'.format(zhuanlan_item['id']))
+            logging.warning(
+                "专栏已爬过，update to Mongo-zhuanlan, {}".format(zhuanlan_item["id"])
+            )
         else:
-            logging.warning('专栏入库，insert to Mongo-zhuanlan, {}'.format(zhuanlan_item['id']))
+            logging.warning(
+                "专栏入库，insert to Mongo-zhuanlan, {}".format(zhuanlan_item["id"])
+            )
 
-        for article in articles_data.get('data'):
+        for article in articles_data.get("data"):
             if not article:
                 continue
             article_item = ZhihuArticalItem()
-            article_item['updated'] = article.get('updated')
-            article_item['is_labeled'] = article.get('is_labeled')
-            article_item['copyright_permission'] = article.get('copyright_permission')
-            article_item['settings'] = article.get('settings')
-            article_item['excerpt'] = article.get('excerpt')
-            article_item['admin_closed_comment'] = article.get('admin_closed_comment')
-            article_item['voting'] = article.get('voting')
-            article_item['article_type'] = article.get('article_type')
-            article_item['reason'] = article.get('reason')
-            article_item['excerpt_title'] = article.get('excerpt_title')
-            article_id = article.get('id')
-            article_item['id'] = article_id
-            article_item['voteup_count'] = article.get('voteup_count')
-            article_item['title_image'] = article.get('title_image')
-            article_item['has_column'] = article.get('has_column')
-            article_item['url'] = article.get('url')
-            article_item['comment_permission'] = article.get('comment_permission')
-            article_item['author'] = article.get('author')
-            comment_count = article.get('comment_count')
-            assert isinstance(comment_count, int), '评论数为整数！'
-            article_item['comment_count'] = comment_count
-            article_item['created'] = article.get('created')
-            article_item['content'] = article.get('content')
-            article_item['state'] = article.get('state')
-            article_item['image_url'] = article.get('image_url')
-            article_item['title'] = article.get('title')
-            article_item['can_comment'] = article.get('can_comment')
-            article_item['type'] = article.get('type')
-            article_item['suggest_edit'] = article.get('suggest_edit')
+            article_item["updated"] = article.get("updated")
+            article_item["is_labeled"] = article.get("is_labeled")
+            article_item["copyright_permission"] = article.get("copyright_permission")
+            article_item["settings"] = article.get("settings")
+            article_item["excerpt"] = article.get("excerpt")
+            article_item["admin_closed_comment"] = article.get("admin_closed_comment")
+            article_item["voting"] = article.get("voting")
+            article_item["article_type"] = article.get("article_type")
+            article_item["reason"] = article.get("reason")
+            article_item["excerpt_title"] = article.get("excerpt_title")
+            article_id = article.get("id")
+            article_item["id"] = article_id
+            article_item["voteup_count"] = article.get("voteup_count")
+            article_item["title_image"] = article.get("title_image")
+            article_item["has_column"] = article.get("has_column")
+            article_item["url"] = article.get("url")
+            article_item["comment_permission"] = article.get("comment_permission")
+            article_item["author"] = article.get("author")
+            comment_count = article.get("comment_count")
+            assert isinstance(comment_count, int), "评论数为整数！"
+            article_item["comment_count"] = comment_count
+            article_item["created"] = article.get("created")
+            article_item["content"] = article.get("content")
+            article_item["state"] = article.get("state")
+            article_item["image_url"] = article.get("image_url")
+            article_item["title"] = article.get("title")
+            article_item["can_comment"] = article.get("can_comment")
+            article_item["type"] = article.get("type")
+            article_item["suggest_edit"] = article.get("suggest_edit")
             pages = comment_count // 20 + 1
             if not pages:
                 yield article_item
             # comment_url = f'https://www.zhihu.com/api/v4/articles/{article_id}/root_comments?order=normal&limit=20&offset=0&status=open'
             for j in range(0, pages):
                 time.sleep(0.1)
-                comment_url = f'https://www.zhihu.com/api/v4/articles/{article_id}/root_comments?order=normal&limit=20&offset={j * 20}&status=open'
-                yield scrapy.Request(url=comment_url,
-                                     headers=self.headers,
-                                     callback=self.parse_article_comment,
-                                     meta=article_item)
+                comment_url = f"https://www.zhihu.com/api/v4/articles/{article_id}/root_comments?order=normal&limit=20&offset={j * 20}&status=open"
+                yield scrapy.Request(
+                    url=comment_url,
+                    headers=self.headers,
+                    callback=self.parse_article_comment,
+                    meta=article_item,
+                )
             # yield article_item
 
     def parse_article_comment(self, response):
@@ -169,5 +186,5 @@ class ZhihuSpider(scrapy.Spider):
         # print(comment_data)
         # logging.warning(comment_data.get('data'))
         article_item = response.meta
-        article_item['comments'] = comment_data.get('data')
+        article_item["comments"] = comment_data.get("data")
         yield article_item

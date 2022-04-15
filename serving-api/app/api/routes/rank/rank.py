@@ -15,7 +15,7 @@ from fastapi import APIRouter
 router = APIRouter()
 
 
-@router.get('/rank', name="rank", summary='排序策略', response_model=RankResponse)
+@router.get("/rank", name="rank", summary="排序策略", response_model=RankResponse)
 async def rank():
     """
     排序算法，对召回结果进行精排
@@ -25,7 +25,7 @@ async def rank():
         # rank
         result_rank = Rank().tf_ranking()
 
-        return ApiResponse.build_success(data={'result_rank': result_rank})
+        return ApiResponse.build_success(data={"result_rank": result_rank})
     except Exception as e:
 
         return ApiResponse.build_error(ResponseEnum.RANK_PROCESS_ERROR)

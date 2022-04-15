@@ -6,7 +6,6 @@ from abc import ABCMeta, abstractmethod
 
 
 class FeatureBase(metaclass=ABCMeta):
-
     @abstractmethod
     def run(self, data):
         raise NotImplementedError

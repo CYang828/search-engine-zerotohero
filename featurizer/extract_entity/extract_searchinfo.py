@@ -6,9 +6,11 @@ from extract_entity import BaseExtract
 from entity.searchinfo import SearchInfo
 import json
 
+
 class ExtractSearchInfo(BaseExtract):
     def __init__(self):
         pass
+
     def extract(self, row_data):
         searchinfo = SearchInfo()
         # userid  document_id      search_token  click  like  comment

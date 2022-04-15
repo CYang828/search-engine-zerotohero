@@ -9,6 +9,7 @@ from pydantic import BaseSettings
 
 class AppEnvTypes(Enum):
     """枚举型设计 不同环境对应的环境字符串"""
+
     prod: str = "prod"
     dev: str = "dev"
     test: str = "test"
@@ -16,8 +17,9 @@ class AppEnvTypes(Enum):
 
 class BaseAppSettings(BaseSettings):
     """基类app配置，设置默认类属性为生产环境"""
+
     app_env: AppEnvTypes = AppEnvTypes.dev
 
     class Config:
         env_file = ".env"
-        env_file_encoding = 'utf-8'
+        env_file_encoding = "utf-8"

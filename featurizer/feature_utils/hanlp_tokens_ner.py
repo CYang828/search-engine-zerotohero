@@ -13,9 +13,9 @@ class HanlpTokensNer(FeatureBase):
 
     def run(self, data):
         data = data[:512]
-        results_document = self.HanLP(data, tasks='ner')  # 精分
-        tok_fine = json.dumps({'tok_fine': results_document['tok/fine']})
-        ner_msra = results_document['ner/msra']
+        results_document = self.HanLP(data, tasks="ner")  # 精分
+        tok_fine = json.dumps({"tok_fine": results_document["tok/fine"]})
+        ner_msra = results_document["ner/msra"]
         ner = {}
         for entity, entity_class, _, _ in ner_msra:
             if entity_class not in ner.keys():

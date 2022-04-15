@@ -3,6 +3,7 @@
 # @Author :Li Meng qi
 # @FileName:association.py
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # 开启
 # CACHED = True
@@ -35,7 +36,12 @@ class Node(dict):
                 setattr(self, key, value)
 
     def __str__(self):
-        return '<Node key:%s is_leaf:%s weight:%s Subnodes: %s>' % (self.key, self.is_leaf, self.weight, self.items())
+        return "<Node key:%s is_leaf:%s weight:%s Subnodes: %s>" % (
+            self.key,
+            self.is_leaf,
+            self.weight,
+            self.items(),
+        )
 
     def add_subnode(self, node):
         """
@@ -74,7 +80,9 @@ class Node(dict):
 
 
 class QueryAssociate:
-    def __init__(self, file_path=BASE_DIR + '/query/model_data/query_association_data.txt'):
+    def __init__(
+        self, file_path=BASE_DIR + "/query/model_data/query_association_data.txt"
+    ):
         self._build(file_path)
 
     def _add(self, node, keyword, weight=0, **kwargs):
@@ -93,7 +101,9 @@ class QueryAssociate:
                 if index != last_index:
                     one_node.add_subnode(Node(c, weight=weight))
                 else:
-                    one_node.add_subnode(Node(c, is_leaf=True, weight=weight, kwargs=kwargs))
+                    one_node.add_subnode(
+                        Node(c, is_leaf=True, weight=weight, kwargs=kwargs)
+                    )
                 one_node = one_node.get_subnode(c)
             else:
                 one_node = one_node.get_subnode(c)
@@ -154,8 +164,8 @@ class QueryAssociate:
         for line in f:
             line = line.strip()
             if not isinstance(line, str):
-                line = line.decode('utf-8')
-            parts = line.split('\t')
+                line = line.decode("utf-8")
+            parts = line.split("\t")
             if len(parts) == 1:
                 continue
             name = parts[0]
@@ -206,7 +216,7 @@ class QueryAssociate:
                 node.is_leaf = False
                 self.depth_walk(node)
             else:
-                return [('', node)]
+                return [("", node)]
         if node.has_subnode():
             for k in node.keys():
                 s = self.depth_walk(node.get(k))
@@ -214,8 +224,9 @@ class QueryAssociate:
                 result.extend([(k + subkey, snode) for subkey, snode in s])
             return result
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     queryass = QueryAssociate()
-    query = '学习'
+    query = "学习"
     for key, node in queryass.search(query, limit=10):
         print(key, node.weight)

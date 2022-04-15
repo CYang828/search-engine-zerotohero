@@ -5,12 +5,12 @@
 from feature_utils import FeatureBase
 import re
 
-SEPARATOR = r'@'
-RE_SENTENCE = re.compile(r'(\S.+?[.!?])(?=\s+|$)|(\S.+?)(?=[\n]|$)', re.UNICODE)
-AB_SENIOR = re.compile(r'([A-Z][a-z]{1,2}\.)\s(\w)', re.UNICODE)
-AB_ACRONYM = re.compile(r'(\.[a-zA-Z]\.)\s(\w)', re.UNICODE)
-UNDO_AB_SENIOR = re.compile(r'([A-Z][a-z]{1,2}\.)' + SEPARATOR + r'(\w)', re.UNICODE)
-UNDO_AB_ACRONYM = re.compile(r'(\.[a-zA-Z]\.)' + SEPARATOR + r'(\w)', re.UNICODE)
+SEPARATOR = r"@"
+RE_SENTENCE = re.compile(r"(\S.+?[.!?])(?=\s+|$)|(\S.+?)(?=[\n]|$)", re.UNICODE)
+AB_SENIOR = re.compile(r"([A-Z][a-z]{1,2}\.)\s(\w)", re.UNICODE)
+AB_ACRONYM = re.compile(r"(\.[a-zA-Z]\.)\s(\w)", re.UNICODE)
+UNDO_AB_SENIOR = re.compile(r"([A-Z][a-z]{1,2}\.)" + SEPARATOR + r"(\w)", re.UNICODE)
+UNDO_AB_ACRONYM = re.compile(r"(\.[a-zA-Z]\.)" + SEPARATOR + r"(\w)", re.UNICODE)
 
 
 class SplitSentence(FeatureBase):
@@ -18,10 +18,10 @@ class SplitSentence(FeatureBase):
         return self.split_sentence(data)
 
     def split_sentence(self, text, best=True):
-        text = re.sub('([。！？\?])([^”’])', r"\1\n\2", text)
-        text = re.sub('(\.{6})([^”’])', r"\1\n\2", text)
-        text = re.sub('(\…{2})([^”’])', r"\1\n\2", text)
-        text = re.sub('([。！？\?][”’])([^，。！？\?])', r'\1\n\2', text)
+        text = re.sub("([。！？\?])([^”’])", r"\1\n\2", text)
+        text = re.sub("(\.{6})([^”’])", r"\1\n\2", text)
+        text = re.sub("(\…{2})([^”’])", r"\1\n\2", text)
+        text = re.sub("([。！？\?][”’])([^，。！？\?])", r"\1\n\2", text)
         for chunk in text.split("\n"):
             chunk = chunk.strip()
             if not chunk:
@@ -29,9 +29,13 @@ class SplitSentence(FeatureBase):
             if not best:
                 yield chunk
                 continue
-            processed = self.replace_with_separator(chunk, SEPARATOR, [AB_SENIOR, AB_ACRONYM])
+            processed = self.replace_with_separator(
+                chunk, SEPARATOR, [AB_SENIOR, AB_ACRONYM]
+            )
             for sentence in RE_SENTENCE.finditer(processed):
-                sentence = self.replace_with_separator(sentence.group(), r" ", [UNDO_AB_SENIOR, UNDO_AB_ACRONYM])
+                sentence = self.replace_with_separator(
+                    sentence.group(), r" ", [UNDO_AB_SENIOR, UNDO_AB_ACRONYM]
+                )
                 yield sentence
 
     def replace_with_separator(self, text, separator, regexs):

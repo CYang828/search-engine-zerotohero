@@ -14,10 +14,14 @@ from recall.utils import BaseRecall
 class BaseVectorRecall(BaseRecall):
     def __init__(self):
         super().__init__()
-        self.connection = happybase.Connection(host=self.hbase_url, port=self.hbase_port,
-                                               timeout=100000, protocol='compact', transport='framed')
-        self.res = redis.StrictRedis(
-            host=self.redis_url, port=self.redis_port, db=0)
+        self.connection = happybase.Connection(
+            host=self.hbase_url,
+            port=self.hbase_port,
+            timeout=100000,
+            protocol="compact",
+            transport="framed",
+        )
+        self.res = redis.StrictRedis(host=self.redis_url, port=self.redis_port, db=0)
 
     @abc.abstractmethod
     def save_vector(self, *args, **kwargs):

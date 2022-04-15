@@ -19,7 +19,12 @@ rewrite = RewriteQuery()
 intentrecog = IntentRecognition()
 
 
-@router.get('/processing', name="query:processing", summary='query processing', response_model=QueryProcessingResonse)
+@router.get(
+    "/processing",
+    name="query:processing",
+    summary="query processing",
+    response_model=QueryProcessingResonse,
+)
 async def understanding(args: QueryProcessingArgs):
     """
     query 理解
@@ -30,7 +35,7 @@ async def understanding(args: QueryProcessingArgs):
     sentence = args.sentence
     if not sentence.strip():
         return ApiResponse.build_error(ResponseEnum.QUERY_UNDERSTANDING_ERROR)
-    if args.process_type == 'default':
+    if args.process_type == "default":
         # query预处理：过滤emo、大写转小写、半角转全角、繁体转简体
         sentence = query_pre.run(args.sentence)
         # 敏感识别
@@ -46,33 +51,41 @@ async def understanding(args: QueryProcessingArgs):
         sentence_extend = rewrite.query_extend(sentence_tokens)
         # 意图识别(返回的是文章集)
         documents = intentrecog.predict(sentence)
-        results.extend([sentence, sentence_tokens, sentence_entity, sentence_unify, sentence_extend])
-    elif args.process_type == 'tokens':
+        results.extend(
+            [
+                sentence,
+                sentence_tokens,
+                sentence_entity,
+                sentence_unify,
+                sentence_extend,
+            ]
+        )
+    elif args.process_type == "tokens":
         sentence_tokens, _ = tokenizer.hanlp_token_ner(sentence)
         results.append(sentence_tokens)
-    elif args.process_type == 'ner':
+    elif args.process_type == "ner":
         _, sentence_entity = tokenizer.hanlp_token_ner(sentence)
         results.append(sentence_entity)
-    elif args.process_type == 'preprocess':
+    elif args.process_type == "preprocess":
         sentence = query_pre.run(args.sentence)
         results.append(sentence)
-    elif args.process_type == 'filter_sensitive':
+    elif args.process_type == "filter_sensitive":
         sentence = filter.filter(sentence)
         results.append(sentence)
-    elif args.process_type == 'corrector':
+    elif args.process_type == "corrector":
         sentence = rewrite.query_corrector(sentence)
         results.append(sentence)
-    elif args.process_type == 'unify':
+    elif args.process_type == "unify":
         sentence_tokens, _ = tokenizer.hanlp_token_ner(sentence)
         sentence_unify = rewrite.query_unify(sentence_tokens)
         results.append(sentence_unify)
-    elif args.process_type == 'extend':
+    elif args.process_type == "extend":
         sentence_tokens, _ = tokenizer.hanlp_token_ner(sentence)
         sentence_extend = rewrite.query_extend(sentence_tokens)
         results.append(sentence_extend)
-    elif args.process_type == 'intent_recognition':
+    elif args.process_type == "intent_recognition":
         documents = intentrecog.predict(sentence)
         results.append(documents)
     else:
         ApiResponse.build_error(ResponseEnum.QUERY_UNDERSTANDING_ERROR)
-    return ApiResponse.build_success(data={'query_processing': results})
+    return ApiResponse.build_success(data={"query_processing": results})

@@ -1,4 +1,3 @@
-
 import re
 import collections
 import configparser
@@ -6,7 +5,7 @@ import configparser
 
 def utf8(d):
     if isinstance(d, bytes):
-        return d.decode('utf-8')
+        return d.decode("utf-8")
     if isinstance(d, dict):
         return dict(map(utf8, d.items()))
     if isinstance(d, tuple):
@@ -33,12 +32,12 @@ def str2everything(s):
             return utf8(s)
     except NameError:
         # boolean, str, list
-        if s.lower() == 'yes':
+        if s.lower() == "yes":
             return True
-        elif s.lower() == 'no':
+        elif s.lower() == "no":
             return False
-        elif len(s.split(',')) > 1:
-            return [i for i in s.split(',') if i]
+        elif len(s.split(",")) > 1:
+            return [i for i in s.split(",") if i]
         else:
             return utf8(s)
     except (SyntaxError, TypeError):
@@ -48,7 +47,7 @@ def str2everything(s):
 class ConfigurationParser(object):
     """Configuration Parser"""
 
-    parser = {'ini': '_ini_parser'}
+    parser = {"ini": "_ini_parser"}
 
     def __init__(self, t, **setting):
         """parse config file
@@ -82,9 +81,9 @@ class ConfigurationParser(object):
         :parameter:
           - `setting`: setting
         """
-        eattr = ['path']
+        eattr = ["path"]
         self._check_setting(eattr, setting)
-        path = setting.get('path')
+        path = setting.get("path")
         # path : 'config.ini'文件
         cf = configparser.ConfigParser()
         cf.read(path)
@@ -115,4 +114,5 @@ class ConfigurationParser(object):
 
 class ParameterError:
     """参数错误"""
+
     pass

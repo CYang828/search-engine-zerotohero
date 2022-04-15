@@ -6,12 +6,11 @@ import pymongo
 
 
 class MongoUtil:
-
     def __init__(self, myset):
-        client = pymongo.MongoClient(host='10.30.89.124', port=27011)
+        client = pymongo.MongoClient(host="10.30.89.124", port=27011)
         # client = pymongo.MongoClient('mongodb://{}:{}@{}:{}/'.format(
         #     "bigdata", "bigdata123", "10.30.89.124", "27011"))
-        self.collection = client.zhihu_data[f'{myset}']
+        self.collection = client.zhihu_data[f"{myset}"]
 
     def mongo_insert(self, data_dict):
         ret = self.collection.insert_one(data_dict)
@@ -22,7 +21,7 @@ class MongoUtil:
         return ret
 
     def update_one(self, old_dict, new_dict):
-        return self.collection.update_one(old_dict, {'$set': new_dict}, upsert=True)
+        return self.collection.update_one(old_dict, {"$set": new_dict}, upsert=True)
 
     def delete_one(self, data_dict):
         self.collection.delete_one(data_dict)
@@ -36,8 +35,8 @@ class MongoUtil:
         return (i for i in t)
 
 
-if __name__ == '__main__':
-    mg_db = MongoUtil('articles')
+if __name__ == "__main__":
+    mg_db = MongoUtil("articles")
     # # 插入数据
     # student = {'id': '20190101', 'name': 'Tom3', 'age': 20, 'gender': 'female'}
     # ret = mg_db.mongo_insert(student)
