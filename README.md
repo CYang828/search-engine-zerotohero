@@ -21,7 +21,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/BSlience/search-engine-zerotohero">
-    <img src="images/logo.jpeg" alt="Logo" width="150" height="120">
+    <img src="images/logo.jpeg" alt="Logo" width="250" height="200">
   </a>
 
   <h3 align="center">search-engine-zerotohero</h3>
