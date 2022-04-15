@@ -1,6 +1,5 @@
 <div id="top"></div>
 
-
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -9,22 +8,18 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
+
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
-
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/BSlience/search-engine-zerotohero">
-    <img src="images/logo.jpg" alt="Logo" width="896" height="541">
-  </a>
 
-  <h3 align="center">search-engine-zerotohero</h3>
+<h3 align="center">search-engine-zerotohero</h3>
 
   <p align="center">
     从零开始学习企业级搜索引擎的搭建
@@ -39,8 +34,9 @@
     <a href="https://github.com/othneildrew/Best-README-Template/issues">提交 Pull Request</a> -->
   </p>
 </div>
-
-
+  <a href="https://github.com/BSlience/search-engine-zerotohero">
+    <img src="images/logo.jpg" alt="Logo" width="896" height="541">
+  </a>
 
 <!-- TABLE OF CONTENTS -->
 <!-- <details>
@@ -68,9 +64,8 @@
   </ol>
 </details> -->
 
-
-
 <!-- ABOUT THE PROJECT -->
+
 ## 关于本项目
 
 推荐系统在众多应用中都有着举足轻重的地位，不管是短视频应用、电商应用、对话应用、内容搜索应用、社交应用，推荐都是一项必不可少的应用，在给用户提高效率的同时，也能给企业带来不错的收益。但是，市面上很少有成体系的搜索引擎的学习资料，国外的一些资料介绍的技术又相对比较老。这把很多想要学习的小伙伴挡在了门外。鉴于此，我和我的团队开发了这个项目，希望能够填补这块内容的空白，让想要学习搜索的人能够少走弯路的学会这项技术，并且能够把它应用到企业应用中。
@@ -79,30 +74,26 @@
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 ### 使用技术
 
 这个部分列举了在本项目中使用的技术和插件。
 
-* [Hadoop](https://hadoop.apache.org/)
-* [Spark](https://spark.apache.org/)
-* [Hive](https://hive.apache.org/)
-* [HBase](https://hbase.apache.org/)
-* [Zookeeper](https://zookeeper.apache.org/)
-* [Tensorflow](https://www.tensorflow.org/)
+- [Hadoop](https://hadoop.apache.org/)
+- [Spark](https://spark.apache.org/)
+- [Hive](https://hive.apache.org/)
+- [HBase](https://hbase.apache.org/)
+- [Zookeeper](https://zookeeper.apache.org/)
+- [Tensorflow](https://www.tensorflow.org/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
+
 ## 快速开始
 
 快速开始体验搜索引擎搭建过程。
 
-
-
 <p align="right">(<a href="#top">back to top</a>)</p>
-
 
 <!-- USAGE EXAMPLES -->
 <!-- ## 如何使用
@@ -113,18 +104,16 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 <p align="right">(<a href="#top">back to top</a>)</p> -->
 
-
-
 <!-- ROADMAP -->
-## 开发地图
 
+## 开发地图
 
 也可以查看 [open issues](https://github.com/BSlience/search-engine-zerotohero/issues) 获取关于新特性的更多信息。
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
 <!-- CONTRIBUTING -->
+
 ## 如何贡献
 
 贡献可以让社区持续的成长，赋能给更多的人，让人和人、人和项目产生链接。如果你有好的想法，非常欢迎能够加入到开源的团队中。对此，我们**非常感谢**。
@@ -139,17 +128,16 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- LICENSE -->
+
 ## 协议
 
 MIT 协议. 查看 `LICENSE.txt` 获取更多信息。
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
 <!-- CONTACT -->
+
 ## 联系
 
 ![](images/wechat.jpg)
@@ -159,8 +147,6 @@ MIT 协议. 查看 `LICENSE.txt` 获取更多信息。
 Project Link: [https://github.com/BSlience/search-engine-zerotohero/](https://github.com/BSlience/search-engine-zerotohero/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 <!-- ACKNOWLEDGMENTS -->
 <!-- ## 你可能会感兴趣
@@ -178,10 +164,9 @@ Use this space to list resources you find helpful and would like to give credit 
 
 <p align="right">(<a href="#top">back to top</a>)</p> -->
 
-
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/BSlience/search-engine-zerotohero.svg?style=for-the-badge
 [contributors-url]: https://github.com/BSlience/search-engine-zerotohero/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/BSlience/search-engine-zerotohero.svg?style=for-the-badge
@@ -193,9 +178,3 @@ Use this space to list resources you find helpful and would like to give credit 
 [license-shield]: https://img.shields.io/github/license/BSlience/search-engine-zerotohero.svg?style=for-the-badge
 [license-url]: https://github.com/BSlience/search-engine-zerotohero/blob/master/LICENSE.txt
 [product-screenshot]: images/product.jpg
-
-
-
-
-
-
