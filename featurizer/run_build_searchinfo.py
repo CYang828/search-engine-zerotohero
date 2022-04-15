@@ -104,6 +104,6 @@ class Processer:
 
 
 if __name__ == '__main__':
-    process = Processer(host='10.30.89.124', port=9090, data_path='/Users/lmq/Downloads/search_information.csv',
+    process = Processer(host='10.30.89.124', port=9090, data_path='data/search_information.csv',
                         h_table_name='searchinfo_features')
     process.run()
