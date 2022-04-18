@@ -70,6 +70,8 @@
 
 推荐系统在众多应用中都有着举足轻重的地位，不管是短视频应用、电商应用、对话应用、内容搜索应用、社交应用，推荐都是一项必不可少的应用，在给用户提高效率的同时，也能给企业带来不错的收益。但是，市面上很少有成体系的搜索引擎的学习资料，国外的一些资料介绍的技术又相对比较老。这把很多想要学习的小伙伴挡在了门外。鉴于此，我和我的团队开发了这个项目，希望能够填补这块内容的空白，让想要学习搜索的人能够少走弯路的学会这项技术，并且能够把它应用到企业应用中。
 
+如果觉得能够帮助你，请帮忙点一颗星星，非常感谢🙏
+
 <!-- [![Product Name Screen Shot][product-screenshot]](https://github.com/BSlience/search-engine-zerotohero) -->
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -92,6 +94,14 @@
 ## 快速开始
 
 快速开始体验搜索引擎搭建过程。
+
+1. 数据导入
+   ```bash
+   wget -P dataset/ http://xbot.bslience.cn/articles.json.zip
+   unzip dataset/articles.json.zip -d dataset/
+   # 把数据导入到 mongo中 
+   mongoimport -h <host> -d zhihu -c articles --file dataset/articles.json --headerline --type json
+   ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
