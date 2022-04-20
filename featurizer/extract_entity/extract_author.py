@@ -2,8 +2,8 @@
 # @Time   :2022/2/28 5:08 下午
 # @Author :Li Meng qi
 # @FileName:extract_author.py
-from extract_entity import BaseExtract
-from entity.author import Author
+from featurizer.extract_entity import BaseExtract
+from featurizer.entity.author import Author
 import json
 
 

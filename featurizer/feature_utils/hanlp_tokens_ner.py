@@ -2,7 +2,7 @@
 # @Time   :2022/2/24 5:12 下午
 # @Author :Li Meng qi
 # @FileName:hanlp_tokens_ner.py
-from feature_utils import FeatureBase
+from featurizer.feature_utils import FeatureBase
 import hanlp
 import json
 

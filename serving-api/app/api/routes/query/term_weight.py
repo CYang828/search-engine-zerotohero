@@ -1,8 +1,6 @@
 # @Time    : 2022-01-10 15:03
 # @Author  : 老赵
 # @File    : term_weight.py
-
-import happybase
 import jieba
 from fastapi import APIRouter
 from app.models.schemas.query import TermResponse, SentenceArgs

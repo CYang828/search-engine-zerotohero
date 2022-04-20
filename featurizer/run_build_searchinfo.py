@@ -3,9 +3,10 @@
 # @Author :Li Meng qi
 # @FileName:run_build_searchinfo.py
 import happybase
-from extract_entity.extract_searchinfo import ExtractSearchInfo
+from featurizer.extract_entity.extract_searchinfo import ExtractSearchInfo
 import pandas as pd
 from multiprocessing import Process, Queue
+from loader import load_configs
 
 
 class Processer:
@@ -109,10 +110,7 @@ class Processer:
 
 
 if __name__ == "__main__":
-    process = Processer(
-        host="10.30.89.124",
-        port=9090,
-        data_path="data/search_information.csv",
-        h_table_name="searchinfo_features",
-    )
+    configs = load_configs(func='search_info_hbase')
+    print(configs)
+    process = Processer(**configs)
     process.run()

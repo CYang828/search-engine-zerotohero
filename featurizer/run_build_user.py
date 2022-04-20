@@ -2,11 +2,10 @@
 # @Time   :2022/2/24 11:21 上午
 # @Author :Li Meng qi
 # @FileName:run_build_user.py
-from pymongo import MongoClient
 import happybase
-from extract_entity.extract_user import ExtractUser
+from featurizer.extract_entity.extract_user import ExtractUser
 import pandas as pd
-
+from loader import load_configs
 
 class Processer:
     def __init__(self, **kwargs):
@@ -85,6 +84,7 @@ class Processer:
 
 
 if __name__ == "__main__":
+    configs = load_configs(func='')
     process = Processer(
         host="10.30.89.124",
         port=9090,
