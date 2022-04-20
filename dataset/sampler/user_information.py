@@ -3,7 +3,6 @@
 # @Author  : zhengjiawei
 # @FileName: user_information.py
 # @Software: PyCharm
-import os
 import random
 
 import numpy as np
@@ -56,12 +55,12 @@ class UserSampler(BaseSampler):
         # 获得未转换的数据
         for i in range(user_data.shape[0]):
             user_origin_data.loc[i, 'gender'] = self.gender_dic[user_data.loc[i, 'gender']]
-            user_origin_data.loc[i, 'age'] = self.age_dic[user_data.loc[i, 'age']]
+            user_origin_data.loc[i, 'age'] = user_data.loc[i, 'age']
             user_origin_data.loc[i, 'city'] = self.cities_dic[user_data.loc[i, 'city']]
             user_origin_data.loc[i, 'job'] = self.jobs_dic[user_data.loc[i, 'job']]
             user_origin_data.loc[i, 'education'] = self.education_dic[user_data.loc[i, 'education']]
-        user_data.to_csv(self.sampler_configs['data_path']+'user_data.csv', index=False)
-        user_origin_data.to_csv(self.sampler_configs['data_path']+'user_origin_data.csv', index=False)
+        user_data.to_csv(self.sampler_configs['data_path'] + 'user_data.csv', index=False)
+        user_origin_data.to_csv(self.sampler_configs['data_path'] + 'user_origin_data.csv', index=False)
 
     def sample_gender(self) -> list:
         """
@@ -79,12 +78,25 @@ class UserSampler(BaseSampler):
         19岁以下占比 20%，20-29岁之间 占比70%，30-39岁之间 占比9%， 其他占比1%
         :return: age_list
         """
+
         # age_dic = {1: '19岁以下', 2: '20-29岁之间', 3: '30-39岁之间', 4: '其他'}
         age_list = ['1'] * int(self.user_nums * 0.2) + ['2'] * int(self.user_nums * 0.7) + ['3'] * int(
             self.user_nums * 0.09) + \
                    ['4'] * int(self.user_nums * 0.01)
         age_list = [int(each) for each in age_list]
         random.shuffle(age_list)
+        # 为了在模型中能够使用连续数据，所以决定对age进行转换
+        new_age_list = []
+        for age in age_list:
+            if age == '1':
+                new_age_list.append(random.choice(range(15, 20)))
+            elif age == '2':
+                new_age_list.append(random.choice(range(20, 30)))
+            elif age == '3':
+                new_age_list.append(random.choice(range(30, 40)))
+            else:
+                new_age_list.append(random.choice(range(40, 65)))
+
         return age_list
 
     def sample_education(self):
