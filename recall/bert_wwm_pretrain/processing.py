@@ -126,4 +126,16 @@ def check_dir(path):
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    word_list = []
+    with open('recall/bert_wwm_pretrain/data/vocab.txt', 'r', encoding='utf-8') as f:
+        for line in f.readlines():
+            line = line.strip('\n')
+            word_list.append(line)
+    print('len(word_list):', len(word_list))
+    new_word_list = []
+    with open('recall/bert_wwm_pretrain/data/chinese_bert_wwm/vocab.txt', 'r', encoding='utf-8') as f:
+        for line in f.readlines():
+            line = line.strip('\n')
+            new_word_list.append(line)
+    print('len(new_word_list):', len(new_word_list))

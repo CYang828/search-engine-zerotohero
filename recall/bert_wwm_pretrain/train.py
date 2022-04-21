@@ -11,7 +11,6 @@ from typing import Tuple, List
 
 import numpy as np
 import torch
-from comet_ml import Experiment
 from torch.utils.data import Dataset
 from tqdm import tqdm
 from transformers import BertTokenizer, BertForMaskedLM, Trainer, TrainingArguments
@@ -19,11 +18,12 @@ from transformers import BertTokenizer, BertForMaskedLM, Trainer, TrainingArgume
 from recall.bert_wwm_pretrain.processing import check_dir
 
 # Create an experiment with your api key
-experiment = Experiment(
-    api_key="I1gv6gvPEQfgfHauwuDYCEpqV",
-    project_name="search-engine-zerotohero",
-    workspace="zhengjiawei",
-)
+# 为了记录数据，这是我自己的comet账号
+# experiment = Experiment(
+#     api_key="I1gv6gvPEQfgfHauwuDYCEpqV",
+#     project_name="search-engine-zerotohero",
+#     workspace="zhengjiawei",
+# )
 os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 
 
@@ -95,7 +95,7 @@ class SearchCollator:
                 masked_lms.append(index)
 
         assert len(covered_indexes) == len(masked_lms)
-        mask_labels = [1 if i in covered_indexes else 0 for i in range(len(input_ids_list))]
+        mask_labels = [1 if i in covered_indexes else 0 for i in range(min(len(input_ids_list), max_seq_len))]
 
         mask_labels += [0] * (max_seq_len - len(mask_labels))
         return torch.tensor(mask_labels)
@@ -145,7 +145,7 @@ class SearchCollator:
                                                                           token_type_ids_list,
                                                                           attention_mask_list,
                                                                           max_seq_len)
-        batch_mask = self.whole_word_mask(input_ids_list, max_seq_len)
+        batch_mask = self.whole_word_mask(input_ids, max_seq_len)
         input_ids, mlm_labels = self.mask_tokens(input_ids, batch_mask)
         data_dict = {
             'input_ids': input_ids,
@@ -160,7 +160,7 @@ class SearchCollator:
 def read_data(train_file_path, tokenizer: BertTokenizer, debug=False) -> dict:
     train_data = open(train_file_path, 'r', encoding='utf8').readlines()
     if debug:
-        train_data = train_data[:200]
+        train_data = train_data[:2000]
 
     inputs = defaultdict(list)
     for row in tqdm(train_data, desc=f'Preprocessing train data', total=len(train_data)):
@@ -184,21 +184,22 @@ def seed_everyone(seed_):
 
 class CFG:
     corpus_file_path = 'recall/bert_wwm_pretrain/data/pretrain_corpus.txt'
-    vocab_file_path = 'recall/bert_wwm_pretrain/data/vocab.txt'
+    vocab_file_path = 'recall/bert_wwm_pretrain/data/chinese_bert_wwm/vocab.txt'
     redis_url = "10.30.89.124"
     redis_port = 6379
     max_seq_len = 102
     batch_size = 32
     output_dir = 'recall/bert_wwm_pretrain/data/whole_word_mask_bert_output'
     bert_model_dir = 'recall/bert_wwm_pretrain/data/chinese_bert_wwm/'
+    debug = False
 
 
 def main():
     seed_everyone(20210318)
-    experiment.log_parameters(CFG)
+    # experiment.log_parameters(CFG)
     train_file_path = CFG.corpus_file_path
-    tokenizer = BertTokenizer.from_pretrained(CFG.vocab_file_path,local_files_only=True)
-    data = read_data(train_file_path, tokenizer)
+    tokenizer = BertTokenizer.from_pretrained(CFG.vocab_file_path, local_files_only=True)
+    data = read_data(train_file_path, tokenizer, CFG.debug)
     train_dataset = SearchDataset(data)
     data_collator = SearchCollator(max_seq_len=CFG.max_seq_len, tokenizer=tokenizer, mlm_probability=0.15)
 
@@ -212,14 +213,14 @@ def main():
     training_args = TrainingArguments(
         output_dir=output_dir,
         overwrite_output_dir=True,
-        num_train_epochs=50,
+        num_train_epochs=20,
         fp16_backend='auto',
         per_device_train_batch_size=128,
         save_steps=500,
         logging_steps=500,
         save_total_limit=5,
         prediction_loss_only=True,
-        report_to='comet_ml',
+        # report_to='comet_ml',
         logging_first_step=True,
         dataloader_num_workers=4,
         disable_tqdm=False,
