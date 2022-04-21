@@ -2,7 +2,7 @@
 # @Time   :2022/2/24 5:25 下午
 # @Author :Li Meng qi
 # @FileName:text_vector.py
-from feature_utils import FeatureBase
+from featurizer.feature_utils import FeatureBase
 from transformers import BertModel, BertTokenizer
 import os
 import torch

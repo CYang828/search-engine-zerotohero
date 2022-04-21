@@ -2,8 +2,8 @@
 # @Time   :2022/3/30 6:46 下午
 # @Author :Li Meng qi
 # @FileName:extract_searchinfo.py
-from extract_entity import BaseExtract
-from entity.searchinfo import SearchInfo
+from featurizer.extract_entity import BaseExtract
+from featurizer.entity.searchinfo import SearchInfo
 import json
 
 

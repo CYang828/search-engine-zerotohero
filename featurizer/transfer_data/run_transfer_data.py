@@ -4,9 +4,9 @@
 # @FileName:run_transfer_data.py
 import happybase
 from pyhive import hive
-import json
 from multiprocessing import Process, Queue
 import time
+from loader import load_configs
 
 
 class Producer(Process):
@@ -126,19 +126,14 @@ class Customer(Process):
 if __name__ == "__main__":
     start_time = time.time()
     queue = Queue(maxsize=256)
-    config = {
-        "table_name": "document_features_test3",
-        "queue": queue,
-        "batch_size": 64,
-        "host": "10.30.89.124",
-    }
-
-    p = Producer(**config)
-    num_customers = 6
+    configs = load_configs(func='hbase_to_hive')
+    configs['queue'] = queue
+    p = Producer(**configs)
+    num_customers = configs['num_customers']
     customers = []
     for i in range(num_customers):
-        config["name"] = "Process" + str(i)
-        customers.append(Customer(**config))
+        configs["name"] = "Process" + str(i)
+        customers.append(Customer(**configs))
     p.start()
     for customer in customers:
         customer.start()
@@ -148,5 +143,5 @@ if __name__ == "__main__":
     for customer in customers:
         customer.join()
     print("主进程结束。")
-    # end_time = time.time()
-    # print('耗时:{}'.format(end_time - start_time))
+    end_time = time.time()
+    print('耗时:{}'.format(end_time - start_time))

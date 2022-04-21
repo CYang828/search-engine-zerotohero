@@ -6,12 +6,14 @@ import time
 from multiprocessing import Process, Queue
 from pymongo import MongoClient
 import happybase
-from extract_entity.extract_author import ExtractAuthor
-from extract_entity.extract_comment import ExtractComment
-from extract_entity.extract_document import ExtractDocument
-from feature_utils.text_vector import TextVector
-from feature_utils.hanlp_tokens_ner import HanlpTokensNer
+from featurizer.extract_entity.extract_comment import ExtractComment
+from featurizer.extract_entity.extract_document import ExtractDocument
+from featurizer.feature_utils.text_vector import TextVector
+from featurizer.feature_utils.hanlp_tokens_ner import HanlpTokensNer
 import hanlp
+
+from featurizer.extract_entity.extract_author import ExtractAuthor
+from loader import load_configs
 
 
 class Producer(Process):
@@ -30,7 +32,7 @@ class Producer(Process):
         print("数据库中的表名称", table_name_list)
         h_table_name = "document_features_test2"
         if (
-            h_table_name.encode() not in table_name_list
+                h_table_name.encode() not in table_name_list
         ):  # table_name_list中的表的名字是字节型的，所以h_table_name要encode()成字节型
             # 表不存在，新建表，author、comment、document 是表中的三个族
             families = {
@@ -133,26 +135,16 @@ class Customer(Process):
 
 
 if __name__ == "__main__":
+    # 加载参数
+    prodece_config = load_configs(func='mongo')
     start_time = time.time()
     queue = Queue(maxsize=100)
-    prodece_config = {
-        "name": "load data",
-        "queue": queue,
-        "url": "mongodb://10.30.89.124:27013/",
-        "db": "zhihu_new",
-        "collection": "articles",
-        "batch_size": 64,
-    }
-
+    prodece_config['queue'] = queue
+    print(prodece_config)
     p = Producer(**prodece_config)
-    num_customers = 4
-    customer_config = {
-        "name": "",
-        "host": "10.30.89.124",
-        "port": 9090,
-        "h_table_name": "document_features_test3",
-        "queue": queue,
-    }
+    customer_config = load_configs(func='document_hbase')
+    customer_config['queue'] = queue
+    num_customers = customer_config['num_customers']
     customers = []
     for i in range(num_customers):
         customer_config["name"] = "Process" + str(i)
@@ -168,7 +160,3 @@ if __name__ == "__main__":
     print("主进程结束。")
     end_time = time.time()
     print("耗时:{}".format(end_time - start_time))
-    # 一个进程：126.90791893005371
-    # 二个进程：112.01390409469604
-    # 3个进程：112.0308210849762
-    # 6个进程：111.26209473609924

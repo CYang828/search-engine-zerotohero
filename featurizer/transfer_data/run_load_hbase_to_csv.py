@@ -3,9 +3,9 @@
 # @Author :Li Meng qi
 # @FileName:run_load_hbase_to_csv.py
 import happybase
-import pandas as pd
 import json
 import numpy as np
+from loader import load_configs
 
 
 class LoadHbase:
@@ -15,7 +15,7 @@ class LoadHbase:
         self.host = kwargs["host"]
         self.port = kwargs["port"]
         self.connect_hbase(kwargs)
-        self.file_path = "document_features.txt"
+        self.file_path = kwargs['output_file_path']
         self.open_file()
         self.reserved_fields = kwargs["rf"]
 
@@ -110,48 +110,8 @@ class LoadHbase:
 
 
 if __name__ == "__main__":
-    field_name = [
-        "author:avatar_url",
-        "author:description",
-        "author:gender",
-        "author:headline",
-        "author:id",
-        "author:is_advertiser",
-        "author:name",
-        "author:url",
-        "author:url_token",
-        "author:user_type",
-        "comment:avatar_url_list",
-        "comment:comment_count",
-        "comment:content_list",
-        "comment:created_time_list",
-        "comment:name_list",
-        "comment:url_token_list",
-        "comment:vote_count_list",
-        "comment:voteup_count",
-        "document:clean_content",
-        "document:clean_content_vector",
-        "document:created",
-        "document:entity",
-        "document:excerpt",
-        "document:excerpt_vector",
-        "document:has_column",
-        "document:id",
-        "document:image_url",
-        "document:title",
-        "document:title_vector",
-        "document:tokens",
-        "document:top5words",
-        "document:type",
-        "document:updated",
-    ]
-    config = {
-        "table_name": "document_features_test3",
-        "host": "10.30.89.124",
-        "port": 9090,
-        "batch_size": 64,
-        "field_name": field_name,
-        "rf": field_name,
-    }
-    loadhbase = LoadHbase(**config)
+    configs = load_configs(func='hbase_to_csv')
+    configs['field_name'] = configs['field_name'].split(',\n')
+    configs['rf'] = configs['field_name']
+    loadhbase = LoadHbase(**configs)
     loadhbase.run()

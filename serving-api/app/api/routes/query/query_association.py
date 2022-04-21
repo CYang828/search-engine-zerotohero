@@ -9,7 +9,6 @@ import sys
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# /Users/lmq/Desktop/search-engine-zerotohero/serving-api/app/api/routes
 BASE_DIR = BASE_DIR.split("/")[:-4]
 BASE_DIR = "/".join(BASE_DIR)
 sys.path.append(BASE_DIR)

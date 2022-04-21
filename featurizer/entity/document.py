@@ -3,9 +3,9 @@
 # @Author :Li Meng qi
 # @FileName:document.py
 
-from feature_utils.clean_html_tag import CleanHtmlTag
-from feature_utils.text_vector import TextVector
-from feature_utils.hanlp_tokens_ner import HanlpTokensNer
+from featurizer.feature_utils.clean_html_tag import CleanHtmlTag
+from featurizer.feature_utils.text_vector import TextVector
+from featurizer.feature_utils.hanlp_tokens_ner import HanlpTokensNer
 import json
 import jieba.analyse as analyse
 

@@ -9,12 +9,12 @@ from nltk.lm import MLE
 import dill as pickle
 import time
 import pickle
-
-
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 class MLEmodel:
     def __init__(
         self,
-        model_path="/Users/lmq/Desktop/query/Build_NgramZ_Language_Model/kilgariff_ngram_model.pkl",
+        model_path= BASE_DIR + "/model_data/kilgariff_ngram_model.pkl",
     ):
         self.model_path = model_path
 
