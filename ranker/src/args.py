@@ -11,7 +11,7 @@ def get_args():
     parser = argparse.ArgumentParser(description='XDeepFM')
 
     parser.add_argument('--seed', type=int, default=12)
-    parser.add_argument('--device', type=str, default='cuda:3')
+    parser.add_argument('--device', type=str, default='cuda')
     ########################## XDeepFM ##########################
     parser.add_argument('--multi_modal_hidden_size', type=int, default=128)
     parser.add_argument('--num_field', type=int, default=5)
@@ -33,9 +33,9 @@ def get_args():
 
     parser.add_argument('--sparse_feature_info', type=list,
                         default=[('userid', 100000, 10), ('gender', 2, 10),
-                                 ('city', 36, 10),
+                                 ('city', 36, 10),('age', 4, 10),
                                  ('job', 12, 10), ('education', 5, 10),
-                                 ('search_token', 598040, 10)  # 共有598039个token('age', 4, 10),
+                                 ('search_token', 598040, 10)  # 共有598039个token
                                  ])
 
     parser.add_argument('--num_folds', type=int, default=20)

@@ -14,6 +14,8 @@ from ranker.src.dataloader import load_data
 from ranker.src.model import MultiDeepFM
 from ranker.src.utils import batch2cuda, EMA, seed_everything, roc_score
 
+os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3'
+
 
 def evaluation(config, model, val_dataloader):
     model.eval()
@@ -88,8 +90,8 @@ def train(config, train_dataloader, valid_dataloader):
     best_roc_auc = 0.
     best_model_path = ''
 
-    # if config.n_gpus > 1:
-    #     model = nn.DataParallel(model)
+    if config.n_gpus > 1:
+        model = torch.nn.DataParallel(model)
 
     optimizer.zero_grad()
 
@@ -183,9 +185,8 @@ def args_setup():
     else:
         # args.n_gpus = torch.cuda.device_count()
         # args.bs *= args.n_gpus
-        #     args.device = 'cpu'
-        #     args.n_gpus = 0
-        args.n_gpus = 1
+        # args.device = 'cpu'
+        args.n_gpus = 2
     return args
 
 

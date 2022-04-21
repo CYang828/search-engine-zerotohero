@@ -85,17 +85,6 @@ class UserSampler(BaseSampler):
                    ['4'] * int(self.user_nums * 0.01)
         age_list = [int(each) for each in age_list]
         random.shuffle(age_list)
-        # 为了在模型中能够使用连续数据，所以决定对age进行转换
-        new_age_list = []
-        for age in age_list:
-            if age == '1':
-                new_age_list.append(random.choice(range(15, 20)))
-            elif age == '2':
-                new_age_list.append(random.choice(range(20, 30)))
-            elif age == '3':
-                new_age_list.append(random.choice(range(30, 40)))
-            else:
-                new_age_list.append(random.choice(range(40, 65)))
 
         return age_list
 

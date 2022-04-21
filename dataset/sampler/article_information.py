@@ -95,7 +95,7 @@ class ArticleSampler(BaseSampler):
         #
         # # 调整数据顺序
         item_information_new = item_information.loc[:,
-                               ['userid', 'document_id', 'search_token', 'click', 'like', 'comment']]
+                               ['userid', 'document_id', 'search_token', 'pv', 'uv', 'click', 'like', 'comment']]
 
         item_information_new.to_csv(self.sampler_configs['data_path'] + 'search_information.csv', index=False)
         # return item_information_new
@@ -134,6 +134,16 @@ class ArticleSampler(BaseSampler):
         document_information = pd.DataFrame([document_token_dic]).T
         document_information = document_information.reset_index()
         document_information.columns = ['document_id', 'clean_token']
+        pv_list = [random.randint(0, 200) for i in range(document_information.shape[0])]
+        uv_list = []
+        for each in pv_list:
+            uv = each - random.randint(0, 20)
+            if uv >= 0:
+                uv_list.append(uv)
+            else:
+                uv_list.append(each)
+        document_information['pv'] = pv_list
+        document_information['uv'] = uv_list
         document_information.to_csv(self.sampler_configs['data_path'] + 'document_information.csv', index=False)
         token_dic_new = {key: value for key, value in token_dic.items() if key not in high_frequency_words_list}
         token_list = [key for key, value in token_dic_new.items()]
@@ -145,4 +155,4 @@ class ArticleSampler(BaseSampler):
 
 if __name__ == '__main__':
     ArticleSampler().get_article()
-    # ArticleSampler().sample()
+    ArticleSampler().sample()

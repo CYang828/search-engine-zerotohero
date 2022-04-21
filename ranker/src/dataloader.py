@@ -77,7 +77,7 @@ class SearchDataset(Dataset):
         # document_id = self.precess_data.search_data['document_id'][index]
         sparse_features = {
             # 'document_id': self.precess_data.search_data['document_id'][index],
-            # 'age': int(row['age']),
+            'age': int(row['age']),
             'gender': int(row['gender']),
             'city': int(row['city']),
             'job': int(row['job']),
@@ -87,7 +87,8 @@ class SearchDataset(Dataset):
         # dense_feature = {
         #     'search_token': self.precess_data.search_data['search_token'][index]
         # }
-        dense_feature = {'age': int(row['age'])}
+        dense_feature = {'pv': int(row['pv']),
+                         'uv': int(row['pv'])}
         if 'click' in self.columns_index_dictionary:
             labels = {
                 'click': self.precess_data.search_data['click'][index],
