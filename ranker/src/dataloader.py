@@ -87,8 +87,8 @@ class SearchDataset(Dataset):
         # dense_feature = {
         #     'search_token': self.precess_data.search_data['search_token'][index]
         # }
-        dense_feature = {'pv': int(row['pv']),
-                         'uv': int(row['pv'])}
+        dense_feature = {'pv': self.precess_data.search_data['pv'][index],
+                         'uv': self.precess_data.search_data['uv'][index]}
         if 'click' in self.columns_index_dictionary:
             labels = {
                 'click': self.precess_data.search_data['click'][index],

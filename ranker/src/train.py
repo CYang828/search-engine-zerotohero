@@ -14,7 +14,7 @@ from ranker.src.dataloader import load_data
 from ranker.src.model import MultiDeepFM
 from ranker.src.utils import batch2cuda, EMA, seed_everything, roc_score
 
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3'
 
 
 def evaluation(config, model, val_dataloader):
@@ -186,7 +186,7 @@ def args_setup():
         # args.n_gpus = torch.cuda.device_count()
         # args.bs *= args.n_gpus
         # args.device = 'cpu'
-        args.n_gpus = 2
+        args.n_gpus = 1
     return args
 
 

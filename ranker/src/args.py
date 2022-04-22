@@ -11,10 +11,10 @@ def get_args():
     parser = argparse.ArgumentParser(description='XDeepFM')
 
     parser.add_argument('--seed', type=int, default=12)
-    parser.add_argument('--device', type=str, default='cuda')
+    parser.add_argument('--device', type=str, default='cuda:3')
     ########################## XDeepFM ##########################
     parser.add_argument('--multi_modal_hidden_size', type=int, default=128)
-    parser.add_argument('--num_field', type=int, default=5)
+    parser.add_argument('--num_field', type=int, default=6)
     parser.add_argument('--cin_layer_size', type=tuple, default=(256, 128))
     parser.add_argument('--cin_split_half', type=bool, default=True)
     parser.add_argument('--cin_activation', type=str, default='relu')
@@ -25,7 +25,7 @@ def get_args():
     parser.add_argument('--init_std', type=float, default=0.0001)
     parser.add_argument('--dnn_dropout', type=float, default=0.)
     parser.add_argument('--dnn_hidden_units', type=tuple, default=(256, 128, 128))
-    parser.add_argument('--dnn_inputs_dim', type=int, default=51)
+    parser.add_argument('--dnn_inputs_dim', type=int, default=62)
     parser.add_argument('--l2_reg_embedding', type=float, default=1e-5)
     parser.add_argument('--l2_reg_linear', type=float, default=1e-5)
     parser.add_argument('--l2', type=float, default=1e-3)
