@@ -65,6 +65,9 @@ class AssociationResponse(RWSchema):
     query_association: list
 
 
+class DocumentResponse(RWSchema):
+    document_features: dict
+
 # class ArticleInCreate(RWSchema):
 #     title: str
 #     description: str

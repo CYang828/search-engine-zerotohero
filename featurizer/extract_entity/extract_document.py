@@ -2,9 +2,9 @@
 # @Time   :2022/2/28 5:08 下午
 # @Author :Li Meng qi
 # @FileName:extract_document.py
-from feature_utils.clean_html_tag import CleanHtmlTag
-from extract_entity import BaseExtract
-from entity.document import Document
+from featurizer.feature_utils.clean_html_tag import CleanHtmlTag
+from featurizer.extract_entity import BaseExtract
+from featurizer.entity.document import Document
 import json
 import jieba.analyse as analyse
 
