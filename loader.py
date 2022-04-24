@@ -1,15 +1,23 @@
 import tornado.options
+
 # from tornado.options import options
 from tornado.options import options, define as _define
 
 from util.configuration import ConfigurationParser
 
 
-def define(name, default=None, type=None, help=None, metavar=None,
-           multiple=False, group=None, callback=None):
+def define(
+    name,
+    default=None,
+    type=None,
+    help=None,
+    metavar=None,
+    multiple=False,
+    group=None,
+    callback=None,
+):
     if name not in options._options:
-        return _define(name, default, type, help, metavar,
-                       multiple, group, callback)
+        return _define(name, default, type, help, metavar, multiple, group, callback)
 
 
 tornado.options.define = define
@@ -62,13 +70,15 @@ tornado.options.define = define
 # print('>>>>',app.configs)
 
 
-def load_configs(path='config.ini', func: str = 'recall'):
-    tornado.options.define('config', default=path,
-                           help='this is default config path', type=str)
-    configer = ConfigurationParser('ini', path=options.config)
+def load_configs(path="config.ini", func: str = "recall"):
+    tornado.options.define(
+        "config", default=path, help="this is default config path", type=str
+    )
+    configer = ConfigurationParser("ini", path=options.config)
     return configer.configs[func]
 
 
 if __name__ == "__main__":
-    configs = load_configs(func='recall')
+    configs = load_configs(func="hbase_to_csv")
     print(configs)
+

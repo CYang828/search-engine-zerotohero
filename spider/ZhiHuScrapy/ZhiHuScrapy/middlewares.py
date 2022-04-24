@@ -57,7 +57,7 @@ class ZhihuscrapySpiderMiddleware:
             yield r
 
     def spider_opened(self, spider):
-        spider.logger.info('Spider opened: %s' % spider.name)
+        spider.logger.info("Spider opened: %s" % spider.name)
 
 
 class ZhihuscrapyDownloaderMiddleware:
@@ -104,15 +104,15 @@ class ZhihuscrapyDownloaderMiddleware:
         pass
 
     def spider_opened(self, spider):
-        spider.logger.info('Spider opened: %s' % spider.name)
+        spider.logger.info("Spider opened: %s" % spider.name)
 
 
 class UserAgentMiddleware(object):
     def __init__(self):
-        location = os.path.join(BASE_DIR, 'libs/fake_useragent_0.1.11.json')
+        location = os.path.join(BASE_DIR, "libs/fake_useragent_0.1.11.json")
         self.ua = UserAgent(path=location)  # 建立UserAgent对象
 
     def process_request(self, request, spider):
         us_agent = self.ua.random  # 调用UserAgent().random生成随机的user agent
         # print(us_agent)
-        request.headers.setdefault('User-Agent', us_agent)
+        request.headers.setdefault("User-Agent", us_agent)

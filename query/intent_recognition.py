@@ -10,6 +10,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
 class IntentRecognition:
     def __init__(self, n_pick_topics=20, n_pick_docs=20):
         # 设定主题数量
@@ -19,7 +20,11 @@ class IntentRecognition:
         self._load_corpus()
 
     def _load_corpus(self):
-        f = open(BASE_DIR + '/query/model_data/intent-recognition/cleaned_document_remove_stopwords_token.pkl', 'rb')
+        f = open(
+            BASE_DIR
+            + "/query/model_data/intent-recognition/cleaned_document_remove_stopwords_token.pkl",
+            "rb",
+        )
         self.corpus_data = pickle.load(f)
         f.close()
 
@@ -28,27 +33,36 @@ class IntentRecognition:
         X = vectorizer.fit_transform(self.corpus_data)
         lsa = TruncatedSVD(self.n_pick_topics)
         X2 = lsa.fit_transform(X)
-        self._save('vectorizer', vectorizer)
-        self._save('lsa', lsa)
-        self._save('X2', X2)
+        self._save("vectorizer", vectorizer)
+        self._save("lsa", lsa)
+        self._save("X2", X2)
 
     def _save(self, model_name, obj):
-        with open(BASE_DIR + '/query/model_data/intent-recognition/' + model_name + '.pkl', 'wb') as f:
+        with open(
+            BASE_DIR + "/query/model_data/intent-recognition/" + model_name + ".pkl",
+            "wb",
+        ) as f:
             pickle.dump(obj, f)
 
     def _load(self, model_name):
-        with open(BASE_DIR + '/query/model_data/intent-recognition/' + model_name + '.pkl', 'rb') as f:
+        with open(
+            BASE_DIR + "/query/model_data/intent-recognition/" + model_name + ".pkl",
+            "rb",
+        ) as f:
             model = pickle.load(f)
         return model
 
     def predict(self, query):
         tokenize = Tokenization()
         query_tokens, _ = tokenize.hanlp_token_ner(query)
-        query = [' '.join(query_tokens)]
-        vectorizer = self._load('vectorizer')
-        lsa = self._load('lsa')
-        X2 = self._load('X2')
-        topic_docs_id = [X2[:, t].argsort()[:-(self.n_pick_docs + 1):-1] for t in range(self.n_pick_topics)]
+        query = [" ".join(query_tokens)]
+        vectorizer = self._load("vectorizer")
+        lsa = self._load("lsa")
+        X2 = self._load("X2")
+        topic_docs_id = [
+            X2[:, t].argsort()[: -(self.n_pick_docs + 1) : -1]
+            for t in range(self.n_pick_topics)
+        ]
         quert_tfidf = vectorizer.transform(query)
         # 使用lsa对其降维
         lsa_query = lsa.transform(quert_tfidf)
@@ -64,8 +78,8 @@ class IntentRecognition:
         return results
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     intentrecognition = IntentRecognition()
     # intentrecognition.fit()
-    re = intentrecognition.predict('想去美国留学')
+    re = intentrecognition.predict("想去美国留学")
     print(len(re))

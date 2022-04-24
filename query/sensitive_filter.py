@@ -6,6 +6,7 @@
 from collections import defaultdict
 import re
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # DFA算法
@@ -19,7 +20,7 @@ class DFAFilter:
         # 关键词链表
         self.keyword_chains = {}
         # 限定
-        self.delimit = '\x00'
+        self.delimit = "\x00"
         self.parse(BASE_DIR + "/query/model_data/sensitive-words/sensitive.txt")
 
     def add(self, keyword):
@@ -53,7 +54,7 @@ class DFAFilter:
             level[self.delimit] = 0
 
     def parse(self, path):
-        with open(path, encoding='utf-8') as f:
+        with open(path, encoding="utf-8") as f:
             for keyword in f:
                 self.add(str(keyword).strip())
         # print(self.keyword_chains)
@@ -82,24 +83,24 @@ class DFAFilter:
             else:
                 ret.append(message[start])
             start += 1
-        return ''.join(ret)
+        return "".join(ret)
 
 
 class BSFilter:
-    '''
+    """
     从关键字过滤消息
     使用反向排序映射来减少替换时间
-    '''
+    """
 
     def __init__(self):
         self.keywords = []
         self.kwsets = set([])
         self.bsdict = defaultdict(set)
-        self.pat_en = re.compile(r'^[0-9a-zA-Z]+$')
+        self.pat_en = re.compile(r"^[0-9a-zA-Z]+$")
 
     def add(self, keyword):
         if not isinstance(keyword, str):
-            keyword = keyword.decode('utf-8')
+            keyword = keyword.decode("utf-8")
         keyword = keyword.lower()
         if keyword not in self.kwsets:
             self.keywords.append(keyword)
@@ -119,7 +120,7 @@ class BSFilter:
 
     def filter(self, message, repl="*"):
         if not isinstance(message, str):
-            message = message.decode('utf-8')
+            message = message.decode("utf-8")
         message = message.lower()
         for word in message.split():
             if self.pat_en.search(word):

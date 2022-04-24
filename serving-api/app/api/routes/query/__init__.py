@@ -3,11 +3,15 @@
 # @File    : __init__.py.py
 from fastapi import APIRouter
 
-from app.api.routes.query import document_features, term_weight, query_association, query_processing
+from app.api.routes.query import (
+    term_weight,
+    query_association,
+    query_processing,
+)
 
 router = APIRouter()
 
-router.include_router(document_features.router, prefix="/features")
+# router.include_router(document_features.router, prefix="/features")
 router.include_router(term_weight.router, prefix="/features")
 
 # query processing

@@ -31,5 +31,5 @@ class Rank:
         return result_rank
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(Rank().re_transformer())

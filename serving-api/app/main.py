@@ -19,9 +19,11 @@ def swagger_monkey_patch(*args, **kwargs):
     overwrite the default values for the swagger js and css.
     """
     return get_swagger_ui_html(
-        *args, **kwargs,
+        *args,
+        **kwargs,
         swagger_js_url="https://cdn.bootcdn.net/ajax/libs/swagger-ui/4.0.0-beta.2/swagger-ui-bundle.js",
-        swagger_css_url="https://cdn.bootcdn.net/ajax/libs/swagger-ui/4.0.0-beta.2/swagger-ui.css")
+        swagger_css_url="https://cdn.bootcdn.net/ajax/libs/swagger-ui/4.0.0-beta.2/swagger-ui.css"
+    )
 
 
 # Actual monkey patch

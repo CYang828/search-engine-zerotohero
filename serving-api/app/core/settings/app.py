@@ -30,9 +30,7 @@ class AppSettings(BaseAppSettings):
         "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
     }
     secret_key: SecretStr
-    x_logo: dict = {
-        "url": "https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png"
-    }
+    x_logo: dict = {"url": "https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png"}
     api_prefix: str = "/api"
 
     jwt_token_prefix: str = "Token"

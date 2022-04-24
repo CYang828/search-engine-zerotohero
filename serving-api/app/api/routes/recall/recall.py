@@ -14,7 +14,9 @@ import jieba
 router = APIRouter()
 
 
-@router.get('/recall', name="recall:recall", summary='召回策略', response_model=RecallResponse)
+@router.get(
+    "/recall", name="recall:recall", summary="召回策略", response_model=RecallResponse
+)
 async def recall(args: SentenceArgs):
     """
     Term分析API，term重要性分析
@@ -30,7 +32,7 @@ async def recall(args: SentenceArgs):
         # query_weight
         result_recall = ReCall(query_list=query_list).structured_recall()
 
-        return ApiResponse.build_success(data={'result_recall': result_recall})
+        return ApiResponse.build_success(data={"result_recall": result_recall})
     except Exception as e:
 
         return ApiResponse.build_error(ResponseEnum.RECALL_PROCESS_ERROR)

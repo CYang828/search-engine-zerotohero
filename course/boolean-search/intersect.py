@@ -51,16 +51,16 @@ def sort_by_alphabet(term_document):
 
 # print matrix
 def print_matrix(**kwargs):
-    if kwargs['name'] == 'tdi':
-        print('%-13s%10s' % ('term', 'docID'))
-        for word, doc_id in kwargs['datas']:
-            print('%-13s%10s' % (word, str(doc_id)))
+    if kwargs["name"] == "tdi":
+        print("%-13s%10s" % ("term", "docID"))
+        for word, doc_id in kwargs["datas"]:
+            print("%-13s%10s" % (word, str(doc_id)))
     else:
         # term_fre=term_fre, term_postings_lists
-        term_fre = kwargs['term_fre']
-        print('%-13s%-10s%-10s' % ('term', 'doc.freq', 'pstings_lists'))
-        for word, doc_id in kwargs['term_postings_lists'].items():
-            print('%-13s%-10s%-10s' % (word, term_fre[word], str(doc_id)))
+        term_fre = kwargs["term_fre"]
+        print("%-13s%-10s%-10s" % ("term", "doc.freq", "pstings_lists"))
+        for word, doc_id in kwargs["term_postings_lists"].items():
+            print("%-13s%-10s%-10s" % (word, term_fre[word], str(doc_id)))
 
 
 # build term document frequence and postings lists
@@ -78,21 +78,23 @@ def build_fre_poslists(datas):
     return term_fre, term_postings_lists
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # 文档列表
     # 第1题
-    documents = ['breakthrough drug for schizophrenia',
-                 'new schizophrenia drug',
-                 'new approach for treatment of schizophrenia',
-                 'new hopes for schizophrenia patients']
+    documents = [
+        "breakthrough drug for schizophrenia",
+        "new schizophrenia drug",
+        "new approach for treatment of schizophrenia",
+        "new hopes for schizophrenia patients",
+    ]
     # a.Draw the term-document incidence matrix for this document collection.
     term_document = term_document_incidence(documents)
-    print_matrix(datas=term_document, name='tdi')
+    print_matrix(datas=term_document, name="tdi")
     term_document = sort_by_alphabet(term_document)
-    print_matrix(datas=term_document, name='tdi')
+    print_matrix(datas=term_document, name="tdi")
     # b.Draw the inverted index representation for this collection
     term_fre, term_postings_lists = build_fre_poslists(term_document)
-    print_matrix(term_fre=term_fre, term_postings_lists=term_postings_lists, name='bfp')
+    print_matrix(term_fre=term_fre, term_postings_lists=term_postings_lists, name="bfp")
 
     # 第2题
     p1 = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13]
@@ -108,6 +110,3 @@ if __name__ == '__main__':
     b.Brutus OR NOT Caesar
 
     """
-
-
-

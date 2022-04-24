@@ -13,7 +13,7 @@ from tqdm import trange, tqdm
 
 from recall.main import Recall
 
-data_test = pd.read_csv('dataset/data/test_search_data.csv')
+data_test = pd.read_csv("dataset/data/test_search_data.csv")
 
 
 def eva(recall, document_id_list, search_token_list, return_dict, num):
@@ -42,11 +42,11 @@ def text_vector_recall():
     document_id_list = []
     search_token_list = []
     for i in range(nums):
-        search_token_temp = eval(data_test.loc[i, 'search_token'])
+        search_token_temp = eval(data_test.loc[i, "search_token"])
         if len(search_token_temp) > 0:
-            search_token_str = ''.join(each for each in search_token_temp)
+            search_token_str = "".join(each for each in search_token_temp)
             search_token_list.append(search_token_str)
-            document_id_list.append(data_test.loc[i, 'document_id'])
+            document_id_list.append(data_test.loc[i, "document_id"])
 
     assert len(document_id_list) == len(search_token_list)
     recall = Recall(use_vector_recall=False)
@@ -56,12 +56,17 @@ def text_vector_recall():
     p = Pool(processes=10)
 
     total = list(
-        tqdm(p.imap(partial(eva_one, recall=recall), list(zip(document_id_list, search_token_list))))
+        tqdm(
+            p.imap(
+                partial(eva_one, recall=recall),
+                list(zip(document_id_list, search_token_list)),
+            )
+        )
     )
     p.close()
     p.join()
     print(total)
-    print('times:', time.time() - start)
+    print("times:", time.time() - start)
 
 
 def fast_eva_recall():
@@ -69,11 +74,11 @@ def fast_eva_recall():
     document_id_list = []
     search_token_list = []
     for i in range(nums):
-        search_token_temp = eval(data_test.loc[i, 'search_token'])
+        search_token_temp = eval(data_test.loc[i, "search_token"])
         if len(search_token_temp) > 0:
-            search_token_str = ''.join(each for each in search_token_temp)
+            search_token_str = "".join(each for each in search_token_temp)
             search_token_list.append(search_token_str)
-            document_id_list.append(data_test.loc[i, 'document_id'])
+            document_id_list.append(data_test.loc[i, "document_id"])
 
     assert len(document_id_list) == len(search_token_list)
     manager = Manager()
@@ -83,23 +88,26 @@ def fast_eva_recall():
     jobs = []
     for i in range(5):
         if i != 4:
-            temp_document_id = document_id_list[i * 10000:(i + 1) * 10000]
-            temp_search_token = search_token_list[i * 10000:(i + 1) * 10000]
+            temp_document_id = document_id_list[i * 10000 : (i + 1) * 10000]
+            temp_search_token = search_token_list[i * 10000 : (i + 1) * 10000]
         else:
-            temp_document_id = document_id_list[i * 10000:]
-            temp_search_token = search_token_list[i * 10000:]
-        p = Process(target=eva, args=(recall, temp_document_id, temp_search_token, return_dict, i))
+            temp_document_id = document_id_list[i * 10000 :]
+            temp_search_token = search_token_list[i * 10000 :]
+        p = Process(
+            target=eva,
+            args=(recall, temp_document_id, temp_search_token, return_dict, i),
+        )
         jobs.append(p)
         p.start()
     for proc in jobs:
         proc.join()
-    print('*' * 80)
+    print("*" * 80)
     hit_rate = sum([each for each in return_dict.values()]) / len(document_id_list)
-    print('times:', time.time() - start)
+    print("times:", time.time() - start)
     return hit_rate
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     hit_rate_score = fast_eva_recall()
 
     # 只使用文本召回 准确率 0.911103 耗时18:21

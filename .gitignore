@@ -12,5 +12,6 @@
 /*/*/*/__pycache__
 /*/*/*/*/__pycache__
 /*/*/*/*/*/__pycache__
-/dataset/data/
-/.DS_Store
+.ipynb_checkpoints
+featurizer/data/*
+

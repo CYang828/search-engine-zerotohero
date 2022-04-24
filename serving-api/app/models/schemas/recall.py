@@ -14,6 +14,7 @@ class RecallResponse(RWSchema):
     # term_weight: dict = {}
     recall: str
 
+
 # class ArticleInCreate(RWSchema):
 #     title: str
 #     description: str

@@ -20,10 +20,9 @@ class SummaryVectorRecall(BaseVectorRecall):
         super().__init__()
         self.summary_vector = None
         self.doc_summary_id2id = {}
-        if os.path.exists(self.vector_dir + 'summary_vector_array.pkl'):
-            self.doc_summary_id2id = json.loads(
-                self.res.get('doc_summary_id2id'))
-            with open(self.vector_dir + 'summary_vector_array.pkl', 'rb') as f:
+        if os.path.exists(self.vector_dir + "summary_vector_array.pkl"):
+            self.doc_summary_id2id = json.loads(self.res.get("doc_summary_id2id"))
+            with open(self.vector_dir + "summary_vector_array.pkl", "rb") as f:
                 self.summary_vector = pickle.load(f)
         else:
             self.save_vector()
@@ -32,27 +31,26 @@ class SummaryVectorRecall(BaseVectorRecall):
         self.index.add(self.summary_vector)
 
     def save_vector(self):
-        table = self.connection.table('document_features_02')
+        table = self.connection.table("document_features_02")
         summary_vector = []
         doc_id_list = []
         for i, each in enumerate(table.scan(batch_size=10)):
-            summary_vector_json = json.loads(each[1][b'document:excerpt_vector'].decode())[
-                'excerpt_vector']
+            summary_vector_json = json.loads(
+                each[1][b"document:excerpt_vector"].decode()
+            )["excerpt_vector"]
             if len(summary_vector_json) == 768:
                 summary_vector.append(summary_vector_json)
-                doc_id_list.append(json.loads(
-                    each[1][b'document:id'].decode()))
+                doc_id_list.append(json.loads(each[1][b"document:id"].decode()))
 
         self.summary_vector = np.array(summary_vector, dtype=np.float32)
 
         if not os.path.exists(self.vector_dir):
             os.makedirs(self.vector_dir)
 
-        with open(self.vector_dir + "summary_vector_array.pkl", 'wb') as f:
+        with open(self.vector_dir + "summary_vector_array.pkl", "wb") as f:
             pickle.dump(self.summary_vector, f)
-        self.doc_summary_id2id = {
-            i: each for i, each in enumerate(doc_id_list)}
-        self.res.set('doc_summary_id2id', json.dumps(self.doc_summary_id2id))
+        self.doc_summary_id2id = {i: each for i, each in enumerate(doc_id_list)}
+        self.res.set("doc_summary_id2id", json.dumps(self.doc_summary_id2id))
 
     def recall(self, query_array, recall_nums: int):
         """
@@ -75,11 +73,11 @@ class SummaryVectorRecall(BaseVectorRecall):
         return summary_recall_id
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     query = "期货"
     # query2 = '学习'
-    tokenizer = BertTokenizer.from_pretrained('bert-base-chinese')
-    model = BertModel.from_pretrained('bert-base-chinese')
+    tokenizer = BertTokenizer.from_pretrained("bert-base-chinese")
+    model = BertModel.from_pretrained("bert-base-chinese")
     inputs = tokenizer(query, return_tensors="pt")
     outputs = model(**inputs)
     query_array = outputs.pooler_output.detach().numpy()[0].reshape(1, -1)

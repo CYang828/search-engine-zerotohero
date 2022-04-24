@@ -22,20 +22,24 @@ class Recall(BaseRecall):
     def recall(self, query: str):
         query_json = get_query_json(query)
         text_recall_id_list = self.text_recall.recall(
-            query_json, recall_nums=self.text_recall_nums)
+            query_json, recall_nums=self.text_recall_nums
+        )
         if self.use_vector_recall:
-            vector_recall_id_list = self.vector_recall.recall(query, title_recall_nums=self.text_recall_nums,
-                                                              summary_recall_nums=self.summary_recall_nums,
-                                                              content_recall_nums=self.content_recall_nums)
+            vector_recall_id_list = self.vector_recall.recall(
+                query,
+                title_recall_nums=self.text_recall_nums,
+                summary_recall_nums=self.summary_recall_nums,
+                content_recall_nums=self.content_recall_nums,
+            )
             text_recall_id_list.extend(vector_recall_id_list)
         ids_list = list(set(text_recall_id_list))
         return ids_list
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     start1 = time.time()
     query_str = "学习自然语言处理"
     recall = Recall()
     ids = recall.recall(query_str)
-    print('召回时间：', time.time() - start1)
+    print("召回时间：", time.time() - start1)
     print(ids)

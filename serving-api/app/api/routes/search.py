@@ -14,6 +14,6 @@ router = APIRouter()
 async def get_all_tags(settings: AppSettings = Depends(get_app_settings)):
     return {
         "app_name": settings.debug,
-        "admin_email": 'sss',
-        "items_per_user": 'sss',
+        "admin_email": "sss",
+        "items_per_user": "sss",
     }

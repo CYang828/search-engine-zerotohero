@@ -2,14 +2,16 @@
 # @Time   :2022/2/28 5:08 下午
 # @user :Li Meng qi
 # @FileName:extract_user.py
-from extract_entity import BaseExtract
-from entity.user import User
+from featurizer.extract_entity import BaseExtract
+from featurizer.entity.user import User
 import json
+
 
 class ExtractUser(BaseExtract):
     def __init__(self):
         # self.user = user()
         pass
+
     def extract(self, row_data):
         user = User()
         # userid	gender	age	city	job	education

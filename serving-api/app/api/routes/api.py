@@ -3,7 +3,7 @@
 # @File    : api.py
 # from app.api.routes import authentication, comments, profiles, tags, users
 # from app.api.routes.articles import api as articles
-from app.api.routes import search, index, query, recall, rank, rerank
+from app.api.routes import search, index, query, recall, rank, rerank, feature
 from fastapi import APIRouter
 
 router = APIRouter()
@@ -22,3 +22,4 @@ router.include_router(query.router, tags=["query"], prefix="/query")
 router.include_router(recall.router, tags=["recall"], prefix="")
 router.include_router(rank.router, tags=["rank"], prefix="")
 router.include_router(rerank.router, tags=["rerank"], prefix="")
+router.include_router(feature.router, tags=["feature"], prefix="/feature")

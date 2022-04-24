@@ -58,4 +58,4 @@ class ZhihuArticalItem(scrapy.Item):
     suggest_edit = scrapy.Field()  #
 
     def __str__(self):
-        return f'文章ID: {self.id}, 标题: {self.title}'
+        return f"文章ID: {self.id}, 标题: {self.title}"

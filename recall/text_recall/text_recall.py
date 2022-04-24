@@ -11,7 +11,9 @@ from recall.utils import parse_es_content, get_query_json, BaseRecall
 
 
 class TextRecall(BaseRecall):
-    def __init__(self,):
+    def __init__(
+        self,
+    ):
         super().__init__()
 
     def connect_es(self):
@@ -22,19 +24,18 @@ class TextRecall(BaseRecall):
             # # 节点没有响应时，进行刷新，重新连接
             sniff_on_connection_fail=True,
             # # 每 60 秒刷新一次
-            sniffer_timeout=60
+            sniffer_timeout=60,
         )
         return es
 
     def recall(self, query_json: json, recall_nums: int):
         es = self.connect_es()
-        query = es.search(index=self.index_name,
-                          body=query_json, size=recall_nums)
+        query = es.search(index=self.index_name, body=query_json, size=recall_nums)
         ids_list = parse_es_content(query)
         return ids_list
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     query = "学习自然语言处理"
     query_json = get_query_json(query)
     text_recall = TextRecall()

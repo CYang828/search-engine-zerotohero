@@ -12,20 +12,20 @@ from loader import load_configs
 
 
 def main():
-    configs = load_configs('config.ini', func='sampler')
-    if not os.path.exists('dataset/data/user_data.csv'):
+    configs = load_configs("config.ini", func="sampler")
+    if not os.path.exists("dataset/data/user_data.csv"):
         UserSampler().sample()
-        print('user_data is over')
-    if not os.path.exists('dataset/data/document_information.csv'):
+        print("user_data is over")
+    if not os.path.exists("dataset/data/document_information.csv"):
         ArticleSampler().get_article()
-        print('document_information is over')
-    if not os.path.exists('dataset/data/test_search_data.csv'):
+        print("document_information is over")
+    if not os.path.exists("dataset/data/test_search_data.csv"):
         ArticleSampler().sample()
-        print('test_search_data is over')
-    if not os.path.exists('dataset/data/test_search_data.csv'):
+        print("test_search_data is over")
+    if not os.path.exists("dataset/data/test_search_data.csv"):
         get_train_test_data(configs)
-        print('test_search_data is over')
+        print("test_search_data is over")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

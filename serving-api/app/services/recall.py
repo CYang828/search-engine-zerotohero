@@ -26,7 +26,7 @@ class ReCall:
         return result
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     query_list = ["我喜欢学习"]
     recall = ReCall(query_list)
     print(recall.structured_recall())

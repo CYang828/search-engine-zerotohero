@@ -6,6 +6,7 @@
 from collections import defaultdict
 import re
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -18,7 +19,7 @@ class DFAFilter:
 
     def __init__(self):
         self.keyword_chains = {}  # 关键词链表
-        self.delimit = '\x00'  # 限定
+        self.delimit = "\x00"  # 限定
         self.parse(BASE_DIR + "/query/public_store/sensitive-words/sensitive.txt")
 
     def add(self, keyword):
@@ -39,13 +40,15 @@ class DFAFilter:
                     level[chars[j]] = {}  # 新出现的给新出现的字赋值为一个空字典{}
                     last_level, last_char = level, chars[j]  # 记录最后一个字和
                     level = level[chars[j]]  # level指向最后一层空字典
-                last_level[last_char] = {self.delimit: 0}  # 把最后一个字对应的value赋值为{'\x00': 0}
+                last_level[last_char] = {
+                    self.delimit: 0
+                }  # 把最后一个字对应的value赋值为{'\x00': 0}
                 break
         if i == len(chars) - 1:
             level[self.delimit] = 0
 
     def parse(self, path):
-        with open(path, encoding='utf-8') as f:
+        with open(path, encoding="utf-8") as f:
             for keyword in f:
                 self.add(str(keyword).strip())
         # print(self.keyword_chains)
@@ -72,28 +75,28 @@ class DFAFilter:
             else:
                 ret.append(message[start])
             start += 1
-        return ''.join(ret)
+        return "".join(ret)
 
 
 class BSFilter:
-    '''
+    """
     Filter Messages from keywords
     Use Back Sorted Mapping to reduce replacement times
     >>> f = BSFilter()
     >>> f.add("sexy")
     >>> f.filter("hello sexy baby")
     hello **** baby
-    '''
+    """
 
     def __init__(self):
         self.keywords = []
         self.kwsets = set([])
         self.bsdict = defaultdict(set)
-        self.pat_en = re.compile(r'^[0-9a-zA-Z]+$')  # english phrase or not
+        self.pat_en = re.compile(r"^[0-9a-zA-Z]+$")  # english phrase or not
 
     def add(self, keyword):
         if not isinstance(keyword, str):
-            keyword = keyword.decode('utf-8')
+            keyword = keyword.decode("utf-8")
         keyword = keyword.lower()
         if keyword not in self.kwsets:
             self.keywords.append(keyword)
@@ -113,7 +116,7 @@ class BSFilter:
 
     def filter(self, message, repl="*"):
         if not isinstance(message, str):
-            message = message.decode('utf-8')
+            message = message.decode("utf-8")
         message = message.lower()
         for word in message.split():
             if self.pat_en.search(word):
