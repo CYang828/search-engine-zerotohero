@@ -81,3 +81,4 @@ def load_configs(path="config.ini", func: str = "recall"):
 if __name__ == "__main__":
     configs = load_configs(func="hbase_to_csv")
     print(configs)
+

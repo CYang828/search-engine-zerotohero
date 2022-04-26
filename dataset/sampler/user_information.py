@@ -3,7 +3,6 @@
 # @Author  : zhengjiawei
 # @FileName: user_information.py
 # @Software: PyCharm
-import os
 import random
 
 import numpy as np
@@ -102,6 +101,15 @@ class UserSampler(BaseSampler):
         user_origin_data.loc[:, "userid"] = user_data.loc[:, "userid"]
         # 获得未转换的数据
         for i in range(user_data.shape[0]):
+<<<<<<< HEAD
+            user_origin_data.loc[i, 'gender'] = self.gender_dic[user_data.loc[i, 'gender']]
+            user_origin_data.loc[i, 'age'] = user_data.loc[i, 'age']
+            user_origin_data.loc[i, 'city'] = self.cities_dic[user_data.loc[i, 'city']]
+            user_origin_data.loc[i, 'job'] = self.jobs_dic[user_data.loc[i, 'job']]
+            user_origin_data.loc[i, 'education'] = self.education_dic[user_data.loc[i, 'education']]
+        user_data.to_csv(self.sampler_configs['data_path'] + 'user_data.csv', index=False)
+        user_origin_data.to_csv(self.sampler_configs['data_path'] + 'user_origin_data.csv', index=False)
+=======
             user_origin_data.loc[i, "gender"] = self.gender_dic[
                 user_data.loc[i, "gender"]
             ]
@@ -117,6 +125,7 @@ class UserSampler(BaseSampler):
         user_origin_data.to_csv(
             self.sampler_configs["data_path"] + "user_origin_data.csv", index=False
         )
+>>>>>>> 2b9df2d699a7843e3370401f199a048730122da9
 
     def sample_gender(self) -> list:
         """
@@ -134,6 +143,7 @@ class UserSampler(BaseSampler):
         19岁以下占比 20%，20-29岁之间 占比70%，30-39岁之间 占比9%， 其他占比1%
         :return: age_list
         """
+
         # age_dic = {1: '19岁以下', 2: '20-29岁之间', 3: '30-39岁之间', 4: '其他'}
         age_list = (
             ["1"] * int(self.user_nums * 0.2)
@@ -143,6 +153,7 @@ class UserSampler(BaseSampler):
         )
         age_list = [int(each) for each in age_list]
         random.shuffle(age_list)
+
         return age_list
 
     def sample_education(self):

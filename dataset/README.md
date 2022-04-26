@@ -25,7 +25,7 @@ cities = ['北京', '深圳', '上海', '广州', '天津', '重庆', '南宁', 
 cities_dic = {i + 1: each for i, each in enumerate(cities)}    
 
 
-职业：以职场白领和大学生为主 (取值[职场白领，大学生，高中生，其他])  
+职业：以职场白领和大学生为主
 jobs = ['学生', '产品经理', '自由职业', '程序员', '工程师', '设计师', '腾讯', '教师', '人力资源（HR)',
             '运营', '律师', '其他']  
 jobs_dic = {i + 1: each for i, each in enumerate(jobs)}  
@@ -57,7 +57,7 @@ np.random.binomial(1, 0.01)
 
 ## 执行采样
 在项目的根目录下
-python -m dataset.data.main
+python -m dataset.sampler.main
 
 
 
