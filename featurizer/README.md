@@ -19,12 +19,12 @@ run_build_user.py 对用户信息进行特征建设
 ```bash
 pip install -r requirements.txt
 # 下载语义 Bert 模型，解压缩模型文件
-wget -P data/ http://xbot.bslience.cn/best_model_ckpt.zip
+wget -P data/ http://aimaksen.bslience.cn/best_model_ckpt.zip
 unzip data/best_model_ckpt.zip -d data/
 # 下载搜索行为数据
-wget -P data/ http://xbot.bslience.cn/search_information.csv
+wget -P data/ http://aimaksen.bslience.cn/search_information.csv
 # 下载用户信息数据
-wget -P data/ http://xbot.bslience.cn/user_data.csv
+wget -P data/ http://aimaksen.bslience.cn/user_data.csv
 ```
 
 * run_build_document.py 处理文档类数据
