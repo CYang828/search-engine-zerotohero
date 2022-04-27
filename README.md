@@ -103,18 +103,18 @@
    mongoimport -h <host> -d zhihu -c articles --file dataset/articles.json --headerline --type json
    ```
    
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 2.
-<p align="right">(<a href="#top">back to top</a>)</p>
 
-3. 在config.ini中配置存储爬虫数据[mongo]与hbase特征平台[document_hbase]中的参数；
+3. 在 config.ini 中配置存储爬虫数据[mongo]与hbase特征平台[document_hbase]中的参数；
+   
    在项目根目录下终端中分别执行下列语句来完成对文档、搜索信息和用户特征的构建与入库
+
     ```bash
       python -m featurizer.run_build_document # 完成文章级别的特征建设
       python -m featurizer.run_build_searchinfo # 完成搜索内容特征的建设
       python -m featurizer.run_build_user # 完成用户特征的建设
     ```
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
