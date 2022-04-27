@@ -5,6 +5,7 @@
 # @Software: PyCharm
 import os
 
+import horovod.torch as hvd
 import torch
 from torch.optim import Adagrad
 from tqdm import tqdm, trange
@@ -13,6 +14,10 @@ from ranker.src.args import get_args
 from ranker.src.dataloader import load_data
 from ranker.src.model import MultiDeepFM
 from ranker.src.utils import batch2cuda, EMA, seed_everything, roc_score
+
+hvd.init()
+torch.cuda.set_device(hvd.local_rank())
+
 
 # os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3'
 

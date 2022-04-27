@@ -26,7 +26,7 @@ xdeepfm模型主要由两部分组成，cin部分和dnn部分 (直接从DeepCTR�
   
 xdeepfm模型中cin部分的输入纬度(bs, num_field, emb_size)
 
-# Horovod 分布式训练
+
 
 
 

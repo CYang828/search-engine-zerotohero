@@ -8,8 +8,9 @@ import os
 import re
 from collections import defaultdict, Counter
 
-import happybase
 import redis
+from bs4 import BeautifulSoup as bs
+from pymongo import MongoClient
 from tqdm import tqdm
 
 
@@ -67,26 +68,60 @@ def get_split_sentences(data):
     return data_new
 
 
-def read_data(hbase_url="10.30.89.124", hbase_port=9090):
-    connection = happybase.Connection(host=hbase_url, port=hbase_port,
-                                      timeout=100000)
-    table = connection.table('document_features_02')
+# def read_data(hbase_url="10.30.89.124", hbase_port=9090):
+#     connection = happybase.Connection(host=hbase_url, port=hbase_port,
+#                                       timeout=100000)
+#     table = connection.table('document_features_02')
+#     data = defaultdict(list)
+#     for i, each in enumerate(table.scan(batch_size=10)):
+#         title = each[1][b'document:title'].decode()
+#         summary = each[1][b'document:excerpt'].decode()
+#         content = each[1][b'document:clean_content'].decode()
+#         data['title'].append(title)
+#         data['summary'].append(summary)
+#         data['content'].append(content)
+#     return data
+
+class CleanHtmlTag():
+    def run(self, data):
+        if isinstance(data, float):
+            print(data)
+            return ""
+        result = bs(data).get_text()
+        return result
+
+
+def read_data(mongo_url='mongodb://10.30.89.124:27013/', db='zhihu_new', table='articles'):
+    client = MongoClient(mongo_url)
+    collec = client[db][table]
+    cht = CleanHtmlTag()
     data = defaultdict(list)
-    for i, each in enumerate(table.scan(batch_size=10)):
-        title = each[1][b'document:title'].decode()
-        summary = each[1][b'document:excerpt'].decode()
-        content = each[1][b'document:clean_content'].decode()
-        data['title'].append(title)
-        data['summary'].append(summary)
-        data['content'].append(content)
+    for one_data in tqdm(collec.find(batch_size=10)):
+        try:
+            if one_data["title"]:
+                title = cht.run(one_data['title'])
+                data['title'].append(title)
+            if one_data["excerpt"]:
+                summary = cht.run(one_data['excerpt'])
+                data['summary'].append(summary)
+            if one_data["content"]:
+                clean_content = cht.run(one_data['content'])
+                data['content'].append(clean_content)
+        except:
+            print(one_data)
     return data
 
 
 def save_corpus(redis_url="10.30.89.124", redis_port=6379):
+    print('start reading data...')
     data = read_data()
+    print('read data end')
+    print('*' * 50)
+    print('start saving data')
     data = get_split_sentences(data)
     res = redis.StrictRedis(host=redis_url, port=redis_port, db=0)
     res.set('sentences', json.dumps(data))
+    print('end of saving data')
 
 
 def generate_data(data, corpus_file_path):
@@ -106,8 +141,8 @@ def generate_vocab(total_data, vocab_file_path):
 
 def main():
     save_corpus()
-    corpus_file_path = 'recall/bert_wwm_pretrain/data/pretrain_corpus.txt'
-    vocab_file_path = 'recall/bert_wwm_pretrain/data/vocab.txt'
+    corpus_file_path = 'public/bert_wwm_pretrain/data/pretrain_corpus.txt'
+    vocab_file_path = 'public/bert_wwm_pretrain/data/vocab.txt'
     redis_url = "10.30.89.124"
     redis_port = 6379
     res = redis.StrictRedis(host=redis_url, port=redis_port, db=0)
@@ -116,7 +151,9 @@ def main():
     for each in data.keys():
         data_list.extend(data[each])
     #
+    print('start producing corpus')
     generate_data(data_list, corpus_file_path)
+    print('start producing vocab')
     generate_vocab(data_list, vocab_file_path)
 
 
@@ -126,16 +163,4 @@ def check_dir(path):
 
 
 if __name__ == '__main__':
-    # main()
-    word_list = []
-    with open('recall/bert_wwm_pretrain/data/vocab.txt', 'r', encoding='utf-8') as f:
-        for line in f.readlines():
-            line = line.strip('\n')
-            word_list.append(line)
-    print('len(word_list):', len(word_list))
-    new_word_list = []
-    with open('recall/bert_wwm_pretrain/data/chinese_bert_wwm/vocab.txt', 'r', encoding='utf-8') as f:
-        for line in f.readlines():
-            line = line.strip('\n')
-            new_word_list.append(line)
-    print('len(new_word_list):', len(new_word_list))
+    main()

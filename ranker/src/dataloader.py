@@ -4,18 +4,13 @@
 # @FileName: dataloader.py
 # @Software: PyCharm
 
-# dataset = Dataset(user_data)
-# data_loader = DataLoader(dataset)
-# print(data_loader)
 from collections import defaultdict
 
+import horovod.torch as hvd
 import pandas as pd
+import torch
 from torch.utils.data import Dataset, DataLoader
 
-#  userid在user_data中拿到用户信息
-#  则该用户的正样本信息和负样本信息
-#
-#  基础模型使用deepfm
 from ranker.src.args import get_args
 
 
@@ -117,16 +112,22 @@ def load_data(args):
     process_valid_data = ReadData(train=False)
     train_dataset = SearchDataset(process_train_data)
     valid_dataset = SearchDataset(process_valid_data)
+    train_sampler = torch.utils.data.distributed.DistributedSampler(
+        train_dataset, num_replicas=hvd.size(), rank=hvd.rank())
+    valid_sampler = torch.utils.data.distributed.DistributedSampler(
+        valid_dataset, num_replicas=hvd.size(), rank=hvd.rank())
     train_dataloader = DataLoader(dataset=train_dataset, batch_size=args.bs,
-                                  shuffle=True, num_workers=4, pin_memory=False)
+                                  shuffle=True, num_workers=4, pin_memory=False,
+                                  sampler=train_sampler)
     valid_dataloader = DataLoader(dataset=valid_dataset, batch_size=args.bs,
-                                  shuffle=True, num_workers=4, pin_memory=False)
+                                  shuffle=True, num_workers=4, pin_memory=False,
+                                  sampler=valid_sampler)
     return train_dataloader, valid_dataloader
 
 
 if __name__ == '__main__':
     import time
-
+    hvd.init()
     args = get_args()
     start1 = time.time()
     sparse_features = defaultdict()

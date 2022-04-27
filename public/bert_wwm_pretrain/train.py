@@ -15,7 +15,7 @@ from torch.utils.data import Dataset
 from tqdm import tqdm
 from transformers import BertTokenizer, BertForMaskedLM, Trainer, TrainingArguments
 
-from recall.bert_wwm_pretrain.processing import check_dir
+from public.bert_wwm_pretrain.processing import check_dir
 
 # Create an experiment with your api key
 # 为了记录数据，这是我自己的comet账号
@@ -183,14 +183,14 @@ def seed_everyone(seed_):
 
 
 class CFG:
-    corpus_file_path = 'recall/bert_wwm_pretrain/data/pretrain_corpus.txt'
-    vocab_file_path = 'recall/bert_wwm_pretrain/data/chinese_bert_wwm/vocab.txt'
+    corpus_file_path = 'public/bert_wwm_pretrain/data/pretrain_corpus.txt'
+    vocab_file_path = 'public/bert_wwm_pretrain/data/chinese_bert_wwm/vocab.txt'
     redis_url = "10.30.89.124"
     redis_port = 6379
     max_seq_len = 102
     batch_size = 32
-    output_dir = 'recall/bert_wwm_pretrain/data/whole_word_mask_bert_output'
-    bert_model_dir = 'recall/bert_wwm_pretrain/data/chinese_bert_wwm/'
+    output_dir = 'public/bert_wwm_pretrain/data/whole_word_mask_bert_output'
+    bert_model_dir = 'public/bert_wwm_pretrain/data/chinese_bert_wwm/'
     debug = False
 
 
