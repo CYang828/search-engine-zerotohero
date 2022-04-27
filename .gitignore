@@ -16,4 +16,6 @@
 featurizer/data/best_model_ckpt
 featurizer/data/__MACOSX
 featurizer/data/best_model_ckpt.zip
+__pycache__
+.idea
 
