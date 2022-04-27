@@ -4,16 +4,14 @@
 # @FileName: model.py
 # @Software: PyCharm
 
-from argparse import Namespace
-from collections import defaultdict
-from typing import Dict
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+from argparse import Namespace
+from collections import defaultdict
 from ranker.src.activation import activation_layer
 from ranker.src.utils import FocalLoss_MultiLabel
+from typing import Dict
 
 
 class DNN(nn.Module):
@@ -133,7 +131,7 @@ class Linear(nn.Module):
         super(Linear, self).__init__()
         self.embedding_dict = create_embedding_dict(config, linear=False)
         self.weight = nn.Parameter(torch.Tensor(2, 3))
-        self.trans_weight = nn.Parameter(torch.Tensor(60, 3)) # 60是离散变量的数量*映射的维度 6*10
+        self.trans_weight = nn.Parameter(torch.Tensor(60, 3))  # 60是离散变量的数量*映射的维度 6*10
         torch.nn.init.normal_(self.weight, mean=0, std=config.init_std)
         torch.nn.init.normal_(self.trans_weight, mean=0, std=config.init_std)
 

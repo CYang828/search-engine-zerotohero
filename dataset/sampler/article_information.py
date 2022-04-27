@@ -11,14 +11,13 @@ from collections import defaultdict, Counter
 import happybase
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
-
 from dataset.sampler.utils import (
     generate_userid,
     load_stop_words,
     BaseSampler,
     sample_token,
 )
+from tqdm import tqdm
 
 
 def random_seed(seed):
@@ -117,7 +116,7 @@ class ArticleSampler(BaseSampler):
         # # 调整数据顺序
 
         item_information_new = item_information.loc[
-                               :, ["userid", "document_id", "search_token", "click", "like", "comment"]
+                               :, ["userid", "document_id", "search_token", "click", "like", "comment", 'pv', 'uv']
                                ]
 
         item_information_new.to_csv(
