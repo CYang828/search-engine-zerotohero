@@ -10,15 +10,18 @@ import dill as pickle
 import time
 import pickle
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
 class MLEmodel:
     def __init__(
-        self,
-        model_path= BASE_DIR + "/model_data/kilgariff_ngram_model.pkl",
+            self,
+            model_path=BASE_DIR + "/model_data/kilgariff_ngram_model.pkl",
     ):
         self.model_path = model_path
 
-    def read(self, sentence_tokens_path="sentences_tokens.pickle"):
+    def read(self, sentence_tokens_path=BASE_DIR + "/model_data/sentences_tokens.pkl"):
         f = open(sentence_tokens_path, "rb")
         self.tokenized_text = pickle.load(f)  # 所有的分词
         f.close()
@@ -72,7 +75,7 @@ class MLEmodel:
 
 if __name__ == "__main__":
     mle = MLEmodel()
-    # mle.fit()
-    model = mle.load()
-    print(model.logscore("never", "language is".split()))
-    print(model.perplexity())
+    mle.fit()
+    # model = mle.load()
+    # print(model.logscore("never", "language is".split()))
+    # print(model.perplexity())

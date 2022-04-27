@@ -2,7 +2,6 @@
 # @Time   :2022/1/27 4:16 下午
 # @Author :Li Meng qi
 # @FileName:rewrite.py
-import pycorrector
 import torch
 from transformers import BertTokenizer, BertForMaskedLM
 from collections import defaultdict
