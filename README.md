@@ -103,12 +103,13 @@
    mongoimport -h <host> -d zhihu -c articles --file dataset/articles.json --headerline --type json
    ```
    
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 2.
-<p align="right">(<a href="#top">back to top</a>)</p>
+
 
 3. 特征工程建设请移步<a href="https://github.com/BSlience/search-engine-zerotohero/blob/main/featurizer/README.md">featurizer/README.md</a>中启动部分。
+
+
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
