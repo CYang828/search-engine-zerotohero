@@ -97,7 +97,7 @@
 
 1. 数据导入
    ```bash
-   wget -P dataset/ http://xbot.bslience.cn/articles.json.zip
+   wget -P dataset/ http://aimaksen.bslience.cn/articles.json.zip
    unzip dataset/articles.json.zip -d dataset/
    # 把数据导入到 mongo中 
    mongoimport -h <host> -d zhihu -c articles --file dataset/articles.json --headerline --type json

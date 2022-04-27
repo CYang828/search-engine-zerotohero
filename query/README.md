@@ -11,20 +11,20 @@
 ```bash
 pip install -r requirements.txt
 # 下载macbert纠错模型参数并解压
-wget -P model_data/ http://xbot.bslience.cn/macbert4csc-base-chinese.zip
+wget -P model_data/ http://aimaksen.bslience.cn/macbert4csc-base-chinese.zip
 unzip model_data/macbert4csc-base-chinese.zip -d model_data/
 # 下载腾讯词向量与使用Annoy创建的索引文件并解压
-wget -P model_data/ http://xbot.bslience.cn/tencent-AILab-ChineseEmbedding.zip
+wget -P model_data/ http://aimaksen.bslience.cn/tencent-AILab-ChineseEmbedding.zip
 unzip model_data/tencent-AILab-ChineseEmbedding.zip -d model_data/
 # 下载无监督SVD意图识别生成的模型文件
-wget -P model_data/ http://xbot.bslience.cn/intent-recognition.zip
+wget -P model_data/ http://aimaksen.bslience.cn/intent-recognition.zip
 unzip model_data/intent-recognition.zip -d model_data/
 # 下载根据爬取的语料建设的字典文件
-wget -P model_data/ http://xbot.bslience.cn/vocab_dic.bin
+wget -P model_data/ http://aimaksen.bslience.cn/vocab_dic.bin
 # 下载保存的语言模型文件
-wget -P model_data/ http://xbot.bslience.cn/kilgariff_ngram_model.pkl
+wget -P model_data/ http://aimaksen.bslience.cn/kilgariff_ngram_model.pkl
 # 下载可以用来训练语言模型的语料（语料来自hbase中文章正文分句分词后的结果）
-wget -P model_data/ http://xbot.bslience.cn/sentences_tokens.pkl
+wget -P model_data/ http://aimaksen.bslience.cn/sentences_tokens.pkl
 
 ```
 
