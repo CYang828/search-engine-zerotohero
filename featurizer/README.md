@@ -37,16 +37,3 @@ python -m featurizer.run_build_document # 完成文章级别的特征建设
 python -m featurizer.run_build_searchinfo # 完成搜索内容特征的建设
 python -m featurizer.run_build_user # 完成用户特征的建设
 ```
-
-
-## 三、必要的包与版本
-
-hanlp==2.1.0a64
-
-happybase==1.2.0
-
-jieba==0.42.1
-
-pymongo==3.12.1
-
-PyHive==0.6.5
