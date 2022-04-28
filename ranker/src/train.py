@@ -5,6 +5,7 @@
 # @Software: PyCharm
 import os
 
+import horovod.torch as hvd
 import torch
 from torch.optim import Adagrad
 from tqdm import tqdm, trange
@@ -13,6 +14,10 @@ from ranker.src.args import get_args
 from ranker.src.dataloader import load_data
 from ranker.src.model import MultiDeepFM
 from ranker.src.utils import batch2cuda, EMA, seed_everything, roc_score
+
+hvd.init()
+torch.cuda.set_device(hvd.local_rank())
+
 
 # os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3'
 
@@ -80,6 +85,8 @@ def train(config, train_dataloader, valid_dataloader):
     model = MultiDeepFM(config)
     model.to(config.device)
     optimizer = Adagrad(model.parameters(), lr=config.lr)
+    optimizer = hvd.DistributedOptimizer(optimizer, named_parameters=model.named_parameters())
+    hvd.broadcast_parameters(model.state_dict(), root_rank=0)
     epoch_iterator = trange(config.num_epochs, desc='Epoch')
     global_steps = 0
     train_loss = 0.
@@ -90,8 +97,8 @@ def train(config, train_dataloader, valid_dataloader):
     best_roc_auc = 0.
     best_model_path = ''
 
-    if config.n_gpus > 1:
-        model = torch.nn.DataParallel(model)
+    # if config.n_gpus > 1:
+    #     model = torch.nn.DataParallel(model)
 
     optimizer.zero_grad()
 
@@ -116,10 +123,10 @@ def train(config, train_dataloader, valid_dataloader):
                         total_reg_loss += torch.sum(config.l2_reg_embedding * torch.square(p))
                     else:
                         total_reg_loss += torch.sum(config.l2 * torch.square(p))
-            if config.n_gpus > 1:
-                loss = loss.mean()
-                pos_loss = pos_loss.mean()
-                neg_loss = neg_loss.mean()
+            # if config.n_gpus > 1:
+            #     loss = loss.mean()
+            #     pos_loss = pos_loss.mean()
+            #     neg_loss = neg_loss.mean()
             loss += total_reg_loss
             loss /= len(user_ids)
             loss.backward()

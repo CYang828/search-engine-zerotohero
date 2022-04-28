@@ -95,8 +95,6 @@ def roc_score(labels: list, preds: list,
     columns = [f'{task}_{type_}' for type_ in ['label', 'pred'] for task in task2weight.keys()]
     results_df = pd.DataFrame(data=np.concatenate([labels, preds], axis=-1),
                               columns=columns)
-    print('results_df:')
-    print(results_df)
     results_df.insert(0, column='user_id', value=user_ids)
     task_metrics = defaultdict(list)
     for _, data in results_df.groupby(by='user_id'):

@@ -16,7 +16,7 @@
 featurizer/data/best_model_ckpt
 featurizer/data/__MACOSX
 featurizer/data/best_model_ckpt.zip
-
+public/bert_wwm_pretrain/data/chinese_bert_wwm
 featurizer/.DS_Store
 __pycache__
 .idea

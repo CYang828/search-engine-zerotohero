@@ -11,14 +11,13 @@ from collections import defaultdict, Counter
 import happybase
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
-
 from dataset.sampler.utils import (
     generate_userid,
     load_stop_words,
     BaseSampler,
     sample_token,
 )
+from tqdm import tqdm
 
 
 def random_seed(seed):
@@ -41,15 +40,9 @@ class ArticleSampler(BaseSampler):
         # 是否点击 1(0.95)
         # 是否点赞 0.05
         # 是否评论 0.01
-<<<<<<< HEAD
-        if os.path.exists(self.sampler_configs['data_path'] + 'document_information.csv'):
-            document_information = pd.read_csv(self.sampler_configs['data_path'] + 'document_information.csv')
-        else:
-            ArticleSampler().get_article()
-            document_information = pd.read_csv(self.sampler_configs['data_path'] + 'document_information.csv')
-=======
+
         if os.path.exists(
-            self.sampler_configs["data_path"] + "document_information.csv"
+                self.sampler_configs["data_path"] + "document_information.csv"
         ):
             document_information = pd.read_csv(
                 self.sampler_configs["data_path"] + "document_information.csv"
@@ -59,7 +52,6 @@ class ArticleSampler(BaseSampler):
             document_information = pd.read_csv(
                 self.sampler_configs["data_path"] + "document_information.csv"
             )
->>>>>>> 2b9df2d699a7843e3370401f199a048730122da9
         if debug:
             self.user_search_max_nums = 50
             self.user_nums = 1000
@@ -85,19 +77,10 @@ class ArticleSampler(BaseSampler):
             index = np.random.randint(0, length, sample_nums)
             uer_click_data = document_information.iloc[index, :]
 
-<<<<<<< HEAD
             uer_click_data.loc[:, 'userid'] = user_id
             uer_click_data.loc[:, 'click'] = 1  # np.random.binomial(1, 0.6, sample_nums)
             uer_click_data.loc[:, 'like'] = np.random.binomial(1, 0.3, sample_nums)
             uer_click_data.loc[:, 'comment'] = np.random.binomial(1, 0.2, sample_nums)
-=======
-            uer_click_data.loc[:, "userid"] = user_id
-            uer_click_data.loc[
-                :, "click"
-            ] = 1  # np.random.binomial(1, 0.95, sample_nums)
-            uer_click_data.loc[:, "like"] = np.random.binomial(1, 0.05, sample_nums)
-            uer_click_data.loc[:, "comment"] = np.random.binomial(1, 0.01, sample_nums)
->>>>>>> 2b9df2d699a7843e3370401f199a048730122da9
             temp_item_list.append(uer_click_data)
 
         for user_id in tqdm(user_no_click_list, total=len(user_no_click_list)):
@@ -131,20 +114,14 @@ class ArticleSampler(BaseSampler):
         # print('循环消耗时间',times)
         #
         # # 调整数据顺序
-<<<<<<< HEAD
-        item_information_new = item_information.loc[:,
-                               ['userid', 'document_id', 'search_token', 'pv', 'uv', 'click', 'like', 'comment']]
 
-        item_information_new.to_csv(self.sampler_configs['data_path'] + 'search_information.csv', index=False)
-=======
         item_information_new = item_information.loc[
-            :, ["userid", "document_id", "search_token", "click", "like", "comment"]
-        ]
+                               :, ["userid", "document_id", "search_token", "click", "like", "comment", 'pv', 'uv']
+                               ]
 
         item_information_new.to_csv(
             self.sampler_configs["data_path"] + "search_information.csv", index=False
         )
->>>>>>> 2b9df2d699a7843e3370401f199a048730122da9
         # return item_information_new
 
     def get_article(self, debug=False):
@@ -159,11 +136,8 @@ class ArticleSampler(BaseSampler):
             if debug and i != 0 and i % 100 == 0:
                 break
 
-<<<<<<< HEAD
         stop_words_list = load_stop_words('dataset/stopwords.txt')
-=======
-        stop_words_list = load_stop_words("../stopwords.txt")
->>>>>>> 2b9df2d699a7843e3370401f199a048730122da9
+
         token_dic = Counter(token_list)
         token_dic = {
             key: value for key, value in token_dic.items() if key not in stop_words_list
@@ -180,8 +154,8 @@ class ArticleSampler(BaseSampler):
             values_list = []
             for value in values:
                 if (
-                    value not in stop_words_list
-                    and value not in high_frequency_words_list
+                        value not in stop_words_list
+                        and value not in high_frequency_words_list
                 ):
                     values_list.append(value)
 
@@ -189,7 +163,6 @@ class ArticleSampler(BaseSampler):
 
         document_information = pd.DataFrame([document_token_dic]).T
         document_information = document_information.reset_index()
-<<<<<<< HEAD
         document_information.columns = ['document_id', 'clean_token']
         pv_list = [random.randint(0, 200) for i in range(document_information.shape[0])]
         uv_list = []
@@ -210,16 +183,5 @@ class ArticleSampler(BaseSampler):
                 f.write(s)
 
 
-if __name__ == '__main__':
-    ArticleSampler().get_article()
-=======
-        document_information.columns = ["document_id", "clean_token"]
-        document_information.to_csv(
-            self.sampler_configs["data_path"] + "document_information.csv", index=False
-        )
-
-
 if __name__ == "__main__":
-    # ArticleSampler().get_article()
->>>>>>> 2b9df2d699a7843e3370401f199a048730122da9
     ArticleSampler().sample()

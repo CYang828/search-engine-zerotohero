@@ -51,9 +51,9 @@ random.choice(range(1, 300))
 2、用户搜索内容：从clean_token随机抽取两到三个词
 3、是否点击 搜索之后为点击行为1 
 4、是否点赞 5%的概率点赞
-np.random.binomial(1, 0.05)
+np.random.binomial(1, 0.3)
 5、是否评论 1%的概率评论
-np.random.binomial(1, 0.01)
+np.random.binomial(1, 0.2)
 
 ## 执行采样
 在项目的根目录下

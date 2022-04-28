@@ -19,9 +19,9 @@ def main():
     if not os.path.exists("dataset/data/document_information.csv"):
         ArticleSampler().get_article()
         print("document_information is over")
-    if not os.path.exists("dataset/data/test_search_data.csv"):
+    if not os.path.exists("dataset/data/search_information.csv"):
         ArticleSampler().sample()
-        print("test_search_data is over")
+        print("search_information is over")
     if not os.path.exists("dataset/data/test_search_data.csv"):
         get_train_test_data(configs)
         print("test_search_data is over")
