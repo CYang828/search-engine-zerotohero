@@ -8,7 +8,7 @@ import abc
 from loader import load_configs
 
 
-def get_query_json(query, boost_title=3, boost_summary=2, boost_content=1):
+def get_query_json(query):
     query_json = {"query": {"match": {"content": query}}}
     # query_json = {
     #     "query": {

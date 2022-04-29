@@ -22,3 +22,4 @@ __pycache__
 .idea
 
 query/model_data/macbert4csc-base-chinese.zip
+recall/__pycache__/
