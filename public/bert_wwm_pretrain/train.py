@@ -96,8 +96,8 @@ class SearchCollator:
                 masked_lms.append(index)
 
         assert len(covered_indexes) == len(masked_lms)
+        # mask 掉的 token 使用 1 来进行标记，否则使用 0 来标记
         mask_labels = [1 if i in covered_indexes else 0 for i in range(min(len(input_ids_list), max_seq_len))]
-
         mask_labels += [0] * (max_seq_len - len(mask_labels))
         return torch.tensor(mask_labels)
 
@@ -147,7 +147,7 @@ class SearchCollator:
                                                                           token_type_ids_list,
                                                                           attention_mask_list,
                                                                           max_seq_len)
-        batch_mask = self.whole_word_mask(input_ids, max_seq_len)
+        batch_mask = self.whole_word_mask(input_ids_list, max_seq_len)
         input_ids, mlm_labels = self.mask_tokens(input_ids, batch_mask)
         data_dict = {
             'input_ids': input_ids,
