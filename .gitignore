@@ -21,3 +21,4 @@ featurizer/.DS_Store
 __pycache__
 .idea
 
+query/model_data/macbert4csc-base-chinese.zip

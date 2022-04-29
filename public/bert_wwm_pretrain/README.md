@@ -1,19 +1,19 @@
-##训练步骤  
-###1、生成训练预料和vocab.txt文件
+## 训练步骤  
+### 1、生成训练预料和vocab.txt文件
 (1)从数据库中读取数据  
 (2)将数据切分成句子保存在pretrain_corpus.txt文件中(同时保存在了redis中,可以选择性使用)  
 (3)生成vocab.txt文件(和bert使用的vocab.txt格式保持一致)
 
 python -m public.bert_wwm_pretrain.processing 
 
-###2、开始训练
+### 2、开始训练
 (1)在https://huggingface.co/hfl/chinese-bert-wwm/tree/main下载vocab.txt、config.json
 和pytorch_model.bin文件并保存在public/bert_wwm_pretrain/data/chinese_bert_wwm目录下  
 (2) 执行main函数
 有条件的同学可以多使用几个GPU  
 python -m public.bert_wwm_pretrain.train
 
-##whole word mask逻辑
+## whole word mask逻辑
 bert是针对字进行训练，whole word mask同样是针对字进行训练，
 那么是如何哪写字的组合是一个词，并且对其mask。
 并且这一步选择在Collator中实现。
