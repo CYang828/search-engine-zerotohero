@@ -10,6 +10,7 @@ from collections import defaultdict, Counter
 
 import redis
 from bs4 import BeautifulSoup as bs
+from loader import load_configs
 from pymongo import MongoClient
 from tqdm import tqdm
 
@@ -93,10 +94,10 @@ class CleanHtmlTag():
 
 def read_data(mongo_url='mongodb://10.30.89.124:27013/', db='zhihu_new', table='articles'):
     client = MongoClient(mongo_url)
-    collec = client[db][table]
+    collect = client[db][table]
     cht = CleanHtmlTag()
     data = defaultdict(list)
-    for one_data in tqdm(collec.find(batch_size=10)):
+    for one_data in tqdm(collect.find(batch_size=10)):
         try:
             if one_data["title"]:
                 title = cht.run(one_data['title'])
@@ -112,9 +113,9 @@ def read_data(mongo_url='mongodb://10.30.89.124:27013/', db='zhihu_new', table='
     return data
 
 
-def save_corpus(redis_url="10.30.89.124", redis_port=6379):
+def save_corpus(redis_url, redis_port, mongo_url,db, table):
     print('start reading data...')
-    data = read_data()
+    data = read_data(mongo_url, db, table)
     print('read data end')
     print('*' * 50)
     print('start saving data')
@@ -140,11 +141,13 @@ def generate_vocab(total_data, vocab_file_path):
 
 
 def main():
-    save_corpus()
     corpus_file_path = 'public/bert_wwm_pretrain/data/pretrain_corpus.txt'
     vocab_file_path = 'public/bert_wwm_pretrain/data/vocab.txt'
-    redis_url = "10.30.89.124"
-    redis_port = 6379
+    mongo_config = load_configs(func="mongo")
+    base_config = load_configs(func="base")
+    save_corpus(redis_url=base_config['redis_url'], redis_port=base_config['redis_port'],
+                mongo_url=mongo_config["url"],
+                db=mongo_config["db"], table=mongo_config["collection"])
     res = redis.StrictRedis(host=redis_url, port=redis_port, db=0)
     data = json.loads(res.get('sentences'))
     data_list = []
