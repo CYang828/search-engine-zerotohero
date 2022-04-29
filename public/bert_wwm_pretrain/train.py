@@ -42,6 +42,7 @@ class SearchDataset(Dataset):
 
 class SearchCollator:
     def __init__(self, max_seq_len: int, tokenizer: BertTokenizer, mlm_probability=0.15):
+        # max_seq_len 用于截断的最大长度
         self.max_seq_len = max_seq_len
         self.tokenizer = tokenizer
         self.mlm_probability = mlm_probability
@@ -139,6 +140,7 @@ class SearchCollator:
     def __call__(self, examples: list) -> dict:
         input_ids_list, token_type_ids_list, attention_mask_list = list(zip(*examples))
         cur_max_seq_len = max(len(input_id) for input_id in input_ids_list)
+        # 动态识别 batch 中最大长度，用于 padding 操作
         max_seq_len = min(cur_max_seq_len, self.max_seq_len)
 
         input_ids, token_type_ids, attention_mask = self.truncate_and_pad(input_ids_list,
