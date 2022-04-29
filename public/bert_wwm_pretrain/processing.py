@@ -114,6 +114,7 @@ def read_data(mongo_url='mongodb://10.30.89.124:27013/', db='zhihu_new', table='
 
 
 def save_corpus(redis_url, redis_port, mongo_url,db, table):
+    """预处理操作"""
     print('start reading data...')
     data = read_data(mongo_url, db, table)
     print('read data end')
@@ -138,6 +139,7 @@ def generate_vocab(total_data, vocab_file_path,original_vocab_file_path):
     # vocab = ['[PAD]', '[UNK]', '[CLS]', '[SEP]', '[MASK]'] + vocab
     # vocab和下载的vocab.txt对其并更新
     original_vocab = []
+    # 读预训练词表
     with open(original_vocab_file_path, 'r', encoding='utf8') as f:
         for line in f.readlines():
             line = line.strip('\n')
@@ -150,9 +152,13 @@ def generate_vocab(total_data, vocab_file_path,original_vocab_file_path):
 
 
 def main():
+    # 预训练词表存储的位置
     original_vocab_file_path = 'public/bert_wwm_pretrain/data/chinese_bert_wwm/vocab.txt'
+    # 预料存储位置
     corpus_file_path = 'public/bert_wwm_pretrain/data/pretrain_corpus.txt'
+    # 自己的词表
     vocab_file_path = 'public/bert_wwm_pretrain/data/vocab.txt'
+
     mongo_config = load_configs(func="mongo")
     base_config = load_configs(func="base")
     save_corpus(redis_url=base_config['redis_url'], redis_port=base_config['redis_port'],
@@ -163,7 +169,6 @@ def main():
     data_list = []
     for each in data.keys():
         data_list.extend(data[each])
-    #
     print('start producing corpus')
     generate_data(data_list, corpus_file_path)
     print('start producing vocab')

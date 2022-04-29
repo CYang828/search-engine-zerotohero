@@ -29,6 +29,12 @@ https://zhuanlan.zhihu.com/p/402666821
 (5)将带特征符号##的token和前一个token进行mask标记获得mask_label
 (6)根据mask_label和input_ids进行mask(80%进行mask掉，10%进行随机替换，10选择保持不变)
 
+## finetune 后模型下载地址
+
+```bash
+wget http://aimaksen.bslience.cn/best_model_ckpt.zip
+```
+
 
 
 
