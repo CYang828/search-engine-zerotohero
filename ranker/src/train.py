@@ -15,12 +15,6 @@ from ranker.src.dataloader import load_data
 from ranker.src.model import MultiDeepFM
 from ranker.src.utils import batch2cuda, EMA, seed_everything, roc_score
 
-hvd.init()
-torch.cuda.set_device(hvd.local_rank())
-
-
-# os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3'
-
 
 def evaluation(config, model, val_dataloader):
     model.eval()
@@ -85,8 +79,12 @@ def train(config, train_dataloader, valid_dataloader):
     model = MultiDeepFM(config)
     model.to(config.device)
     optimizer = Adagrad(model.parameters(), lr=config.lr)
-    optimizer = hvd.DistributedOptimizer(optimizer, named_parameters=model.named_parameters())
+
     hvd.broadcast_parameters(model.state_dict(), root_rank=0)
+    hvd.broadcast_optimizer_state(optimizer, root_rank=0)
+    # compression = hvd.Compression.fp16 if config.fp16_allreduce else hvd.Compression.none
+    optimizer = hvd.DistributedOptimizer(optimizer, named_parameters=model.named_parameters())
+
     epoch_iterator = trange(config.num_epochs, desc='Epoch')
     global_steps = 0
     train_loss = 0.
@@ -189,15 +187,18 @@ def args_setup():
     os.makedirs(args.output_dir, exist_ok=True)
     if not torch.cuda.is_available():
         args.device = 'cpu'
-    else:
-        # args.n_gpus = torch.cuda.device_count()
-        # args.bs *= args.n_gpus
-        # args.device = 'cpu'
-        args.n_gpus = 1
+    # else:
+    #     # args.n_gpus = torch.cuda.device_count()
+    #     # args.bs *= args.n_gpus
+    #     # args.device = 'cpu'
+    #     args.n_gpus = 1
     return args
 
 
 if __name__ == '__main__':
+    hvd.init()
+    torch.cuda.set_device(hvd.local_rank())
     args = args_setup()
+    print('start training')
     train_dataloader, valid_dataloader = load_data(args)
     train(args, train_dataloader, valid_dataloader)
