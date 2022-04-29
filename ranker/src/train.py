@@ -187,11 +187,11 @@ def args_setup():
     os.makedirs(args.output_dir, exist_ok=True)
     if not torch.cuda.is_available():
         args.device = 'cpu'
-    else:
-        # args.n_gpus = torch.cuda.device_count()
-        # args.bs *= args.n_gpus
-        # args.device = 'cpu'
-        args.n_gpus = 1
+    # else:
+    #     # args.n_gpus = torch.cuda.device_count()
+    #     # args.bs *= args.n_gpus
+    #     # args.device = 'cpu'
+    #     args.n_gpus = 1
     return args
 
 
