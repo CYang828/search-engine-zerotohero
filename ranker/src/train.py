@@ -19,9 +19,7 @@ from ranker.src.utils import batch2cuda, EMA, seed_everything, roc_score
 def evaluation(config, model, val_dataloader):
     model.eval()
     preds = []
-    #     nums_pred_list = []
     labels = []
-    user_ids = []
     val_loss = 0.
     val_iterator = tqdm(val_dataloader, desc='Evaluation', total=len(val_dataloader))
     user_ids = []

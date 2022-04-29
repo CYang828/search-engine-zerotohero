@@ -131,16 +131,26 @@ def generate_data(data, corpus_file_path):
             f.write(row + '\n')
 
 
-def generate_vocab(total_data, vocab_file_path):
+def generate_vocab(total_data, vocab_file_path,original_vocab_file_path):
     total_tokens = [token for sent in total_data for token in sent]
     counter = Counter(total_tokens)
     vocab = [token for token, freq in counter.items()]
-    vocab = ['[PAD]', '[UNK]', '[CLS]', '[SEP]', '[MASK]'] + vocab
+    # vocab = ['[PAD]', '[UNK]', '[CLS]', '[SEP]', '[MASK]'] + vocab
+    # vocab和下载的vocab.txt对其并更新
+    original_vocab = []
+    with open(original_vocab_file_path, 'r', encoding='utf8') as f:
+        for line in f.readlines():
+            line = line.strip('\n')
+            original_vocab.append(line)
+    need_add_token = [each for each in vocab if each not in original_vocab]
+
+    original_vocab.extend(need_add_token)
     with open(vocab_file_path, 'w', encoding='utf8') as f:
-        f.write('\n'.join(vocab))
+        f.write('\n'.join(original_vocab))
 
 
 def main():
+    original_vocab_file_path = 'public/bert_wwm_pretrain/data/chinese_bert_wwm/vocab.txt'
     corpus_file_path = 'public/bert_wwm_pretrain/data/pretrain_corpus.txt'
     vocab_file_path = 'public/bert_wwm_pretrain/data/vocab.txt'
     mongo_config = load_configs(func="mongo")
@@ -148,7 +158,7 @@ def main():
     save_corpus(redis_url=base_config['redis_url'], redis_port=base_config['redis_port'],
                 mongo_url=mongo_config["url"],
                 db=mongo_config["db"], table=mongo_config["collection"])
-    res = redis.StrictRedis(host=redis_url, port=redis_port, db=0)
+    res = redis.StrictRedis(host=base_config["redis_url"], port=base_config["redis_port"], db=0)
     data = json.loads(res.get('sentences'))
     data_list = []
     for each in data.keys():
@@ -157,7 +167,7 @@ def main():
     print('start producing corpus')
     generate_data(data_list, corpus_file_path)
     print('start producing vocab')
-    generate_vocab(data_list, vocab_file_path)
+    generate_vocab(data_list, vocab_file_path,original_vocab_file_path)
 
 
 def check_dir(path):
@@ -167,3 +177,4 @@ def check_dir(path):
 
 if __name__ == '__main__':
     main()
+
