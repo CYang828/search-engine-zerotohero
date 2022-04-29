@@ -11,7 +11,7 @@ def get_args():
     parser = argparse.ArgumentParser(description='XDeepFM')
 
     parser.add_argument('--seed', type=int, default=12)
-    parser.add_argument('--device', type=str, default='cuda:3')
+    parser.add_argument('--device', type=str, default='cuda')
     ########################## XDeepFM ##########################
     parser.add_argument('--multi_modal_hidden_size', type=int, default=128)
     parser.add_argument('--num_field', type=int, default=6)
