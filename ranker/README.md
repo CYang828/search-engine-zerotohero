@@ -11,6 +11,11 @@ CUDA_VISIBLE_DEVICES=1,3  horovodrun -np 2 -H localhost:2 --gloo python -m ranke
 CUDA_VISIBLE_DEVICES=1,3指定使用的GPU型号，-np 指的是进程的数量，localhost:2表示localhost节点上2个GPU。  
 并且一个卡一个进程，意味着localhost:2不能超过-np 2的数量(或许有其他使用方法，但还没找到)  
 
+(3)预测  
+未生成这部分的数据  
+可以根据需求生成(生成两个test.csv文件,其中一个test中的数据去掉y,
+当作未来要预测的数据)
+python -m ranker.src.test
 
 ###精排逻辑
 使用MMOE同时对是否点击，点赞，评论进行预测,MMOE的except模块使用xdeepfm，
