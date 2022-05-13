@@ -16,12 +16,12 @@ class DFAFilter:
     使用确定性有限自动机（DFA）减少更换时间
     """
 
-    def __init__(self):
+    def __init__(self, path):
         # 关键词链表
         self.keyword_chains = {}
         # 限定
         self.delimit = "\x00"
-        self.parse(BASE_DIR + "/query/model_data/sensitive-words/sensitive.txt")
+        self.parse((BASE_DIR + path))
 
     def add(self, keyword):
         # 关键词英文变为小写
@@ -92,11 +92,12 @@ class BSFilter:
     使用反向排序映射来减少替换时间
     """
 
-    def __init__(self):
+    def __init__(self, path):
         self.keywords = []
         self.kwsets = set([])
         self.bsdict = defaultdict(set)
         self.pat_en = re.compile(r"^[0-9a-zA-Z]+$")
+        self.parse((BASE_DIR + path))
 
     def add(self, keyword):
         if not isinstance(keyword, str):
@@ -134,9 +135,9 @@ class BSFilter:
 
 
 if __name__ == "__main__":
-    gfw = DFAFilter()
-    path = "model_data/sensitive-words/sensitive.txt"
-    gfw.parse(path)
+    path = "/query/model_data/sensitive-words/sensitive.txt"
+
+    gfw = DFAFilter(path)
     text = "你真是个大傻逼，大傻子，傻大个，大坏蛋，坏人。"
     # text = "野营刀具军品网"
     result = gfw.filter(text)
@@ -147,7 +148,6 @@ if __name__ == "__main__":
     # else:
     #     print("not ok")
 
-    # bsf = BSFilter()
-    # bsf.parse(path)
-    # result = bsf.filter(text)
-    # print(result)
+    bsf = BSFilter(path)
+    result = bsf.filter(text)
+    print(result)
