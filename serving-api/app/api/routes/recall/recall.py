@@ -27,10 +27,10 @@ async def recall(args: SentenceArgs):
     sentence = args.sentence
 
     # 分词 query_list # todo  query改写预处理
-    query_list = jieba.cut(sentence)
+    # query_list = jieba.cut(sentence)
     try:
         # query_weight
-        result_recall = ReCall(query_list=query_list).structured_recall()
+        result_recall = ReCall().recall(sentence)
 
         return ApiResponse.build_success(data={"result_recall": result_recall})
     except Exception as e:

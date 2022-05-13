@@ -26,7 +26,7 @@ from torch.utils.data import Dataset, DataLoader
 
 class ReadData:
 
-    def __init__(self, train=True, debug=True):
+    def __init__(self, train=True, debug=False):
         if train:
             self.search_data = pd.read_csv('dataset/data/train_search_data.csv').head(500000)
         else:
