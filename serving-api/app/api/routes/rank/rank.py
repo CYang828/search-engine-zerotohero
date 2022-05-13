@@ -10,6 +10,7 @@ from app.models.schemas.query import SentenceArgs
 from app.resources.api_response import ApiResponse, ResponseEnum
 from app.services.rank import Rank
 from fastapi import APIRouter
+from ranker.src.test import main
 
 
 router = APIRouter()
@@ -23,7 +24,7 @@ async def rank():
     """
     try:
         # rank
-        result_rank = Rank().tf_ranking()
+        result_rank = Rank().main()
 
         return ApiResponse.build_success(data={"result_rank": result_rank})
     except Exception as e:

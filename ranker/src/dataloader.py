@@ -26,14 +26,19 @@ from torch.utils.data import Dataset, DataLoader
 
 class ReadData:
 
-    def __init__(self, train=True, debug=False):
+    def __init__(self, train=True,test=False, debug=False):
         if train:
             self.search_data = pd.read_csv('dataset/data/train_search_data.csv').head(500000)
+        elif test:
+                if debug:
+                    self.search_data = pd.read_csv('dataset/data/test_search_data.csv').head(100)
+                else:
+                    self.search_data = pd.read_csv('dataset/data/test_search_data.csv')
         else:
             if debug:
-                self.search_data = pd.read_csv('dataset/data/test_search_data.csv').head(100)
+                self.search_data = pd.read_csv('dataset/data/valid_search_data.csv').head(100)
             else:
-                self.search_data = pd.read_csv('dataset/data/test_search_data.csv')
+                self.search_data = pd.read_csv('dataset/data/valid_search_data.csv').head(50000)
         self.user_data = pd.read_csv('dataset/data/user_data.csv')
         self.vocab_dic = defaultdict(int)
         with open('dataset/data/vocab.txt', 'r', encoding='utf-8') as f:

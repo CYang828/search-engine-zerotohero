@@ -5,6 +5,8 @@
 # @Software: PyCharm
 from builtins import staticmethod
 
+from ranker.src.test import main
+
 
 class Rank:
     def __init__(self, query_list=None):
@@ -17,7 +19,8 @@ class Rank:
 
     @staticmethod
     def mmoe():
-        result_rank = "使用多目标排序算法mmoe"
+        print("使用多目标排序算法mmoe")
+        result_rank = main()
         return result_rank
 
     @staticmethod
@@ -32,4 +35,4 @@ class Rank:
 
 
 if __name__ == "__main__":
-    print(Rank().re_transformer())
+    print(Rank().mmoe())

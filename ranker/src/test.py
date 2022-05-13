@@ -5,14 +5,18 @@
 # @Software: PyCharm
 import os
 
-import horovod.torch as hvd
+# import horovod.torch as hvd
 import torch
 from ranker.src.args import get_args
-from ranker.src.dataloader import load_data
+from ranker.src.dataloader import load_data, ReadData, SearchDataset
 from ranker.src.model import MultiDeepFM
 from ranker.src.utils import batch2cuda, EMA, seed_everything, roc_score
 from torch.optim import Adagrad
+from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm, trange
+import time
+
+os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 
 
 def args_setup():
@@ -33,15 +37,17 @@ def predict(config, model, test_dataloader):
 
     model.eval()
     with torch.no_grad():
-        t = time.time()
         for batch in test_iterator:
-            batch_cuda, _ = batch2cuda(batch, config)
-            logits = model(**batch_cuda)[3]
+            sparse_features = batch[1]
+            dense_features = batch[2]
+            labels = batch[3]
+            sparse_features = batch2cuda(sparse_features, config)
+            dense_features = batch2cuda(dense_features, config)
+            labels = batch2cuda(labels, config)
+            logits = model(dense_features, sparse_features, labels)[3]
+
             probs = torch.sigmoid(logits)
             test_preds.append(probs.detach().cpu())
-
-    ts = (time.time() - t) * 1000.0 / len(test_df) * 2000.0
-    print(f'\n>>> Single action average cost time {ts:.4} ms on 2000 samples ...')
 
     test_preds = torch.cat(test_preds).numpy()
     return test_preds
@@ -49,10 +55,8 @@ def predict(config, model, test_dataloader):
 
 def main():
     args = args_setup()
-    process_valid_data = ReadData(train=False)
+    process_valid_data = ReadData(train=False, test=True)
     test_dataset = SearchDataset(process_valid_data)
-    # test_sampler = torch.utils.data.distributed.DistributedSampler(
-    #     test_dataset, num_replicas=hvd.size(), rank=hvd.rank())
 
     test_dataloader = DataLoader(dataset=test_dataset, batch_size=args.bs,
                                  num_workers=4, pin_memory=False,
@@ -62,8 +66,9 @@ def main():
     args.best_model_path = os.path.join(args.output_dir, 'best.pth')
     model.load_state_dict(torch.load(args.best_model_path))
 
-    predict(args, model, test_dataloader)
+    test_preds = predict(args, model, test_dataloader)
+    return test_preds
 
 
 if __name__ == '__main__':
-    main()
+    test_preds = main()
