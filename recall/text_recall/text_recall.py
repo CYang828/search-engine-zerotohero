@@ -5,14 +5,15 @@
 # @Software: PyCharm
 
 import json
-from elasticsearch import Elasticsearch
+from collections import defaultdict
 
+from elasticsearch import Elasticsearch
 from recall.utils import parse_es_content, get_query_json, BaseRecall
 
 
 class TextRecall(BaseRecall):
     def __init__(
-        self,
+            self,
     ):
         super().__init__()
 
@@ -34,10 +35,26 @@ class TextRecall(BaseRecall):
         ids_list = parse_es_content(query)
         return ids_list
 
+    def multi_recall(self, query_list: list) -> list:
+        query_json = []
+        for each in query_list:
+            query_json.append({})
+            query_json.append(get_query_json(each))
+        es = self.connect_es()
+        results = es.msearch(index=self.index_name, body=query_json)
+        ids_dict = defaultdict(list)
+        for i in range(len(results['responses'])):
+            ids_dict[query_list[i]] = (parse_es_content(results['responses'][i]))
+        return ids_dict
+
 
 if __name__ == "__main__":
-    query = "学习自然语言处理"
-    query_json = get_query_json(query)
-    text_recall = TextRecall()
-    ids = text_recall.recall(query_json, recall_nums=60)
-    print(ids)
+    # 一个查询语句
+    # query = "学习自然语言处理"
+    # query_json = get_query_json(query)
+    # text_recall = TextRecall()
+    # ids = text_recall.recall(query_json, recall_nums=60)
+    # 多个查询语句
+    query_list = ["学习自然语言处理", "股票期货"]
+    ids_dict = TextRecall().multi_recall(query_list)
+    print("ids_dict:",ids_dict)

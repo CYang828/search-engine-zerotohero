@@ -4,7 +4,7 @@
 # @FileName: main.py
 # @Software: PyCharm
 import time
-from multiprocessing import Manager
+from collections import defaultdict
 
 from recall.text_recall.text_recall import TextRecall
 from recall.utils import get_query_json, BaseRecall
@@ -35,11 +35,29 @@ class Recall(BaseRecall):
         ids_list = list(set(text_recall_id_list))
         return ids_list
 
+    def multi_recall(self, query_list: list):
+        ids_dict = defaultdict(list)
+        text_recall_id_dict = self.text_recall.multi_recall(
+            query_list
+        )
+        print('text_recall_id_dict:', text_recall_id_dict)
+        if self.use_vector_recall:
+            vector_recall_id_dict = self.vector_recall.multi_recall(
+                query_list,
+                title_recall_nums=self.text_recall_nums,
+                summary_recall_nums=self.summary_recall_nums,
+                content_recall_nums=self.content_recall_nums,
+            )
+            print('vector_recall_id_dict:', vector_recall_id_dict)
+            for each in query_list:
+                ids_dict[each] = list(set(text_recall_id_dict[each] + vector_recall_id_dict[each]))
+
+            return ids_dict
+        else:
+            return text_recall_id_dict
+
 
 if __name__ == "__main__":
-    start1 = time.time()
-    query_str = "学习自然语言处理"
+    query = ["学习自然语言处理", "股票期货"]
     recall = Recall()
-    ids = recall.recall(query_str)
-    print("召回时间：", time.time() - start1)
-    print(ids)
+    ids = recall.multi_recall(query)

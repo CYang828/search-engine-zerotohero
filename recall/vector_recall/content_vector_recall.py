@@ -75,6 +75,27 @@ class ContentVectorRecall(BaseVectorRecall):
 
         return content_recall_id
 
+    def multi_recall(self, query_array, recall_nums: int):
+        """
+        :param query_array:  需要查询的语句对应的向量
+        :param recall_nums: 向量召回的数量
+        :return:multi_content_recall_id:list 根据title向量召回文章的id
+        """
+        D, I = self.index.search(query_array, recall_nums)
+        multi_recall_list = I
+        # print('查询向量时间：', time.time() - start2)
+        multi_content_recall_id = []
+        content_recall_id = []
+        for recall_list in multi_recall_list:
+            for each in recall_list:
+                each = str(each)
+                if each not in self.doc_content_id2id:
+                    continue
+                else:
+                    content_recall_id.append(self.doc_content_id2id[each])
+            multi_content_recall_id.append(content_recall_id)
+        return multi_content_recall_id
+
 
 if __name__ == "__main__":
     query = "期货"
