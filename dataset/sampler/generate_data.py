@@ -13,12 +13,16 @@ def get_train_test_data(config):
     test_search_data = search_information.sample(
         n=config["test_data_nums"], random_state=2022, axis=0
     )
-    train_search_data = search_information[
+    train_search_data_temp = search_information[
         ~search_information.index.isin(test_search_data.index)
     ]
+    length = train_search_data_temp.shape[0]
+    train_search_data = train_search_data_temp.iloc[:int(length * 0.7), ]
+    valid_search_data = train_search_data_temp.iloc[int(length * 0.7):, ]
 
     test_search_data.to_csv("dataset/data/test_search_data.csv", index=False)
     train_search_data.to_csv("dataset/data/train_search_data.csv", index=False)
+    valid_search_data.to_csv("dataset/data/valid_search_data.csv", index=False)
 
 
 if __name__ == "__main__":

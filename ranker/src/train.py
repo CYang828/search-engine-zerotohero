@@ -7,13 +7,12 @@ import os
 
 import horovod.torch as hvd
 import torch
-from torch.optim import Adagrad
-from tqdm import tqdm, trange
-
 from ranker.src.args import get_args
 from ranker.src.dataloader import load_data
 from ranker.src.model import MultiDeepFM
 from ranker.src.utils import batch2cuda, EMA, seed_everything, roc_score
+from torch.optim import Adagrad
+from tqdm import tqdm, trange
 
 
 def evaluation(config, model, val_dataloader):
@@ -40,8 +39,8 @@ def evaluation(config, model, val_dataloader):
             probs = torch.sigmoid(logits)
 
             loss /= len(user_ids)
-            if config.n_gpus > 1:
-                loss = loss.mean()
+            # if config.n_gpus > 1:
+            #     loss = loss.mean()
 
             val_loss += loss.item()
             preds.append(probs.detach().cpu())
@@ -90,7 +89,7 @@ def train(config, train_dataloader, valid_dataloader):
     train_num_loss = 0.
     neg_train_loss = 0.
     logging_loss = 0.
-    best_roc_auc = 0.
+    best_roc_auc = -0.000000001
     best_model_path = ''
 
     # if config.n_gpus > 1:
@@ -193,10 +192,14 @@ def args_setup():
     return args
 
 
-if __name__ == '__main__':
+def main():
     hvd.init()
     torch.cuda.set_device(hvd.local_rank())
     args = args_setup()
     print('start training')
     train_dataloader, valid_dataloader = load_data(args)
     train(args, train_dataloader, valid_dataloader)
+
+
+if __name__ == '__main__':
+    main()

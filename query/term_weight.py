@@ -150,7 +150,7 @@ class TermAnalyze:
             else:
                 weight1.append(0)
         weight_new = [weight0[i] + weight1[i] for i in range(len(weight0))]
-        weight = softmax([weight_new])
+        weight = softmax(weight_new)
         return list(weight)
 
 
@@ -160,7 +160,7 @@ if __name__ == "__main__":
 
     # 根据公式(idf = log(预料库的文档总数/包含该词的文档数+1)) 计算idf并保存在redis中
     #
-    TermAnalyze().get_idf()
+    # TermAnalyze().get_idf()
     query_list = ["我", "喜欢", "学习"]
     query_weight = TermAnalyze(query_list=query_list).get_term_weight()
     print(query_weight)

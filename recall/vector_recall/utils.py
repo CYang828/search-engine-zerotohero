@@ -30,3 +30,7 @@ class BaseVectorRecall(BaseRecall):
     @abc.abstractmethod
     def recall(self, *args, **kwargs):
         raise NotImplemented
+
+    @abc.abstractmethod
+    def multi_recall(self, *args, **kwargs):
+        raise NotImplemented

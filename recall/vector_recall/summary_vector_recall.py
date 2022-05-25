@@ -10,9 +10,8 @@ import pickle
 
 import faiss as faiss
 import numpy as np
-from transformers import BertTokenizer, BertModel
-
 from recall.vector_recall.utils import BaseVectorRecall
+from transformers import BertTokenizer, BertModel
 
 
 class SummaryVectorRecall(BaseVectorRecall):
@@ -71,6 +70,27 @@ class SummaryVectorRecall(BaseVectorRecall):
                 summary_recall_id.append(self.doc_summary_id2id[each])
 
         return summary_recall_id
+
+    def multi_recall(self, query_array, recall_nums: int):
+        """
+        :param query_array:  需要查询的语句对应的向量
+        :param recall_nums: 向量召回的数量
+        :return:multi_summary_recall_id:list 根据summary向量召回文章的id
+        """
+        D, I = self.index.search(query_array, recall_nums)
+        multi_recall_list = I
+        # print('查询向量时间：', time.time() - start2)
+        multi_summary_recall_id = []
+        summary_recall_id = []
+        for recall_list in multi_recall_list:
+            for each in recall_list:
+                each = str(each)
+                if each not in self.doc_summary_id2id:
+                    continue
+                else:
+                    summary_recall_id.append(self.doc_summary_id2id[each])
+            multi_summary_recall_id.append(summary_recall_id)
+        return multi_summary_recall_id
 
 
 if __name__ == "__main__":
